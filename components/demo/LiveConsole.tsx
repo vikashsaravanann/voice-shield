@@ -139,7 +139,7 @@ export function LiveConsole() {
       <div className="row">
         {!running ? (
           <button type="button" className="btn btn-primary" onClick={() => void start()}>
-            <Mic aria-hidden size={16} /> Start live path
+            <Mic aria-hidden size={16} /> Start live analysis
           </button>
         ) : (
           <button type="button" className="btn btn-ghost" onClick={stop}>
@@ -147,12 +147,11 @@ export function LiveConsole() {
           </button>
         )}
         <button type="button" className={cloneOn ? "btn btn-critical" : "btn btn-ghost"} aria-pressed={cloneOn} disabled={!running} onClick={toggleClone}>
-          <ShieldAlert aria-hidden size={16} /> {cloneOn ? "Clone injection on" : "Inject cloned stream"}
+          <ShieldAlert aria-hidden size={16} /> {cloneOn ? "Cloned voice on" : "Simulate cloned voice"}
         </button>
         <button type="button" className="btn btn-ghost" disabled={!running} onClick={drop}>
-          <Unplug aria-hidden size={16} /> Simulate drop
+          <Unplug aria-hidden size={16} /> Simulate connection drop
         </button>
-        <p className="hint">PCM stays in RAM. Sign in after Supabase is wired to persist the vault.</p>
       </div>
       <div className="row" style={{ marginTop: 12 }} role="status" aria-live="polite">
         <StatusBadge severity={error ? "critical" : LINK_SEVERITY[snap?.state ?? "idle"]}>
@@ -162,7 +161,7 @@ export function LiveConsole() {
           {error
             ? "Session not running."
             : !running
-            ? "Waiting — start the live path to begin analysis."
+            ? "Press Start live analysis and allow microphone access to begin."
             : snap?.state === "live" && !d
             ? "Listening — waiting for the first analysed hop."
             : snap?.state === "live"
@@ -170,9 +169,6 @@ export function LiveConsole() {
             : ""}
         </span>
       </div>
-      <p className="hint" style={{ marginTop: 8 }}>
-        This console runs the detector in the browser as a client-side stand-in for the inference WebSocket; values are not backend telemetry.
-      </p>
       {error ? (
         <div className="alert alert-critical" role="alert" style={{ marginTop: 12 }}>
           <ShieldAlert aria-hidden size={18} style={{ flexShrink: 0, marginTop: 2, color: "var(--danger)" }} />
@@ -185,26 +181,26 @@ export function LiveConsole() {
 
       <div className="board">
         <section className="card">
-          <p className="eyebrow">Spoof probability</p>
+          <p className="eyebrow">Synthetic-voice score</p>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 12 }}>
-            <p className="pct" style={{ color: d ? RISK_COLOR[risk] : "var(--subtle)" }} aria-label={d ? `Spoof probability ${pct} percent` : "Spoof probability not yet available"}>
+            <p className="pct" style={{ color: d ? RISK_COLOR[risk] : "var(--subtle)" }} aria-label={d ? `Synthetic-voice score ${pct} percent` : "Synthetic-voice score not yet available"}>
               {d ? pct : "—"}
-              <span style={{ fontSize: 18, color: "var(--muted)" }}>%</span>
+              {d ? <span style={{ fontSize: 18, color: "var(--muted)" }}>%</span> : null}
             </p>
             <StatusBadge severity={d ? RISK_SEVERITY[risk] : "unknown"}>
-              {d ? (risk === "green" ? "Verified human" : risk === "amber" ? "Suspicious / challenge" : "Confirmed spoof") : "No result yet"}
+              {d ? (risk === "green" ? "Likely human" : risk === "amber" ? "Suspicious: challenge" : "Likely synthetic") : "No result yet"}
             </StatusBadge>
           </div>
-          <div className="bar" role="progressbar" aria-label="Spoof probability" aria-valuemin={0} aria-valuemax={100} aria-valuenow={d ? pct : undefined}>
+          <div className="bar" role="progressbar" aria-label="Synthetic-voice score" aria-valuemin={0} aria-valuemax={100} aria-valuenow={d ? pct : undefined}>
             <span style={{ width: `${pct}%`, background: RISK_COLOR[risk] }} />
           </div>
           <dl className="stats">
             <div>
-              <dt>Hop latency</dt>
+              <dt>Analysis time</dt>
               <dd>{d ? `${d.latencyMs.toFixed(1)} ms` : "—"}</dd>
             </div>
             <div>
-              <dt>Chunks</dt>
+              <dt>Segments</dt>
               <dd>{hops}</dd>
             </div>
             <div>
@@ -213,7 +209,7 @@ export function LiveConsole() {
             </div>
             <div>
               <dt>Ring buffer</dt>
-              <dd>{snap?.buffered ?? 0} hops</dd>
+              <dd>{snap?.buffered ?? 0} segments</dd>
             </div>
             <div>
               <dt>Drops</dt>
@@ -234,16 +230,22 @@ export function LiveConsole() {
         </section>
         <section className="card">
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-            <p className="eyebrow">
-              <AudioLines size={14} style={{ verticalAlign: "middle" }} /> Waveform · 16 kHz
+            <p className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <AudioLines aria-hidden size={14} /> Waveform · 16 kHz
             </p>
-            <p className="eyebrow">{AUDIO_CONFIG.chunkMs} ms hops</p>
+            <p className="eyebrow">{AUDIO_CONFIG.chunkMs} ms segments</p>
           </div>
-          <canvas ref={waveRef} role="img" aria-label="Live microphone waveform" width={800} height={80} style={{ height: 64 }} />
-          <p className="eyebrow" style={{ marginTop: 16 }}>
-            <Activity size={14} style={{ verticalAlign: "middle" }} /> Linear spectrogram
+          <div style={{ position: "relative" }}>
+            <canvas ref={waveRef} role="img" aria-label="Live microphone waveform" width={800} height={80} style={{ height: 64 }} />
+            {!running ? <CanvasIdle label="Waveform appears when analysis starts" /> : null}
+          </div>
+          <p className="eyebrow" style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 6 }}>
+            <Activity aria-hidden size={14} /> Spectrogram
           </p>
-          <canvas ref={canvasRef} role="img" aria-label="Live linear spectrogram of microphone input" width={800} height={160} style={{ height: 144, marginTop: 8 }} />
+          <div style={{ position: "relative", marginTop: 8 }}>
+            <canvas ref={canvasRef} role="img" aria-label="Live linear spectrogram of microphone input" width={800} height={160} style={{ height: 144 }} />
+            {!running ? <CanvasIdle label="Spectrogram appears when analysis starts" /> : null}
+          </div>
           <Sparkline values={history} />
         </section>
       </div>
@@ -264,7 +266,8 @@ export function LiveConsole() {
           <p className="eyebrow">Phonemic challenge</p>
           {!challenge ? (
             <p className="hint" style={{ marginTop: 12 }}>
-              Armed when Kalman-smoothed C(t) stays Amber/Red for {AUDIO_CONFIG.challengeAfterHops} hops. Inject a clone to trip it.
+              Triggers when the smoothed score stays amber or red for {AUDIO_CONFIG.challengeAfterHops} consecutive segments. The caller must read a
+              random phrase aloud; a cloned stream cannot respond naturally. Use Simulate cloned voice to trigger it.
             </p>
           ) : (
             <div>
@@ -308,11 +311,37 @@ export function LiveConsole() {
         </section>
       </div>
 
-      <p className="hint" style={{ marginTop: 16, fontFamily: "var(--mono)" }}>
-        Session {sessionId ? sessionId.slice(0, 8) : "—"} · last_chunk_index {snap?.lastChunkIndex ?? -1} ·{" "}
-        <Radio size={12} style={{ verticalAlign: "middle" }} /> {AUDIO_CONFIG.reconnect.baseDelay}ms base · ×
-        {AUDIO_CONFIG.reconnect.multiplier} · jitter {AUDIO_CONFIG.reconnect.jitter * 100}% · max {AUDIO_CONFIG.reconnect.maxAttempts}
-      </p>
+      <details className="hint" style={{ marginTop: 16 }}>
+        <summary style={{ cursor: "pointer", minHeight: 32, display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <Radio aria-hidden size={12} /> Connection details
+        </summary>
+        <dl className="stats" style={{ fontFamily: "var(--mono)", marginTop: 8 }}>
+          <div><dt>Session</dt><dd>{sessionId ? sessionId.slice(0, 8) : "—"}</dd></div>
+          <div><dt>Last segment</dt><dd>{(snap?.lastChunkIndex ?? -1) >= 0 ? snap?.lastChunkIndex : "—"}</dd></div>
+          <div><dt>Reconnect backoff</dt><dd>{AUDIO_CONFIG.reconnect.baseDelay} ms × {AUDIO_CONFIG.reconnect.multiplier}</dd></div>
+          <div><dt>Max attempts</dt><dd>{AUDIO_CONFIG.reconnect.maxAttempts} (±{AUDIO_CONFIG.reconnect.jitter * 100}% jitter)</dd></div>
+        </dl>
+      </details>
+    </div>
+  );
+}
+
+function CanvasIdle({ label }: { label: string }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "grid",
+        placeItems: "center",
+        fontSize: 12,
+        color: "var(--subtle)",
+        border: "1px dashed var(--border-strong)",
+        borderRadius: 8,
+        pointerEvents: "none",
+      }}
+    >
+      {label}
     </div>
   );
 }
@@ -320,7 +349,7 @@ export function LiveConsole() {
 function Sparkline({ values }: { values: number[] }) {
   const w = 800;
   const h = 56;
-  if (values.length < 2) return <div className="unavailable" style={{ marginTop: 12, height: 56 }}>No hop history yet</div>;
+  if (values.length < 2) return <div className="unavailable" style={{ marginTop: 12, height: 56 }}>Score history appears after the first analysed segment</div>;
   const pts = values
     .map((v, i) => `${(i / (values.length - 1)) * w},${h - v * (h - 4) - 2}`)
     .join(" ");
