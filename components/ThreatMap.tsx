@@ -44,7 +44,7 @@ export function ThreatMap({ sessions }: { sessions: any[] }) {
           </h2>
         </div>
         <div className="flex items-center gap-2 text-xs font-mono">
-          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span className="w-2 h-2 rounded-full bg-rose-500"></span>
           <span className="text-slate-400">Session telemetry</span>
         </div>
       </div>
@@ -77,7 +77,7 @@ export function ThreatMap({ sessions }: { sessions: any[] }) {
                 style={pos}
               >
                 <div className="relative flex items-center justify-center">
-                  <span className={`absolute w-8 h-8 rounded-full ${bgColor} opacity-20 animate-ping`} />
+                  <span className={`absolute w-8 h-8 rounded-full ${bgColor} opacity-20`} />
                   <Crosshair className={`w-4 h-4 ${color}`} />
                   <span className="absolute left-5 whitespace-nowrap text-[10px] font-mono text-slate-400">{t.label}</span>
                 </div>

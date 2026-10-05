@@ -102,7 +102,7 @@ export function DualAxisMatrix({
         {/* Q2 (Top Right): Impersonator */}
         <div className="absolute top-0 left-[65%] w-[35%] h-[50%] bg-rose-950/25 p-2.5 text-[9px] font-mono font-bold text-rose-400/90 border-l border-b border-rose-500/20 flex flex-col justify-between">
           <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 motion-safe:animate-ping" />
             <span>ZONE II: DEEPFAKE CLONE</span>
           </span>
           <span className="text-[8px] opacity-80 text-rose-300">HIGH MATCH · TARGETED ATTACK</span>
@@ -125,7 +125,7 @@ export function DualAxisMatrix({
         >
           {/* Pulsing ring */}
           <div
-            className={`w-9 h-9 rounded-full border-2 animate-ping absolute -top-1.5 -left-1.5 opacity-75 ${
+            className={`w-9 h-9 rounded-full border-2 motion-safe:animate-ping absolute -top-1.5 -left-1.5 opacity-75 ${
               classification.zone === "impersonator"
                 ? "border-rose-500"
                 : classification.zone === "genuine"
@@ -143,7 +143,7 @@ export function DualAxisMatrix({
                 : "bg-cyan-500 border-white text-slate-950 shadow-cyan-500/50"
             }`}
           >
-            <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-white motion-safe:animate-pulse" />
           </div>
 
           {/* Caller Label Floating Tag */}

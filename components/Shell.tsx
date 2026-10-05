@@ -73,7 +73,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden lg:flex items-center gap-0.5">
+          <nav aria-label="Primary" className="hidden min-[1200px]:flex items-center gap-0.5">
             {NAV.map((item) => {
               const active = isActive(item.href);
               const Icon = item.icon;
@@ -97,11 +97,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 shrink-0">
             <a
               href={LIT_HOME}
-              className="hidden 2xl:inline-flex btn btn-ghost btn-sm"
+              className="hidden min-[1700px]:inline-flex btn btn-ghost btn-sm"
             >
               Company
             </a>
-            <div className="hidden min-[1280px]:block">
+            <div className="hidden min-[1700px]:block">
               <BackendHealth compact />
             </div>
             <Link href="/login" className="btn btn-primary btn-sm">
@@ -111,7 +111,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="lg:hidden btn btn-ghost btn-icon btn-sm"
+              className="min-[1200px]:hidden btn btn-ghost btn-icon btn-sm"
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
@@ -125,7 +125,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {mobileMenuOpen && (
         <div
           id="mobile-nav"
-          className="lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-slate-950/98 backdrop-blur-2xl p-4 overflow-y-auto animate-fadeIn"
+          className="min-[1200px]:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-slate-950/98 backdrop-blur-2xl p-4 overflow-y-auto animate-fadeIn"
         >
           <nav aria-label="Mobile" className="flex flex-col gap-2 max-w-md mx-auto pt-2">
             <div className="px-1 py-2 text-[11px] font-semibold tracking-widest text-slate-500 uppercase">Navigation</div>

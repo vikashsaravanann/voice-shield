@@ -25,10 +25,10 @@ export function ConnectionStatus({
   if (state === "connected") {
     badgeText = "CONNECTED (REAL-TIME)";
     color = "bg-emerald-950/60 text-emerald-300 border-emerald-500/30";
-    dotColor = "bg-emerald-400 animate-pulse";
+    dotColor = "bg-emerald-400 motion-safe:animate-pulse";
   } else if (state === "reconnecting") {
     badgeText = `RECONNECTING (ATTEMPT ${reconnectAttempt}/10)`;
-    color = "bg-amber-950/60 text-amber-300 border-amber-500/40 animate-pulse";
+    color = "bg-amber-950/60 text-amber-300 border-amber-500/40 motion-safe:animate-pulse";
     dotColor = "bg-amber-400";
   } else if (state === "offline_buffering") {
     badgeText = `OFFLINE — BUFFERING (${bufferedChunksCount} CHUNKS)`;

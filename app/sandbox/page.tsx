@@ -180,7 +180,7 @@ export default function ForensicSandboxPage() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-cyan-400 font-bold uppercase">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-cyan-400" />
               <span>FORENSIC AUDIO AUDIT &amp; SPLICING LAB</span>
             </span>
             <span className="text-slate-600">|</span>
@@ -317,12 +317,14 @@ export default function ForensicSandboxPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={togglePlay}
+                  aria-label={isPlaying ? "Pause playback" : "Play audio"}
                   className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shadow-cyan-500/20 active:scale-95 transition-all"
                 >
                   {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                 </button>
                 <button
                   onClick={() => handleSeek(0)}
+                  aria-label="Restart from beginning"
                   className="w-9 h-9 rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:text-white flex items-center justify-center transition-all"
                   title="Reset to 0.00s"
                 >
