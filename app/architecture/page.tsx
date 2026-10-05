@@ -57,7 +57,7 @@ export default function ArchitecturePage() {
   ];
 
   const latencyBudget = [
-    { label: "FRAME INGESTION & VAD", time: "200.0 ms", pct: 74, color: "bg-emerald-500" },
+    { label: "FRAME INGESTION & VAD", time: "200.0 ms", pct: 74, color: "bg-brand-500" },
     { label: "DSP (LFCC + BISPECTRUM)", time: "16.5 ms", pct: 6, color: "bg-teal-400" },
     { label: "INT8 NEURAL INFERENCE", time: "38.0 ms", pct: 14, color: "bg-cyan-400" },
     { label: "KALMAN SMOOTHING & LOGIC", time: "2.5 ms", pct: 1, color: "bg-indigo-400" },
@@ -65,12 +65,12 @@ export default function ArchitecturePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#060d22] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header Title */}
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-500/30 bg-brand-950/40 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
             <Cpu className="w-3.5 h-3.5" />
             <span>VoiceShield · TECHNICAL ARCHITECTURE SPECIFICATION</span>
           </div>
@@ -86,7 +86,7 @@ export default function ArchitecturePage() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl font-black tracking-wider text-white uppercase flex items-center gap-2.5">
-              <Layers className="w-5 h-5 text-emerald-400" />
+              <Layers className="w-5 h-5 text-brand-400" />
               <span>FIVE COUPLED SUBSYSTEMS</span>
             </h2>
             <span className="text-xs font-mono text-slate-500 uppercase tracking-widest hidden sm:inline">
@@ -98,11 +98,11 @@ export default function ArchitecturePage() {
             {subsystems.map((s) => (
               <div
                 key={s.num}
-                className="relative rounded-2xl border border-slate-800/80 bg-slate-900/50 p-6 backdrop-blur-xl shadow-xl hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between group"
+                className="relative rounded-2xl border border-slate-800/80 bg-slate-900/50 p-6 backdrop-blur-xl shadow-xl hover:border-brand-500/40 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-black text-emerald-400 tracking-widest">
+                    <span className="text-xs font-mono font-black text-brand-400 tracking-widest">
                       SUBSYSTEM {s.num}
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-mono tracking-widest bg-slate-800 text-slate-300 uppercase">
@@ -110,7 +110,7 @@ export default function ArchitecturePage() {
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-black tracking-wide text-white uppercase group-hover:text-emerald-300 transition-colors">
+                  <h3 className="text-lg font-black tracking-wide text-white uppercase group-hover:text-brand-300 transition-colors">
                     {s.title}
                   </h3>
 
@@ -121,8 +121,8 @@ export default function ArchitecturePage() {
 
                 <div className="mt-6 pt-4 border-t border-slate-800/60 space-y-1.5">
                   {s.metrics.map((m, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-[11px] font-mono text-emerald-400/90">
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                    <div key={idx} className="flex items-center gap-2 text-[11px] font-mono text-brand-400/90">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-brand-400" />
                       <span>{m}</span>
                     </div>
                   ))}
@@ -131,9 +131,9 @@ export default function ArchitecturePage() {
             ))}
 
             {/* Final Policy Card */}
-            <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/30 via-slate-900/60 to-slate-950 p-6 flex flex-col justify-between shadow-xl">
+            <div className="rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-950/30 via-slate-900/60 to-slate-950 p-6 flex flex-col justify-between shadow-xl">
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
+                <div className="flex items-center gap-2 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
                   <ShieldCheck className="w-4 h-4" />
                   <span>POLICY ENFORCEMENT HOOK</span>
                 </div>
@@ -147,7 +147,7 @@ export default function ArchitecturePage() {
 
               <Link
                 href="/demo"
-                className="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20"
+                className="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs font-mono tracking-widest uppercase transition-all shadow-lg shadow-brand-500/20"
               >
                 <span>TEST IN LIVE DEMO</span>
                 <ArrowRight className="w-4 h-4" />
@@ -160,7 +160,7 @@ export default function ArchitecturePage() {
         <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
             <div>
-              <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-widest">
+              <span className="text-xs font-mono text-brand-400 font-bold uppercase tracking-widest">
                 REAL-TIME TELEMETRY PROFILE
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wide">
@@ -168,7 +168,7 @@ export default function ArchitecturePage() {
               </h2>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <Clock className="w-4 h-4 text-emerald-400" />
+              <Clock className="w-4 h-4 text-brand-400" />
               <span>MEASURED ON 4-CORE INTEL/AMD CPU (NO GPU REQUIRED)</span>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function ArchitecturePage() {
               <div key={idx} className="space-y-1.5">
                 <div className="flex justify-between text-xs font-mono">
                   <span className="text-slate-300 font-bold uppercase">{item.label}</span>
-                  <span className="text-emerald-400 font-bold">{item.time}</span>
+                  <span className="text-brand-400 font-bold">{item.time}</span>
                 </div>
                 <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
                   <div
@@ -198,22 +198,22 @@ export default function ArchitecturePage() {
         {/* DPDP Act 2023 & Security Controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
-            <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-brand-400 font-mono text-xs font-bold uppercase tracking-widest">
               <Lock className="w-4 h-4" />
               <span>DPDP ACT 2023 COMPLIANCE SPECIFICATION</span>
             </div>
             <h3 className="text-lg font-black text-white uppercase">ZERO RAW-AUDIO PERSISTENCE BY DESIGN</h3>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400">
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 font-bold">1.</span>
+                <span className="text-brand-400 font-bold">1.</span>
                 <span><strong>Volatile RAM Only:</strong> Audio frames reside strictly in circular volatile memory queues, overwritten immediately after feature extraction.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 font-bold">2.</span>
+                <span className="text-brand-400 font-bold">2.</span>
                 <span><strong>Non-Reconstructible Vectors:</strong> Extracted LFCC and bispectral features cannot be inverse-synthesized into intelligible human speech.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-400 font-bold">3.</span>
+                <span className="text-brand-400 font-bold">3.</span>
                 <span><strong>Append-Only Audit:</strong> Telemetry logs store session ID, C(t) risk trace, codec tag, and timestamps only — never waveform bytes.</span>
               </li>
             </ul>

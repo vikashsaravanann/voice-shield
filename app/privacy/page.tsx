@@ -21,22 +21,22 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans pb-24">
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/20 via-slate-950/60 to-[#030712] -z-10" />
+    <div className="min-h-screen bg-[#060d22] text-slate-100 selection:bg-brand-500 selection:text-slate-950 font-sans pb-24">
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-950/20 via-slate-950/60 to-[#060d22] -z-10" />
 
       <section className="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl pt-16 pb-16 px-4 sm:px-6 lg:px-12">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-slate-400 uppercase">
-              <Link href="/" className="hover:text-emerald-400 transition-colors">
+              <Link href="/" className="hover:text-brand-400 transition-colors">
                 VOICESHIELD
               </Link>
               <span>/</span>
-              <span className="text-emerald-400 font-bold">PRIVACY</span>
+              <span className="text-brand-400 font-bold">PRIVACY</span>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase bg-brand-950/80 text-brand-400 border border-brand-500/40">
+                <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
                 DPDP ACT 2023–ALIGNED DESIGN
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-slate-900 text-slate-300 border border-slate-800">
@@ -47,7 +47,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
               <Scale className="w-3.5 h-3.5" />
               <span>PRIVACY & DATA-PROTECTION DESIGN · LIT VoiceShield</span>
             </div>
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
             ].map((s) => (
               <div key={s.k} className="p-4 rounded-xl border border-slate-800/90 bg-slate-900/60 backdrop-blur-md space-y-1.5">
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">{s.k}</span>
-                <span className="text-base font-mono font-black text-emerald-400 uppercase block">{s.v}</span>
+                <span className="text-base font-mono font-black text-brand-400 uppercase block">{s.v}</span>
                 <p className="text-xs text-slate-400 leading-normal">{s.d}</p>
               </div>
             ))}
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-16 space-y-16">
         <section className="space-y-6">
           <div className="flex items-center gap-3">
-            <span className="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">1.0</span>
+            <span className="px-2.5 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-400 font-mono text-xs font-bold uppercase tracking-wider">1.0</span>
             <h2 className="text-2xl font-bold text-white tracking-tight uppercase">Purpose limitation</h2>
           </div>
           <p className="text-sm text-slate-300 leading-relaxed max-w-4xl">
@@ -94,7 +94,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400">
                 <Shield className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">Security analysis</h3>
@@ -125,8 +125,8 @@ export default function PrivacyPolicyPage() {
               { t: "Audit orientation", d: "Detection and access events intended for reviewable logs.", icon: Database },
             ].map((x) => (
               <div key={x.t} className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                <x.icon className="w-5 h-5 text-emerald-400" />
-                <div className="text-xs font-mono font-bold text-emerald-400 uppercase">{x.t}</div>
+                <x.icon className="w-5 h-5 text-brand-400" />
+                <div className="text-xs font-mono font-bold text-brand-400 uppercase">{x.t}</div>
                 <p className="text-xs text-slate-300 leading-relaxed">{x.d}</p>
               </div>
             ))}
@@ -139,10 +139,10 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold text-white tracking-tight uppercase">DPDP Act 2023</h2>
           </div>
           <p className="text-sm text-slate-300 leading-relaxed max-w-4xl">
-            VoiceShield is designed to support privacy and data-protection requirements, including applicable considerations under India's Digital Personal Data Protection Act 2023, depending on processing activities, deployment location, and contractual configuration. This is not a claim of universal certification for every deployment.
+            VoiceShield is designed to support privacy and data-protection requirements, including applicable considerations under India&apos;s Digital Personal Data Protection Act 2023, depending on processing activities, deployment location, and contractual configuration. This is not a claim of universal certification for every deployment.
           </p>
           <div className="p-5 rounded-xl border border-slate-800 bg-slate-900/40 flex items-start gap-3">
-            <EyeOff className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+            <EyeOff className="w-5 h-5 text-brand-400 shrink-0 mt-0.5" />
             <p className="text-sm text-slate-300 leading-relaxed">
               Enterprise customers should document lawful purpose, retention, subprocessors, and access rights in their own DPA / processing schedules where required.
             </p>
@@ -151,13 +151,13 @@ export default function PrivacyPolicyPage() {
 
         <section className="space-y-6">
           <div className="flex items-center gap-3">
-            <span className="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">4.0</span>
+            <span className="px-2.5 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-400 font-mono text-xs font-bold uppercase tracking-wider">4.0</span>
             <h2 className="text-2xl font-bold text-white tracking-tight uppercase">Contact</h2>
           </div>
           <p className="text-sm text-slate-300 leading-relaxed max-w-4xl">
             Privacy and security enquiries for VoiceShield:
             <br />
-            <a href="mailto:admin@logicintelligencetechnologies.in" className="text-emerald-400 hover:underline font-mono">
+            <a href="mailto:admin@logicintelligencetechnologies.in" className="text-brand-400 hover:underline font-mono">
               admin@logicintelligencetechnologies.in
             </a>
           </p>

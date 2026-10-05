@@ -56,7 +56,7 @@ function ReportForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 p-6 md:p-10 font-sans">
+    <div className="min-h-screen bg-[#060d22] text-slate-100 p-6 md:p-10 font-sans">
       <div className="max-w-4xl mx-auto space-y-6">
         
         <div>
@@ -214,7 +214,7 @@ function ReportForm() {
 
 export default function ReportPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#030712] p-10 flex justify-center text-slate-400">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#060d22] p-10 flex justify-center text-slate-400">Loading...</div>}>
       <ReportForm />
     </Suspense>
   );

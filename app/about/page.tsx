@@ -25,10 +25,10 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#060d22] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-12">
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-500/30 bg-brand-950/40 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
             <Award className="w-3.5 h-3.5" />
             <span>LOGIC INTELLIGENCE TECHNOLOGIES · PRODUCT</span>
           </div>
@@ -42,7 +42,7 @@ export default function AboutPage() {
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-xl shadow-xl space-y-4">
-          <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">
+          <span className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest">
             THE CORE MISSION
           </span>
           <h2 className="text-2xl font-black text-white uppercase tracking-tight">
@@ -56,7 +56,7 @@ export default function AboutPage() {
 
         <div className="space-y-6">
           <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
-            <Shield className="w-5 h-5 text-emerald-400" />
+            <Shield className="w-5 h-5 text-brand-400" />
             Engineering focus areas
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -73,26 +73,26 @@ export default function AboutPage() {
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
-          <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">
+          <span className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest">
             Product ownership
           </span>
           <ul className="space-y-2 text-sm text-slate-300">
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
               Designed and operated by Logic Intelligence Technologies
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
               Company site: www.logicintelligencetechnologies.in/voice-shield
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
               Access via registered demo / beta request — not public self-serve
             </li>
           </ul>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-emerald-400 hover:text-emerald-300 pt-2"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-brand-400 hover:text-brand-300 pt-2"
           >
             Back to overview <ArrowRight className="w-3.5 h-3.5" />
           </Link>

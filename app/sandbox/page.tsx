@@ -163,7 +163,7 @@ export default function ForensicSandboxPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-emerald-500 selection:text-slate-950 pb-24">
+    <div className="min-h-screen bg-[#060d22] text-slate-100 font-sans selection:bg-emerald-500 selection:text-slate-950 pb-24">
       {/* Background Cyber Ambient */}
       <div
         className="fixed inset-0 pointer-events-none"

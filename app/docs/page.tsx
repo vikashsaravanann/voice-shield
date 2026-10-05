@@ -25,12 +25,12 @@ export default function DocsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#060d22] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Header */}
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-500/30 bg-brand-950/40 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
             <BookOpen className="w-3.5 h-3.5" />
             <span>DEVELOPER &amp; INTEGRATOR DOCUMENTATION</span>
           </div>
@@ -45,7 +45,7 @@ export default function DocsPage() {
         {/* Quick Reference Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-5 rounded-xl border border-slate-800 bg-slate-900/40">
-            <span className="text-[11px] font-mono text-emerald-400 uppercase font-bold block mb-1">
+            <span className="text-[11px] font-mono text-brand-400 uppercase font-bold block mb-1">
               STREAMING PROTOCOL
             </span>
             <span className="text-base font-bold text-white font-mono block">WebSocket Binary PCM16</span>
@@ -71,7 +71,7 @@ export default function DocsPage() {
         <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-xl shadow-xl space-y-6">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <div className="p-2 rounded-lg bg-brand-500/10 border border-brand-500/30 text-brand-400">
                 <Radio className="w-5 h-5" />
               </div>
               <div>
@@ -79,7 +79,7 @@ export default function DocsPage() {
                   STREAMING WEBSOCKET INTAKE
                 </h2>
                 <span className="text-xs font-mono text-slate-400">
-                  ENDPOINT: <code className="text-emerald-400">/ws/audio</code> (WSS)
+                  ENDPOINT: <code className="text-brand-400">/ws/audio</code> (WSS)
                 </span>
               </div>
             </div>
@@ -91,7 +91,7 @@ export default function DocsPage() {
             </p>
 
             <div className="space-y-2">
-              <span className="font-mono text-xs text-emerald-400 font-bold uppercase">
+              <span className="font-mono text-xs text-brand-400 font-bold uppercase">
                 1. SESSION INITIALIZATION (CLIENT → SERVER)
               </span>
               <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto">
@@ -110,7 +110,7 @@ export default function DocsPage() {
             </div>
 
             <div className="space-y-2 pt-3">
-              <span className="font-mono text-xs text-emerald-400 font-bold uppercase">
+              <span className="font-mono text-xs text-brand-400 font-bold uppercase">
                 2. REAL-TIME DETECTION TELEMETRY (SERVER → CLIENT)
               </span>
               <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto">
@@ -156,7 +156,7 @@ export default function DocsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 font-mono">
               <div className="flex items-center justify-between text-xs">
-                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded bg-brand-950 text-brand-400 font-bold border border-brand-500/30">
                   GET
                 </span>
                 <span className="text-slate-400">/health</span>
@@ -168,7 +168,7 @@ export default function DocsPage() {
 
             <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 font-mono">
               <div className="flex items-center justify-between text-xs">
-                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded bg-brand-950 text-brand-400 font-bold border border-brand-500/30">
                   GET
                 </span>
                 <span className="text-slate-400">/api/challenges?language=hi</span>
@@ -192,7 +192,7 @@ export default function DocsPage() {
 
             <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 font-mono">
               <div className="flex items-center justify-between text-xs">
-                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded bg-brand-950 text-brand-400 font-bold border border-brand-500/30">
                   GET
                 </span>
                 <span className="text-slate-400">/api/sessions</span>

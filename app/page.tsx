@@ -9,6 +9,9 @@ import {
   Lock,
   ArrowRight,
   Sparkles,
+  Mic,
+  Binary,
+  ScrollText,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -36,108 +39,147 @@ export const metadata: Metadata = {
 const CORPORATE_REQUEST =
   "https://www.logicintelligencetechnologies.in/voice-shield/request";
 
+const FEATURES = [
+  {
+    icon: Zap,
+    title: "STREAMING WEBSOCKET INFERENCE",
+    text: "Chunked PCM audio evaluated via feature extraction and a latency-focused model path. Designed so large LLM analysis is not placed in the real-time detector loop.",
+  },
+  {
+    icon: Activity,
+    title: "EXPLAINABLE SPECTRAL SIGNALS",
+    text: "Spectral and signal markers surface anomaly indicators operators can review. Explanations never replace structured evidence.",
+  },
+  {
+    icon: Languages,
+    title: "CHALLENGE-RESPONSE WORKFLOWS",
+    text: "Optional challenge prompts support active verification workflows where configured for the deployment.",
+  },
+  {
+    icon: WifiOff,
+    title: "RESILIENT STREAM BUFFERING",
+    text: "Ring-buffer and reconnect strategies reduce impact of transient network loss during live sessions.",
+  },
+  {
+    icon: Lock,
+    title: "APPEND-ORIENTED AUDIT TRAIL",
+    text: "Detection events, connection changes and auth challenges are designed to log to PostgreSQL with Row-Level Security where enabled.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "PRIVACY-AWARE PROCESSING",
+    text: "Designed to support configurable retention and privacy-oriented defaults. Exact retention depends on deployment, contracts and provider chain — not a universal zero-retention guarantee.",
+  },
+];
+
+const METRICS = [
+  ["REAL-TIME", "DETECTION PATH"],
+  ["STRUCTURED", "EVIDENCE OUTPUT"],
+  ["CONFIGURABLE", "RETENTION POLICY"],
+  ["AUDIT-ORIENTED", "RLS LOGGING"],
+];
+
+/** Static architecture diagram. Uses only product terms already on this page; shows no live or sample telemetry. */
+function DetectionPathDiagram() {
+  const steps = [
+    { icon: Mic, label: "Voice stream", sub: "Chunked PCM audio" },
+    { icon: Zap, label: "Streaming WebSocket inference", sub: "Feature extraction · latency-focused model path" },
+    { icon: Binary, label: "Explainable spectral signals", sub: "Markers operators can review" },
+    { icon: ScrollText, label: "Append-oriented audit trail", sub: "PostgreSQL · Row-Level Security where enabled" },
+  ];
+  return (
+    <figure
+      aria-label="VoiceShield detection path: voice stream, streaming inference, spectral signals, audit trail"
+      className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6 shadow-[0_30px_80px_-30px_rgba(0,0,0,.7)]"
+    >
+      <figcaption className="flex items-center justify-between gap-3 mb-5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-300">DEFENSE ARCHITECTURE</span>
+        <span className="status status-normal">Product architecture</span>
+      </figcaption>
+      <ol className="relative space-y-3">
+        <span aria-hidden className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-brand-400/50 via-azure-500/40 to-slate-700" />
+        {steps.map(({ icon: Icon, label, sub }, i) => (
+          <li key={label} className="relative flex items-start gap-4 animate-riseIn" style={{ animationDelay: `${i * 70}ms` }}>
+            <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-700 bg-slate-950 text-brand-300">
+              <Icon aria-hidden className="h-[18px] w-[18px]" />
+            </span>
+            <div className="min-w-0 pt-0.5">
+              <p className="text-sm font-semibold text-white uppercase tracking-wide break-words">{label}</p>
+              <p className="text-[13px] text-slate-400 leading-snug">{sub}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 pt-4 border-t border-slate-800 text-xs text-slate-500 leading-relaxed">
+        Capabilities describe the product architecture; live production behaviour depends on deployed models, hosts and configuration.
+      </p>
+    </figure>
+  );
+}
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
-      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-500/20 py-2.5 px-4 text-center">
-        <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-emerald-300">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>
-            A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY &amp; VOICE
-            FRAUD INTELLIGENCE
-          </span>
-        </div>
+    <div className="text-slate-100 flex flex-col selection:bg-brand-400 selection:text-slate-950">
+      <div className="border-b border-slate-800 bg-slate-900/70 py-2.5 px-4 text-center">
+        <p className="text-[11px] sm:text-xs font-semibold tracking-[0.14em] text-brand-200">
+          A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY &amp; VOICE FRAUD INTELLIGENCE
+        </p>
       </div>
 
-      <section className="relative px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-6xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-xs text-slate-300 font-mono mb-8 backdrop-blur-md">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-          <span>AI-Powered Voice Security &amp; Compliance Intelligence</span>
-        </div>
+      <section className="relative px-4 sm:px-6 pt-12 pb-14 md:pt-20 md:pb-24 max-w-7xl mx-auto w-full">
+        <div className="grid gap-10 lg:gap-14 lg:grid-cols-[1.15fr_0.85fr] items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-700 bg-slate-900/80 text-xs text-slate-200 mb-7">
+              <Sparkles aria-hidden className="w-3.5 h-3.5 text-brand-400" />
+              <span>AI-Powered Voice Security &amp; Compliance Intelligence</span>
+            </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-          Detect the clone. <br />
-          <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-            Protect the conversation.
-          </span>
-        </h1>
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]">
+              Detect the clone. <br />
+              <span className="text-brand-400">Protect the conversation.</span>
+            </h1>
 
-        <p className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Analyze eligible voice interactions for configurable fraud-risk,
-          security, compliance and quality signals, with structured evidence
-          designed for enterprise workflows. Built for telecom, BFSI, BPO and
-          high-volume voice operations.
-        </p>
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mb-9 leading-relaxed">
+              Analyze eligible voice interactions for configurable fraud-risk,
+              security, compliance and quality signals, with structured evidence
+              designed for enterprise workflows. Built for telecom, BFSI, BPO and
+              high-volume voice operations.
+            </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href={CORPORATE_REQUEST}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group active:scale-95"
-          >
-            <span>REQUEST ACCESS</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </a>
-          <Link
-            href="/architecture"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 font-mono font-bold text-xs tracking-widest uppercase transition-all active:scale-95"
-          >
-            EXPLORE PLATFORM
-          </Link>
-          <Link
-            href="/docs"
-            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/40 text-slate-400 font-mono font-bold text-xs tracking-widest uppercase transition-all active:scale-95"
-          >
-            VIEW API / DOCS
-          </Link>
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+              <a href={CORPORATE_REQUEST} className="btn btn-primary px-7 group">
+                REQUEST ACCESS
+                <ArrowRight aria-hidden className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <Link href="/architecture" className="btn btn-secondary px-7">EXPLORE PLATFORM</Link>
+              <Link href="/docs" className="btn btn-ghost px-7">VIEW API / DOCS</Link>
+            </div>
+          </div>
+
+          <DetectionPathDiagram />
         </div>
       </section>
 
-      <section className="border-y border-slate-800/80 bg-slate-900/40 py-12 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="p-4">
-            <span className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400 block mb-1">
-              REAL-TIME
-            </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
-              DETECTION PATH
-            </span>
-          </div>
-          <div className="p-4">
-            <span className="text-xl sm:text-2xl font-extrabold font-mono text-teal-300 block mb-1">
-              STRUCTURED
-            </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
-              EVIDENCE OUTPUT
-            </span>
-          </div>
-          <div className="p-4">
-            <span className="text-xl sm:text-2xl font-extrabold font-mono text-cyan-400 block mb-1">
-              CONFIGURABLE
-            </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
-              RETENTION POLICY
-            </span>
-          </div>
-          <div className="p-4">
-            <span className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400 block mb-1">
-              AUDIT-ORIENTED
-            </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
-              RLS LOGGING
-            </span>
-          </div>
-        </div>
+      <section aria-label="Platform characteristics" className="border-y border-slate-800 bg-slate-900/40">
+        <dl className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-800">
+          {METRICS.map(([k, label]) => (
+            <div key={k} className="px-4 py-7 sm:px-6 text-center">
+              <dt className="text-base sm:text-xl font-semibold text-white tracking-wide break-words">{k}</dt>
+              <dd className="mt-1 text-[11px] sm:text-xs text-slate-400 uppercase tracking-[0.14em] font-medium">{label}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
-      <section className="px-6 py-20 max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400 block mb-2">
+      <section className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
+        <div className="max-w-3xl mb-12">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-300 block mb-3">
             DEFENSE ARCHITECTURE
           </span>
-          <h2 className="text-3xl font-black text-white uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-white uppercase tracking-tight">
             ENGINEERED FOR ENTERPRISE VOICE SECURITY
           </h2>
-          <p className="mt-3 text-sm text-slate-400 max-w-2xl mx-auto">
+          <p className="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed">
             VoiceShield is a product of Logic Intelligence Technologies Pvt.
             Ltd. Capabilities below describe the product architecture; live
             production behaviour depends on deployed models, hosts and
@@ -145,87 +187,16 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
-              <Zap className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              STREAMING WEBSOCKET INFERENCE
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Chunked PCM audio evaluated via feature extraction and a
-              latency-focused model path. Designed so large LLM analysis is not
-              placed in the real-time detector loop.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-4">
-              <Activity className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              EXPLAINABLE SPECTRAL SIGNALS
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Spectral and signal markers surface anomaly indicators operators
-              can review. Explanations never replace structured evidence.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4">
-              <Languages className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              CHALLENGE-RESPONSE WORKFLOWS
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Optional challenge prompts support active verification workflows
-              where configured for the deployment.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-4">
-              <WifiOff className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              RESILIENT STREAM BUFFERING
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Ring-buffer and reconnect strategies reduce impact of transient
-              network loss during live sessions.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
-              <Lock className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              APPEND-ORIENTED AUDIT TRAIL
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Detection events, connection changes and auth challenges are
-              designed to log to PostgreSQL with Row-Level Security where
-              enabled.
-            </p>
-          </div>
-
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 uppercase">
-              PRIVACY-AWARE PROCESSING
-            </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Designed to support configurable retention and privacy-oriented
-              defaults. Exact retention depends on deployment, contracts and
-              provider chain — not a universal zero-retention guarantee.
-            </p>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {FEATURES.map(({ icon: Icon, title, text }) => (
+            <article key={title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 transition-colors hover:border-slate-700">
+              <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 grid place-items-center text-brand-300 mb-4">
+                <Icon aria-hidden className="w-5 h-5" />
+              </div>
+              <h3 className="text-[15px] font-semibold text-white mb-2 uppercase tracking-wide">{title}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">{text}</p>
+            </article>
+          ))}
         </div>
       </section>
     </div>

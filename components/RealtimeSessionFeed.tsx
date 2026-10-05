@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 import { format } from "date-fns";
@@ -112,14 +113,18 @@ export function RealtimeSessionFeed() {
           <h3 className="text-base font-bold text-white font-sans sm:text-lg">Live Feed</h3>
           <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">Realtime detection events</p>
         </div>
-        <div className="flex items-center gap-2">
-          {connectionStatus === "live" && (
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-          )}
-          <span className="text-xs font-mono tracking-widest text-slate-400">
+        <div role="status" aria-live="polite">
+          <StatusBadge
+            severity={
+              connectionStatus === "live"
+                ? "safe"
+                : connectionStatus === "offline"
+                ? "offline"
+                : connectionStatus === "retrying"
+                ? "warning"
+                : "processing"
+            }
+          >
             {connectionStatus === "live"
               ? "LIVE"
               : connectionStatus === "retrying"
@@ -127,19 +132,19 @@ export function RealtimeSessionFeed() {
               : connectionStatus === "offline"
               ? "OFFLINE"
               : "CONNECTING..."}
-          </span>
+          </StatusBadge>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden relative">
-        <div className="absolute inset-0 space-y-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 sm:space-y-4 sm:pr-2">
+        <div role="log" aria-label="Realtime detection events" tabIndex={0} className="absolute inset-0 space-y-3 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 sm:space-y-4 sm:pr-2">
           {events.length === 0 ? (
-            <div className="text-center text-sm text-slate-500 py-10 font-mono">Waiting for events...</div>
+            <div className="unavailable justify-center">Waiting for events...</div>
           ) : (
             events.map((ev) => (
               <div
                 key={ev.id}
-                className="animate-in fade-in slide-in-from-top-4 flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-800/50 p-3 duration-300 sm:p-4"
+                className="animate-riseIn flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-800/50 p-3 duration-300 sm:p-4"
               >
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="text-slate-400">
@@ -149,28 +154,11 @@ export function RealtimeSessionFeed() {
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <span
-                      className={`h-2.5 w-2.5 rounded-full ${
-                        ev.risk_level === "high"
-                          ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"
-                          : ev.risk_level === "medium"
-                          ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"
-                          : "bg-emerald-500"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-semibold ${
-                        ev.risk_level === "high"
-                          ? "text-rose-400"
-                          : ev.risk_level === "medium"
-                          ? "text-amber-400"
-                          : "text-emerald-400"
-                      }`}
-                    >
-                      {Math.round((ev.spoof_probability || 0) * 100)}%
-                    </span>
+                    <StatusBadge severity={ev.risk_level === "high" ? "critical" : ev.risk_level === "medium" ? "warning" : "safe"}>
+                      {Math.round((ev.spoof_probability || 0) * 100)}% · {ev.risk_level === "high" ? "High" : ev.risk_level === "medium" ? "Medium" : "Low"}
+                    </StatusBadge>
                   </div>
-                  <span className="text-xs text-slate-500 font-mono">{ev.latency_ms || 0}ms</span>
+                  <span className="text-xs text-slate-400 font-mono">{ev.latency_ms || 0}ms</span>
                 </div>
               </div>
             ))

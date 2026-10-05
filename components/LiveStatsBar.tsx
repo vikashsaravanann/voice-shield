@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { createClient } from "@/lib/supabase/browser";
 
 export function LiveStatsBar() {
@@ -9,6 +10,7 @@ export function LiveStatsBar() {
     threatsBlocked: 0,
     activeStreams: 0,
   });
+  const [loaded, setLoaded] = useState(false);
   const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export function LiveStatsBar() {
         .gte("started_at", today.toISOString());
       
       if (data) {
+        setLoaded(true);
         setStats({
           totalSessions: data.length,
           threatsBlocked: data.filter((s: any) => s.status === "flagged" || s.risk_summary?.decision === "blocked").length,
@@ -52,27 +55,15 @@ export function LiveStatsBar() {
   }, [supabase]);
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 font-mono">Total Sessions Today</p>
-        <p className="text-3xl font-sans font-bold text-slate-100">{stats.totalSessions}</p>
-      </div>
-      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-rose-500/80 font-mono">Threats Blocked</p>
-        <p className="text-3xl font-sans font-bold text-rose-400">{stats.threatsBlocked}</p>
-      </div>
-      <div className="min-h-[108px] rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm backdrop-blur-xl sm:p-5">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-500/80 font-mono">Active Streams</p>
-        <p className="text-3xl font-sans font-bold text-cyan-400 flex items-center gap-3">
-          {stats.activeStreams > 0 && (
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-            </span>
-          )}
-          {stats.activeStreams}
-        </p>
-      </div>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4" role="group" aria-label="Today's session statistics">
+      <MetricCard label="Total Sessions Today" value={loaded ? stats.totalSessions : null} unavailableText="Unavailable" />
+      <MetricCard label="Threats Blocked" value={loaded ? stats.threatsBlocked : null} tone="critical" />
+      <MetricCard
+        label="Active Streams"
+        value={loaded ? stats.activeStreams : null}
+        tone="processing"
+        note={loaded && stats.activeStreams > 0 ? "Streams currently active" : undefined}
+      />
     </div>
   );
 }

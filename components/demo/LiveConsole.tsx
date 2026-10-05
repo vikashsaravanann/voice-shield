@@ -4,9 +4,29 @@ import { AUDIO_CONFIG, CHALLENGE_PHRASES, type ChallengeLang } from "@/lib/audio
 import { AudioStreamer, type StreamSnapshot } from "@/lib/audio/streamer";
 import type { Decision } from "@/lib/audio/decision";
 import { useEffect, useRef, useState } from "react";
-import { Activity, AudioLines, Mic, Radio, ShieldAlert, Unplug } from "lucide-react";
+import { Activity, AudioLines, Mic, Radio, ShieldAlert, Unplug, Square } from "lucide-react";
+import { StatusBadge, type Severity } from "@/components/ui/StatusBadge";
 
 const RISK_COLOR = { green: "var(--ok)", amber: "var(--warn)", red: "var(--danger)" } as const;
+const RISK_SEVERITY: Record<"green" | "amber" | "red", Severity> = { green: "safe", amber: "warning", red: "critical" };
+const LINK_SEVERITY: Record<StreamSnapshot["state"], Severity> = {
+  idle: "unknown",
+  connecting: "processing",
+  live: "safe",
+  reconnecting: "warning",
+  dropped: "offline",
+};
+
+function describeMicError(err: unknown): string {
+  const name = err instanceof DOMException ? err.name : "";
+  if (name === "NotAllowedError" || name === "SecurityError")
+    return "Microphone permission denied. Allow microphone access in the browser site settings, then start again.";
+  if (name === "NotFoundError" || name === "OverconstrainedError")
+    return "No microphone available. Connect an input device and start again.";
+  if (name === "NotReadableError") return "The microphone is in use by another application. Close it and start again.";
+  return "The live path could not start. Check the microphone and connection, then try again.";
+}
+
 const LINK_LABEL: Record<StreamSnapshot["state"], string> = {
   idle: "Idle",
   connecting: "Connecting",
@@ -86,7 +106,7 @@ export function LiveConsole() {
       await streamerRef.current?.start(id);
       setRunning(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Microphone permission is required for the live path.");
+      setError(describeMicError(err));
     }
   }
 
@@ -119,36 +139,63 @@ export function LiveConsole() {
       <div className="row">
         {!running ? (
           <button type="button" className="btn btn-primary" onClick={() => void start()}>
-            <Mic size={16} /> Start live path
+            <Mic aria-hidden size={16} /> Start live path
           </button>
         ) : (
           <button type="button" className="btn btn-ghost" onClick={stop}>
-            Stop session
+            <Square aria-hidden size={14} /> Stop session
           </button>
         )}
-        <button type="button" className={cloneOn ? "btn btn-danger" : "btn btn-ghost"} disabled={!running} onClick={toggleClone}>
-          <ShieldAlert size={16} /> {cloneOn ? "Clone injection on" : "Inject cloned stream"}
+        <button type="button" className={cloneOn ? "btn btn-critical" : "btn btn-ghost"} aria-pressed={cloneOn} disabled={!running} onClick={toggleClone}>
+          <ShieldAlert aria-hidden size={16} /> {cloneOn ? "Clone injection on" : "Inject cloned stream"}
         </button>
         <button type="button" className="btn btn-ghost" disabled={!running} onClick={drop}>
-          <Unplug size={16} /> Simulate drop
+          <Unplug aria-hidden size={16} /> Simulate drop
         </button>
         <p className="hint">PCM stays in RAM. Sign in after Supabase is wired to persist the vault.</p>
       </div>
-      {error ? <p className="err">{error}</p> : null}
+      <div className="row" style={{ marginTop: 12 }} role="status" aria-live="polite">
+        <StatusBadge severity={error ? "critical" : LINK_SEVERITY[snap?.state ?? "idle"]}>
+          {error ? "Error" : `Link: ${snap ? LINK_LABEL[snap.state] : "Idle"}`}
+        </StatusBadge>
+        <span className="hint">
+          {error
+            ? "Session not running."
+            : !running
+            ? "Waiting — start the live path to begin analysis."
+            : snap?.state === "live" && !d
+            ? "Listening — waiting for the first analysed hop."
+            : snap?.state === "live"
+            ? "Analysing live microphone input."
+            : ""}
+        </span>
+      </div>
+      <p className="hint" style={{ marginTop: 8 }}>
+        This console runs the detector in the browser as a client-side stand-in for the inference WebSocket; values are not backend telemetry.
+      </p>
+      {error ? (
+        <div className="alert alert-critical" role="alert" style={{ marginTop: 12 }}>
+          <ShieldAlert aria-hidden size={18} style={{ flexShrink: 0, marginTop: 2, color: "var(--danger)" }} />
+          <div>
+            <p style={{ margin: 0, fontWeight: 600 }}>Live path unavailable</p>
+            <p className="err" style={{ margin: "4px 0 0", color: "var(--muted)" }}>{error}</p>
+          </div>
+        </div>
+      ) : null}
 
       <div className="board">
         <section className="card">
           <p className="eyebrow">Spoof probability</p>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 12 }}>
-            <p className="pct" style={{ color: RISK_COLOR[risk] }}>
-              {pct}
+            <p className="pct" style={{ color: d ? RISK_COLOR[risk] : "var(--subtle)" }} aria-label={d ? `Spoof probability ${pct} percent` : "Spoof probability not yet available"}>
+              {d ? pct : "—"}
               <span style={{ fontSize: 18, color: "var(--muted)" }}>%</span>
             </p>
-            <span className="badge" style={{ background: `color-mix(in oklab, ${RISK_COLOR[risk]} 18%, transparent)`, color: RISK_COLOR[risk] }}>
-              {risk === "green" ? "Verified human" : risk === "amber" ? "Suspicious / challenge" : "Confirmed spoof"}
-            </span>
+            <StatusBadge severity={d ? RISK_SEVERITY[risk] : "unknown"}>
+              {d ? (risk === "green" ? "Verified human" : risk === "amber" ? "Suspicious / challenge" : "Confirmed spoof") : "No result yet"}
+            </StatusBadge>
           </div>
-          <div className="bar">
+          <div className="bar" role="progressbar" aria-label="Spoof probability" aria-valuemin={0} aria-valuemax={100} aria-valuenow={d ? pct : undefined}>
             <span style={{ width: `${pct}%`, background: RISK_COLOR[risk] }} />
           </div>
           <dl className="stats">
@@ -178,7 +225,7 @@ export function LiveConsole() {
             </div>
           </dl>
           {snap?.state === "reconnecting" || snap?.state === "connecting" ? (
-            <p className="hint" style={{ marginTop: 12, color: "var(--warn)" }}>
+            <p className="hint" role="status" style={{ marginTop: 12, color: "var(--warn)" }}>
               {snap.state === "connecting" ? "Bringing the inference link up…" : "Connection lost — reconnecting"}
               {snap.reconnectDelayMs ? ` in ${snap.reconnectDelayMs} ms` : ""}
               {snap.reconnectAttempt ? ` (attempt ${snap.reconnectAttempt})` : ""}. Ring holds the last {AUDIO_CONFIG.bufferDurationSec}s.
@@ -192,22 +239,22 @@ export function LiveConsole() {
             </p>
             <p className="eyebrow">{AUDIO_CONFIG.chunkMs} ms hops</p>
           </div>
-          <canvas ref={waveRef} width={800} height={80} style={{ height: 64 }} />
+          <canvas ref={waveRef} role="img" aria-label="Live microphone waveform" width={800} height={80} style={{ height: 64 }} />
           <p className="eyebrow" style={{ marginTop: 16 }}>
             <Activity size={14} style={{ verticalAlign: "middle" }} /> Linear spectrogram
           </p>
-          <canvas ref={canvasRef} width={800} height={160} style={{ height: 144, marginTop: 8 }} />
+          <canvas ref={canvasRef} role="img" aria-label="Live linear spectrogram of microphone input" width={800} height={160} style={{ height: 144, marginTop: 8 }} />
           <Sparkline values={history} />
         </section>
       </div>
 
-      <div className="board" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 16 }}>
+      <div className="board board-2" style={{ marginTop: 16 }}>
         <section className="card">
           <p className="eyebrow">Explainability</p>
           <ul style={{ margin: "12px 0 0", padding: 0, listStyle: "none" }}>
             {(d?.markers ?? ["Awaiting active speech"]).map((m) => (
               <li key={m} style={{ display: "flex", gap: 8, fontSize: 14, color: "var(--muted)", marginTop: 6 }}>
-                <span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--accent)", marginTop: 7 }} />
+                <span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--accent)", marginTop: 7, flexShrink: 0 }} />
                 {m}
               </li>
             ))}
@@ -273,13 +320,13 @@ export function LiveConsole() {
 function Sparkline({ values }: { values: number[] }) {
   const w = 800;
   const h = 56;
-  if (values.length < 2) return <div style={{ marginTop: 12, height: 56, background: "var(--elevated)", borderRadius: 8 }} />;
+  if (values.length < 2) return <div className="unavailable" style={{ marginTop: 12, height: 56 }}>No hop history yet</div>;
   const pts = values
     .map((v, i) => `${(i / (values.length - 1)) * w},${h - v * (h - 4) - 2}`)
     .join(" ");
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ marginTop: 12, height: 56, width: "100%" }}>
-      <polyline fill="none" stroke="var(--accent)" strokeWidth="1.5" points={pts} />
+    <svg role="img" aria-label={`Smoothed spoof probability, last ${values.length} hops`} viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ marginTop: 12, height: 56, width: "100%" }}>
+      <polyline fill="none" stroke="var(--accent)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" points={pts} />
     </svg>
   );
 }
@@ -289,10 +336,10 @@ function drawWave(canvas: HTMLCanvasElement | null, pcm: Float32Array | null) {
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return;
   const { width, height } = canvas;
-  ctx.fillStyle = "#0c121a";
+  ctx.fillStyle = "#091330";
   ctx.fillRect(0, 0, width, height);
   if (!pcm) return;
-  ctx.strokeStyle = "#5eead4";
+  ctx.strokeStyle = "#45d9d2";
   ctx.lineWidth = 1.2;
   ctx.beginPath();
   const step = Math.max(1, Math.floor(pcm.length / width));
@@ -311,7 +358,7 @@ function drawSpec(canvas: HTMLCanvasElement | null, pcm: Float32Array | null) {
   if (!ctx) return;
   const { width, height } = canvas;
   if (!pcm) {
-    ctx.fillStyle = "#0c121a";
+    ctx.fillStyle = "#091330";
     ctx.fillRect(0, 0, width, height);
     return;
   }

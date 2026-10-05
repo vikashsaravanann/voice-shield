@@ -26,7 +26,7 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
     ? "text-emerald-400 border-emerald-500/30 bg-emerald-950/40"
     : isMed
     ? "text-amber-400 border-amber-500/30 bg-amber-950/40"
-    : "text-rose-400 border-rose-500/40 bg-rose-950/40 animate-pulse";
+    : "text-rose-400 border-rose-500/40 bg-rose-950/40";
 
   const barColor = isLow
     ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/20"
@@ -69,7 +69,7 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
             <span>INFERENCE LOOP</span>
           </span>
           <span className="text-base font-bold text-cyan-300">
-            {latencyMs !== undefined ? `${latencyMs.toFixed(1)} ms` : "4.2 ms"}
+            {latencyMs !== undefined ? `${latencyMs.toFixed(1)} ms` : "—"}
           </span>
           <span className="text-[9px] text-slate-400 block uppercase">
             BUDGET: &lt;269MS
