@@ -246,7 +246,7 @@ export function VoiceprintVault({ selectedProfileId, onSelectProfile }: Voicepri
             >
               {recordingStatus === "recording" ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-red-600 motion-safe:animate-ping" />
                   <span>RECORDING ({recordingCountdown}S)</span>
                 </>
               ) : (

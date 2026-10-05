@@ -139,7 +139,7 @@ export function VoiceShieldAssistant() {
           <span className="absolute inset-0 rounded-full bg-brand-400/10 opacity-0 transition-opacity group-hover:opacity-100" />
           <img src="/logo.png" alt="" className="relative z-10 h-full w-full rounded-full object-cover" />
           <div className="absolute right-0.5 top-0.5 z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#06111a] bg-brand-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-300 opacity-60" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-brand-300 opacity-60" />
           </div>
         </button>
       )}

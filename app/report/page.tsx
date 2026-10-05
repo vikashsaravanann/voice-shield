@@ -135,8 +135,8 @@ function ReportForm() {
                 </div>
 
                 <div className="space-y-2 pt-2">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Incident Description</label>
-                  <textarea 
+                  <label htmlFor="incident-description" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Incident Description</label>
+                  <textarea id="incident-description" 
                     rows={6}
                     value={formData.description}
                     onChange={e => setFormData({...formData, description: e.target.value})}
@@ -149,7 +149,7 @@ function ReportForm() {
                 <button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 flex justify-center items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl p-3 font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50"
+                  className="flex-1 flex justify-center items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl p-3 font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />

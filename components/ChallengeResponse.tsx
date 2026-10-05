@@ -136,12 +136,12 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
         };
 
         recognition.onerror = (e: any) => {
-          console.debug("Speech recognition event:", e.error);
+          void e;
         };
 
         recognition.start();
       } catch (err) {
-        console.debug("Web speech recognition unavailable:", err);
+        void err;
       }
     }
 
@@ -261,7 +261,7 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 motion-safe:animate-ping" />
             <h4 className="text-sm font-black uppercase tracking-wider text-amber-300">
               ACTIVE PHONEMIC CHALLENGE-RESPONSE GATE
             </h4>
@@ -351,7 +351,7 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
         <div className="text-xs font-mono">
           {status === "recording" && (
             <span className="text-amber-400 flex items-center gap-2">
-              <Mic className="w-4 h-4 animate-pulse text-amber-400" />
+              <Mic className="w-4 h-4 motion-safe:animate-pulse text-amber-400" />
               <span>RECORDING SPEECH: Read prompt aloud (3.5s)...</span>
             </span>
           )}

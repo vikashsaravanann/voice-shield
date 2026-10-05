@@ -131,7 +131,7 @@ export function BackendHealth({
             ) : (
               <ServerCrash
                 className={`w-5 h-5 ${
-                  loading ? "text-slate-500 animate-pulse" : "text-slate-500"
+                  loading ? "text-slate-500 motion-safe:animate-pulse" : "text-slate-500"
                 }`}
               />
             )}

@@ -140,7 +140,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen sm:h-screen w-screen overflow-y-auto sm:overflow-hidden bg-[#060d22] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-brand-500 selection:text-slate-950 relative">
+    <div className="min-h-[100dvh] w-full overflow-x-hidden bg-[#060d22] text-slate-100 flex flex-col justify-center p-3 sm:p-6 font-sans selection:bg-brand-500 selection:text-slate-950 relative">
       
       {/* ── Background Cyber Ambient Gradients ── */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-brand-950/25 via-slate-950/60 to-[#060d22] -z-10" />
@@ -159,14 +159,14 @@ export default function LoginPage() {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase">
-            <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-brand-400" />
             <span>PORTAL: SECURE FIPS 140-2</span>
           </div>
         </div>
       </header>
 
       {/* ── Main Two-Column Layout with Wide Gaps & Strong Hierarchy ── */}
-      <main className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-2">
+      <main id="main" className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-2">
         
         {/* Left Column: Security Narrative & Identity */}
         <div className="hidden lg:block lg:col-span-6 space-y-4">
@@ -328,17 +328,18 @@ export default function LoginPage() {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-slate-800" />
               </div>
-              <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-widest text-slate-500">
+              <div className="relative flex justify-center text-[11px] font-mono uppercase tracking-widest text-slate-400">
                 <span className="bg-slate-900/95 px-3">OR USE EMAIL CREDENTIALS</span>
               </div>
             </div>
 
             {/* Form Mode Tabs with Clear Visual State */}
             <div className="space-y-3">
-              <div className="flex rounded-xl bg-slate-950 p-1.5 border border-slate-800 font-mono text-xs">
+              <div role="group" aria-label="Authentication mode" className="flex rounded-xl bg-slate-950 p-1.5 border border-slate-800 font-mono text-xs">
                 <button
                   type="button"
                   onClick={() => { setMode("in"); setMessage(null); }}
+                  aria-pressed={mode === "in"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "in"
                       ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
@@ -350,6 +351,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setMode("up"); setMessage(null); }}
+                  aria-pressed={mode === "up"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "up"
                       ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
@@ -361,6 +363,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setMode("reset"); setMessage(null); }}
+                  aria-pressed={mode === "reset"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "reset"
                       ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
@@ -375,6 +378,7 @@ export default function LoginPage() {
             {/* Error or Success Alert */}
             {message && (
               <div
+                role={message.type === "error" ? "alert" : "status"}
                 className={`p-4 rounded-xl text-xs font-mono flex items-start gap-3 border ${
                   message.type === "error"
                     ? "bg-rose-950/50 border-rose-500/50 text-rose-300"
@@ -391,7 +395,7 @@ export default function LoginPage() {
             )}
 
             {callbackError && !message && (
-              <div className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
+              <div role="alert" className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                 <span>{callbackError}</span>
               </div>
@@ -400,12 +404,14 @@ export default function LoginPage() {
 
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                <label htmlFor="login-email" className="text-[11px] font-mono tracking-widest text-slate-300 uppercase">
                   Operator Email
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
                   <input
+                    id="login-email"
+                    autoComplete="email"
                     required
                     type="email"
                     value={email}
@@ -419,7 +425,7 @@ export default function LoginPage() {
                 {!isReset && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <label className="font-bold text-slate-300 uppercase tracking-wider">PASSWORD</label>
+                    <label htmlFor="login-password" className="font-bold text-slate-300 uppercase tracking-wider">PASSWORD</label>
                     <button
                       type="button"
                       onClick={() => setMode("reset")}
@@ -431,17 +437,21 @@ export default function LoginPage() {
                   <div className="relative">
                     <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
                     <input
+                      id="login-password"
+                      autoComplete={isSignUp ? "new-password" : "current-password"}
                       type={showPassword ? "text" : "password"}
                       required
                       minLength={8}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-brand-500 transition-colors"
+                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus:border-brand-500 transition-colors"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-pressed={showPassword}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -462,7 +472,7 @@ export default function LoginPage() {
               >
                 {busy === "email" ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 motion-safe:animate-spin" aria-hidden="true" />
                     <span>AUTHENTICATING OPERATOR...</span>
                   </>
                 ) : (
@@ -501,7 +511,7 @@ export default function LoginPage() {
       {/* ── Footer Bar with Generous Spacing ── */}
       <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
         <div>VOICESHIELD VoiceShield · LOGIC INTELLIGENCE TECHNOLOGIES · FIPS 140-2 ENCRYPTED</div>
-        <div className="text-slate-500">MUMBAI SOVEREIGN HOSTING (AP-SOUTH-1) · ZERO RAW AUDIO DISK RETENTION</div>
+        <div className="text-slate-400">MUMBAI SOVEREIGN HOSTING (AP-SOUTH-1) · ZERO RAW AUDIO DISK RETENTION</div>
       </footer>
 
     </div>

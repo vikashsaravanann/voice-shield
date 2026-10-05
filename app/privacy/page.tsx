@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase bg-brand-950/80 text-brand-400 border border-brand-500/40">
-                <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-brand-400" />
                 DPDP ACT 2023–ALIGNED DESIGN
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-slate-900 text-slate-300 border border-slate-800">
