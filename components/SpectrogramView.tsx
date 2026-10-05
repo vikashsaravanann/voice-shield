@@ -26,7 +26,7 @@ export function SpectrogramView({ markers, isActive, spoofProbability }: Spectro
 
     const render = () => {
       if (!isActive) {
-        ctx.fillStyle = "#030712";
+        ctx.fillStyle = "#060d22";
         ctx.fillRect(0, 0, width, height);
 
         // Cyber idle grid lines
@@ -122,7 +122,7 @@ export function SpectrogramView({ markers, isActive, spoofProbability }: Spectro
       </div>
 
       {/* Waterfall Canvas Display */}
-      <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-[#030712]">
+      <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-[#060d22]">
         <canvas
           ref={canvasRef}
           width={640}

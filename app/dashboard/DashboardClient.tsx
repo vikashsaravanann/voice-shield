@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ShieldCheck, ShieldAlert, Activity, Users, Clock, AlertTriangle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { BackendHealth } from "@/components/BackendHealth";
 import { ForensicReportButton } from "@/components/ForensicReportButton";
 import { I4CReportButton } from "@/components/I4CReportButton";
@@ -31,26 +32,21 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
   return (
     <>
       <LiveAlertToast />
-      <div className="min-h-screen bg-[#030712] px-3 pb-8 pt-20 text-slate-100 font-sans sm:px-5 sm:pb-10 sm:pt-24 lg:px-8 lg:pt-28">
+      <div className="min-h-screen bg-[#060d22] px-3 pb-8 pt-20 text-slate-100 font-sans sm:px-5 sm:pb-10 sm:pt-24 lg:px-8 lg:pt-28">
         <div className="mx-auto grid w-full max-w-none grid-cols-1 items-stretch gap-5 lg:gap-7 xl:grid-cols-[minmax(0,1fr)_minmax(340px,420px)]">
           
           <div className="min-w-0 space-y-5 sm:space-y-6 lg:space-y-7">
             {/* Header */}
             <div className="grid gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/35 p-4 shadow-xl backdrop-blur-xl sm:p-5 lg:grid-cols-[1fr_auto] lg:items-start lg:p-6">
               <div className="min-w-0">
-                <div className="mb-2 inline-flex items-center gap-2 text-[10px] font-mono font-medium uppercase tracking-[0.16em] text-emerald-400 sm:text-xs">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                  </span>
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-300">
                   <span>LIVE: TELEPHONY MONITORING CENTER</span>
                 </div>
 
-                <h1 className="mt-1 max-w-3xl text-2xl font-black uppercase tracking-tight text-white sm:text-3xl lg:text-4xl">Security Operations Dashboard</h1>
+                <h1 className="mt-1 max-w-3xl text-2xl font-bold uppercase tracking-tight text-white sm:text-3xl lg:text-4xl">Security Operations Dashboard</h1>
                 <p className="mt-2 max-w-2xl text-[11px] uppercase tracking-[0.12em] text-slate-400 sm:text-xs">Real-time threat analytics and voice-cloning mitigation</p>
               </div>
-              <div className="flex w-fit items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-100 sm:justify-self-end sm:px-4 sm:text-xs">
-                <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
+              <div className="flex w-fit items-center gap-2 sm:justify-self-end">
                 <BackendHealth compact />
               </div>
             </div>
@@ -83,16 +79,16 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
               <StatCard
                 title="AVERAGE LATENCY"
                 value={stats.averageLatency ? `${Math.round(stats.averageLatency)}ms` : "—"}
-                icon={<Clock className="w-6 h-6 text-emerald-400" />}
+                icon={<Clock className="w-6 h-6 text-azure-400" />}
                 trend="Recorded inference latency"
-                trendColor="text-emerald-400"
+                trendColor="text-slate-400"
               />
               <StatCard
                 title="AVG CONFIDENCE SCORE"
                 value={stats.total ? `${Math.round((1 - stats.averageRisk) * 100)}%` : "—"}
-                icon={<ShieldCheck className="w-6 h-6 text-teal-400" />}
-                trend="Optimal"
-                trendColor="text-teal-400"
+                icon={<ShieldCheck className="w-6 h-6 text-slate-400" />}
+                trend="Based on recorded sessions"
+                trendColor="text-slate-400"
               />
             </div>
 
@@ -107,31 +103,32 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                   <p className="text-[10px] font-mono uppercase tracking-wide text-slate-400 sm:text-xs">Maximum detected risk probability across voice sessions</p>
                 </div>
 
-                <div className="h-[240px] w-full sm:h-[300px]">
+                <div className="h-[240px] w-full sm:h-[300px]" role="img" aria-label="Area chart of maximum detected risk percentage per voice session, by hour of day">
                   {chartData.length === 0 ? (
                     <div className="grid h-full place-items-center rounded-xl border border-dashed border-slate-800 bg-slate-950/30 px-6 text-center">
                       <div>
                         <p className="font-mono text-sm text-slate-400">No voice sessions recorded yet</p>
-                        <p className="mt-2 text-xs text-slate-600">Start the live demo to populate real threat telemetry.</p>
+                        <p className="mt-2 text-xs text-slate-400">Start the live demo to populate real threat telemetry.</p>
                       </div>
                     </div>
                   ) : (
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <AreaChart data={chartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
-                          <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="#ee7c3a" stopOpacity={0.4}/>
+                          <stop offset="95%" stopColor="#ee7c3a" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                      <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1c2a4f" vertical={false} />
+                      <XAxis dataKey="name" stroke="#8d9dbf" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis domain={[0, 100]} width={44} stroke="#8d9dbf" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9', borderRadius: '8px' }}
-                        itemStyle={{ color: '#ef4444' }}
+                        formatter={(v) => [`${v}%`, "Max risk"]}
+                        contentStyle={{ backgroundColor: '#0d1b3e', borderColor: '#334066', color: '#e9eef8', borderRadius: '8px' }}
+                        itemStyle={{ color: '#ee7c3a' }}
                       />
-                      <Area type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
+                      <Area type="monotone" dataKey="risk" stroke="#ee7c3a" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   )}
@@ -157,15 +154,16 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                 <span className="rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[10px] font-mono text-slate-400">{sessions.length} records</span>
               </div>
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Recent sessions table, scrollable">
                 <table className="w-full min-w-[680px] border-collapse text-left">
+                  <caption className="sr-only">Recent detection sessions with max risk and status</caption>
                   <thead>
                     <tr className="border-b border-slate-800 text-xs uppercase tracking-wider text-slate-500">
-                      <th className="pb-3 px-4 font-semibold">Session ID</th>
-                      <th className="pb-3 px-4 font-semibold">Time</th>
-                      <th className="pb-3 px-4 font-semibold">Max Risk</th>
-                      <th className="pb-3 px-4 font-semibold">Status</th>
-                      <th className="pb-3 px-4 font-semibold">Client</th>
+                      <th scope="col" className="pb-3 px-4 font-semibold">Session ID</th>
+                      <th scope="col" className="pb-3 px-4 font-semibold">Time</th>
+                      <th scope="col" className="pb-3 px-4 font-semibold">Max Risk</th>
+                      <th scope="col" className="pb-3 px-4 font-semibold">Status</th>
+                      <th scope="col" className="pb-3 px-4 font-semibold">Client</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm">
@@ -176,14 +174,14 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                       return (
                         <tr key={session.id} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
                           <td className="py-4 px-4 font-mono text-slate-300">{session.id.split('-')[0]}</td>
-                          <td className="py-4 px-4 text-slate-400">
+                          <td className="py-4 px-4 text-slate-300">
                             {formatDistanceToNow(new Date(session.started_at), { addSuffix: true })}
                           </td>
                           <td className="py-4 px-4">
                             <div className="flex items-center gap-2">
                               <div className="w-16 h-2 rounded-full bg-slate-800 overflow-hidden">
                                 <div
-                                  className={`h-full ${isBlocked ? 'bg-rose-500' : 'bg-emerald-500'}`}
+                                  className={`h-full ${isBlocked ? 'bg-[var(--danger)]' : 'bg-[var(--ok)]'}`}
                                   style={{ width: `${Math.max(maxRisk, 5)}%` }}
                                 />
                               </div>
@@ -193,13 +191,9 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
                             </div>
                           </td>
                           <td className="py-4 px-4">
-                            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-                              isBlocked ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            }`}>
-                              {isBlocked ? 'Blocked' : 'Clean'}
-                            </span>
+                            <StatusBadge severity={isBlocked ? "critical" : "safe"}>{isBlocked ? "Blocked" : "Clean"}</StatusBadge>
                           </td>
-                          <td className="py-4 px-4 text-slate-500 font-mono text-xs">
+                          <td className="py-4 px-4 text-slate-400 font-mono text-xs">
                             <div className="flex items-center gap-2">
                               <span>{session.client_info?.browser || 'Unknown'} / {session.client_info?.os || 'Unknown'}</span>
                               <ForensicReportButton session={session} />
@@ -236,9 +230,9 @@ export default function DashboardClient({ sessions, stats }: { sessions: any[]; 
 function EvidenceCard({ title, value, detail }: { title: string; value: string; detail: string }) {
   return (
     <div className="flex min-h-[124px] flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-4 sm:p-5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">{title}</p>
-      <p className="mt-3 break-words font-mono text-sm font-bold uppercase leading-relaxed text-emerald-300 sm:text-base">{value}</p>
-      <p className="mt-1 text-[11px] leading-relaxed text-slate-400">{detail}</p>
+      <p className="widget-label">{title}</p>
+      <p className="mt-3 break-words font-mono text-sm font-bold uppercase leading-relaxed text-brand-300 sm:text-base">{value}</p>
+      <p className="mt-1 text-xs leading-relaxed text-slate-400">{detail}</p>
     </div>
   );
 }
@@ -247,7 +241,7 @@ function StatCard({ title, value, icon, trend, trendColor = "text-blue-400" }: a
   return (
     <div className="min-h-[142px] rounded-xl border border-slate-800 bg-slate-900/60 p-3 shadow-lg backdrop-blur-md sm:p-5">
       <div className="flex items-start justify-between mb-2">
-        <span className="max-w-[9rem] text-[10px] font-semibold uppercase leading-tight tracking-wider text-slate-400 sm:text-xs">{title}</span>
+        <span className="max-w-[9rem] widget-label leading-tight">{title}</span>
         <div className="hidden rounded-lg border border-slate-800/50 bg-slate-950 p-2 sm:block">
           {icon}
         </div>

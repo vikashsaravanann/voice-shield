@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import {
   CheckCircle2,
   ServerCrash,
@@ -80,19 +81,10 @@ export function BackendHealth({
 
   if (compact) {
     return (
-      <span
-        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-mono font-semibold ${
-          online
-            ? "border-emerald-500/30 bg-emerald-950/40 text-emerald-300"
-            : "border-amber-500/30 bg-amber-950/30 text-amber-400"
-        }`}
-      >
-        <span
-          className={`h-1.5 w-1.5 rounded-full ${
-            online ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-          }`}
-        />
-        {online ? "API ONLINE" : loading ? "CONNECTING…" : "API STANDBY"}
+      <span role="status" aria-live="polite">
+        <StatusBadge severity={online ? "safe" : loading ? "processing" : "offline"}>
+          {online ? "API online" : loading ? "Connecting…" : "API unavailable"}
+        </StatusBadge>
       </span>
     );
   }
@@ -101,7 +93,7 @@ export function BackendHealth({
     ? "Inference API · Online"
     : loading
     ? "Inference API · Connecting…"
-    : "Inference API · Standby";
+    : "Inference API · Unavailable";
 
   const statusSub = wsConnected && httpError
     ? `WebSocket active — HTTP health probe returned ${httpStatus ?? "no response"}.`
@@ -115,12 +107,14 @@ export function BackendHealth({
 
   return (
     <div
-      className={`rounded-2xl border p-5 backdrop-blur-md transition-all duration-500 ${
+      role="status"
+      aria-live="polite"
+      className={`rounded-2xl border border-l-4 p-5 transition-colors duration-300 ${
         online
-          ? "border-emerald-500/30 bg-emerald-950/10 shadow-lg shadow-emerald-500/5"
+          ? "border-slate-800 border-l-[var(--ok)] bg-slate-900/60"
           : httpError
-          ? "border-slate-700/60 bg-slate-900/50"
-          : "border-slate-800/80 bg-slate-900/40"
+          ? "border-slate-700 border-l-[var(--offline)] bg-slate-900/60"
+          : "border-slate-800 border-l-[var(--processing)] bg-slate-900/60"
       }`}
     >
       <div className="flex items-center justify-between gap-4">
@@ -143,25 +137,23 @@ export function BackendHealth({
             )}
           </div>
           <div>
-            <p className="text-[10px] font-mono font-semibold tracking-[0.2em] text-slate-500 uppercase mb-0.5">
+            <p className="widget-label mb-0.5">
               Control Plane
             </p>
             <h2 className="text-sm font-bold text-white leading-tight">
               {statusLabel}
             </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5 max-w-lg">{statusSub}</p>
+            <p className="text-xs text-slate-400 mt-0.5 max-w-lg">{statusSub}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          {online && (
-            <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
-          )}
+          {online && <Activity aria-hidden className="w-4 h-4 text-emerald-400" />}
           {httpError && !wsConnected && (
             <button
               onClick={check}
               disabled={retrying}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50"
+              className="btn btn-ghost btn-sm"
             >
               <RefreshCw
                 className={`w-3.5 h-3.5 ${retrying ? "animate-spin" : ""}`}
@@ -189,7 +181,7 @@ export function BackendHealth({
             {
               icon: Database,
               label: "Audio Storage",
-              value: health.store_raw_audio ? "Retained" : "RAM Only ✓",
+              value: health.store_raw_audio ? "Retained" : "RAM only",
               highlight: !health.store_raw_audio,
             },
           ].map(({ icon: Icon, label, value, highlight }) => (
@@ -199,7 +191,7 @@ export function BackendHealth({
             >
               <div className="flex items-center gap-1.5 text-slate-500">
                 <Icon className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-mono uppercase tracking-wider">
+                <span className="widget-label">
                   {label}
                 </span>
               </div>
@@ -218,7 +210,7 @@ export function BackendHealth({
       {wsConnected && httpError && (
         <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-950/20 px-4 py-3">
           <p className="text-xs text-emerald-300/80 leading-relaxed">
-            <strong className="text-emerald-300">✅ Backend Confirmed Online:</strong> Your
+            <strong className="text-emerald-300">Backend confirmed online:</strong> Your
             WebSocket connection is live and streaming audio in real-time. The HTTP health
             endpoint returned {httpStatus ?? "no response"}, but the active stream is authoritative.
           </p>
@@ -228,7 +220,7 @@ export function BackendHealth({
       {!online && !loading && (
         <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-950/10 px-4 py-3">
           <p className="text-xs text-amber-300/80 leading-relaxed">
-            <strong className="text-amber-300">ℹ️ Browser Shell Active:</strong> The visual
+            <strong className="text-amber-300">Browser shell active:</strong> The visual
             console remains available, but live inference and risk updates require the backend
             WebSocket. Retry after the service is deployed or awake.
           </p>

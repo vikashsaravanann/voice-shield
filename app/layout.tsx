@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         />
       </head>
-      <body className="min-h-screen bg-[#030712] text-slate-100 antialiased">
+      <body className="min-h-screen bg-[#060d22] text-slate-100 antialiased">
         <Shell>{children}</Shell>
         <VoiceShieldAssistant />
       </body>

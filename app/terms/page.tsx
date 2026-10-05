@@ -37,8 +37,8 @@ export const metadata = {
 
 export default function TermsOfServicePage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 selection:bg-emerald-500 selection:text-slate-950 font-sans pb-24">
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-950/20 via-slate-950/60 to-[#030712] -z-10" />
+    <div className="min-h-screen bg-[#060d22] text-slate-100 selection:bg-brand-500 selection:text-slate-950 font-sans pb-24">
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-950/20 via-slate-950/60 to-[#060d22] -z-10" />
       <div className="fixed top-1/4 right-1/4 w-[500px] h-[300px] bg-cyan-500/5 rounded-full blur-[130px] pointer-events-none -z-10" />
 
       <section className="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl pt-16 pb-16 px-4 sm:px-6 lg:px-12">
@@ -55,7 +55,7 @@ export default function TermsOfServicePage() {
                 TELEPHONY SPEC V2.4 ACTIVE
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-slate-900 text-slate-300 border border-slate-800">
-                <Award className="w-3.5 h-3.5 text-emerald-400" />
+                <Award className="w-3.5 h-3.5 text-brand-400" />
                 VoiceShield COMPLIANT
               </span>
             </div>
@@ -82,7 +82,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="p-4 rounded-xl border border-slate-800/90 bg-slate-900/60 backdrop-blur-md space-y-1.5">
               <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">EMERGENCY PROTOCOL</span>
-              <span className="text-base font-mono font-black text-emerald-400 uppercase block">FAIL-OPEN (112 / SOS)</span>
+              <span className="text-base font-mono font-black text-brand-400 uppercase block">FAIL-OPEN (112 / SOS)</span>
               <p className="text-xs text-slate-400 leading-normal">Uninterrupted emergency life-safety routing.</p>
             </div>
             <div className="p-4 rounded-xl border border-slate-800/90 bg-slate-900/60 backdrop-blur-md space-y-1.5">
@@ -117,7 +117,7 @@ export default function TermsOfServicePage() {
               <p className="text-sm text-slate-300 leading-relaxed">Telecommunications service providers may integrate VoiceShield via SBCs, SIP REC, or media-forking WebSocket gateways when properly authorized.</p>
             </div>
             <div className="p-6 sm:p-8 rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400"><Radio className="w-5 h-5" /></div>
+              <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400"><Radio className="w-5 h-5" /></div>
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">BANKING & CONTACT CENTERS</h3>
               <p className="text-sm text-slate-300 leading-relaxed">Financial institutions may use VoiceShield for high-risk voice verification workflows with human review and configured mitigation policies.</p>
             </div>
@@ -127,14 +127,14 @@ export default function TermsOfServicePage() {
         <section className="space-y-8">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">CLAUSE 2.0</span>
+              <span className="px-2.5 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-400 font-mono text-xs font-bold uppercase tracking-wider">CLAUSE 2.0</span>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight uppercase">DUAL FAIL-SAFE STANDARD</h2>
             </div>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">VoiceShield instances should follow dual fail-safe principles: emergency paths fail-open; high-risk financial paths may fail-closed when configured.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-5 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-3">
-              <span className="text-xs font-mono font-bold text-emerald-400 uppercase">FAIL-OPEN · EMERGENCY</span>
+            <div className="p-5 rounded-xl bg-slate-950/80 border border-brand-500/30 space-y-3">
+              <span className="text-xs font-mono font-bold text-brand-400 uppercase">FAIL-OPEN · EMERGENCY</span>
               <h3 className="text-base font-bold text-white uppercase">UNINTERRUPTED EMERGENCY ROUTING</h3>
               <p className="text-xs text-slate-300 leading-relaxed">Emergency responder gateways must not be severed or delayed by inspection failures.</p>
             </div>
@@ -156,7 +156,7 @@ export default function TermsOfServicePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="p-6 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">
-              <div className="text-xs font-mono font-bold text-emerald-400 uppercase">RIGHT 01 · DEMO</div>
+              <div className="text-xs font-mono font-bold text-brand-400 uppercase">RIGHT 01 · DEMO</div>
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">CONFIGURED DEMO ACCESS</h3>
               <p className="text-xs text-slate-400 leading-relaxed">Authorized evaluators can use configured demo access without pre-registered carrier credentials.</p>
             </div>
@@ -179,7 +179,7 @@ export default function TermsOfServicePage() {
               <span className="px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider">CLAUSE 4.0</span>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight uppercase">TELECOMMUNICATIONS COMPLIANCE</h2>
             </div>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">VoiceShield deployments should be operated in accordance with applicable DoT, TRAI, and IT Act requirements for the customer's jurisdiction and use case.</p>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">VoiceShield deployments should be operated in accordance with applicable DoT, TRAI, and IT Act requirements for the customer&apos;s jurisdiction and use case.</p>
           </div>
         </section>
 

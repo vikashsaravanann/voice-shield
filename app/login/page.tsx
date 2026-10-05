@@ -140,26 +140,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen sm:h-screen w-screen overflow-y-auto sm:overflow-hidden bg-[#030712] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-emerald-500 selection:text-slate-950 relative">
+    <div className="min-h-screen sm:h-screen w-screen overflow-y-auto sm:overflow-hidden bg-[#060d22] text-slate-100 flex flex-col justify-center p-2 sm:p-4 font-sans selection:bg-brand-500 selection:text-slate-950 relative">
       
       {/* ── Background Cyber Ambient Gradients ── */}
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-emerald-950/25 via-slate-950/60 to-[#030712] -z-10" />
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-brand-950/25 via-slate-950/60 to-[#060d22] -z-10" />
       <div className="fixed top-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/4 left-1/4 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="fixed bottom-1/4 left-1/4 w-[400px] h-[400px] bg-brand-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* ── Top Navigation Bar with Generous Breathing Space ── */}
       <header className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between pb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono font-bold tracking-widest text-slate-300 hover:text-emerald-400 hover:border-emerald-500/40 uppercase transition-all duration-200"
+          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono font-bold tracking-widest text-slate-300 hover:text-brand-400 hover:border-brand-500/40 uppercase transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>RETURN TO OVERVIEW</span>
         </Link>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-bold tracking-wider uppercase">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase">
+            <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
             <span>PORTAL: SECURE FIPS 140-2</span>
           </div>
         </div>
@@ -174,15 +174,15 @@ export default function LoginPage() {
           {/* Brand Header */}
           <div className="space-y-3">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-xl shadow-emerald-500/15 group-hover:border-emerald-400 transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500/20 to-teal-500/10 border border-brand-500/40 flex items-center justify-center text-brand-400 shadow-xl shadow-brand-500/15 group-hover:border-brand-400 transition-all duration-300">
                 <Shield className="w-6 h-6 stroke-[2.2]" />
               </div>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-black tracking-wider text-white uppercase group-hover:text-emerald-300 transition-colors">
+                  <span className="text-2xl font-black tracking-wider text-white uppercase group-hover:text-brand-300 transition-colors">
                     VOICESHIELD
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-emerald-950 text-emerald-400 border border-emerald-500/40 uppercase">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-brand-950 text-brand-400 border border-brand-500/40 uppercase">
                     VoiceShield
                   </span>
                 </div>
@@ -205,7 +205,7 @@ export default function LoginPage() {
           <div className="space-y-4 pt-2">
             
             <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-800/90 bg-slate-900/40 backdrop-blur-md hover:border-slate-700 transition-colors">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+              <div className="p-2.5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 shrink-0">
                 <Cpu className="w-5 h-5" />
               </div>
               <div className="space-y-1">
@@ -250,7 +250,7 @@ export default function LoginPage() {
 
           {/* Statutory Credentials Footer */}
           <div className="pt-2 flex flex-wrap items-center gap-6 text-[11px] font-mono text-slate-400 uppercase tracking-widest">
-            <span className="flex items-center gap-1.5 text-emerald-400">
+            <span className="flex items-center gap-1.5 text-brand-400">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>AES-256-GCM</span>
             </span>
@@ -268,15 +268,15 @@ export default function LoginPage() {
 
         {/* Right Column: High-Grade Authentication Card */}
         <div className="lg:col-span-6 w-full max-w-lg mx-auto">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-10 backdrop-blur-2xl shadow-2xl shadow-emerald-950/20 space-y-4 relative">
+          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-10 backdrop-blur-2xl shadow-2xl shadow-brand-950/20 space-y-4 relative">
             
             {/* Glowing Top Edge Accent */}
-            <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+            <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
 
             {/* Primary OAuth Sign In Options (Open to Any Gmail / GitHub) */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-brand-400">
                   <span>OPEN OPERATOR ACCESS</span>
                   <span className="text-[10px] text-cyan-300">NO DOMAIN RESTRICTIONS</span>
                 </div>
@@ -288,10 +288,10 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => signInWithProvider("google")}
                   disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-emerald-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-brand-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
                 >
                   <GoogleIcon />
-                  <span className="text-white group-hover:text-emerald-300 transition-colors">
+                  <span className="text-white group-hover:text-brand-300 transition-colors">
                     CONTINUE WITH GOOGLE (ANY GMAIL)
                   </span>
                 </button>
@@ -314,8 +314,8 @@ export default function LoginPage() {
               </div>
 
               {/* Clearance Guarantee Banner */}
-              <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-brand-950/40 border border-brand-500/30 text-[11px] font-mono text-brand-300 flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
                 <span>
                   All authenticated Google &amp; GitHub accounts receive instantaneous clearance to the SOC Dashboard, Live Voice Streamer, Forensic FIR Reports, and Telephony Controls.
                   
@@ -341,7 +341,7 @@ export default function LoginPage() {
                   onClick={() => { setMode("in"); setMessage(null); }}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "in"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
+                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -352,7 +352,7 @@ export default function LoginPage() {
                   onClick={() => { setMode("up"); setMessage(null); }}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "up"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
+                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -363,7 +363,7 @@ export default function LoginPage() {
                   onClick={() => { setMode("reset"); setMessage(null); }}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "reset"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
+                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -378,13 +378,13 @@ export default function LoginPage() {
                 className={`p-4 rounded-xl text-xs font-mono flex items-start gap-3 border ${
                   message.type === "error"
                     ? "bg-rose-950/50 border-rose-500/50 text-rose-300"
-                    : "bg-emerald-950/50 border-emerald-500/50 text-emerald-300"
+                    : "bg-brand-950/50 border-brand-500/50 text-brand-300"
                 }`}
               >
                 {message.type === "error" ? (
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
                 ) : (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-brand-400" />
                 )}
                 <span className="leading-relaxed">{message.text}</span>
               </div>
@@ -410,7 +410,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                    className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/50 transition-all"
                     placeholder="operator@voiceshield.in"
                   />
                 </div>
@@ -423,7 +423,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setMode("reset")}
-                      className="text-slate-400 hover:text-emerald-400 uppercase tracking-wider text-[10px] transition-colors"
+                      className="text-slate-400 hover:text-brand-400 uppercase tracking-wider text-[10px] transition-colors"
                     >
                       FORGOT PASSWORD?
                     </button>
@@ -437,7 +437,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus:border-brand-500 transition-colors"
                     />
                     <button
                       type="button"
@@ -454,9 +454,9 @@ export default function LoginPage() {
                 type="submit"
                 disabled={busy !== null}
                 className="
-                  w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500
-                  hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black
-                  text-xs tracking-widest uppercase transition-all shadow-lg shadow-emerald-500/20
+                  w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-teal-500
+                  hover:from-brand-400 hover:to-teal-400 text-slate-950 font-mono font-black
+                  text-xs tracking-widest uppercase transition-all shadow-lg shadow-brand-500/20
                   active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 mt-2
                 "
               >
@@ -476,15 +476,15 @@ export default function LoginPage() {
             {/* Legal & Policy Direct Links with Clear Spacing */}
             <div className="pt-4 border-t border-slate-800 text-center space-y-2">
               <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-400">
-                <Link href="/privacy" className="hover:text-emerald-400 uppercase transition-colors underline-offset-4 hover:underline">
+                <Link href="/privacy" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
                   PRIVACY POLICY
                 </Link>
                 <span className="text-slate-600">·</span>
-                <Link href="/terms" className="hover:text-emerald-400 uppercase transition-colors underline-offset-4 hover:underline">
+                <Link href="/terms" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
                   TERMS OF SERVICE
                 </Link>
                 <span className="text-slate-600">·</span>
-                <Link href="/docs" className="hover:text-emerald-400 uppercase transition-colors underline-offset-4 hover:underline">
+                <Link href="/docs" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
                   SECURITY DOCS
                 </Link>
               </div>
