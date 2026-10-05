@@ -136,7 +136,7 @@ function ReportForm() {
 
                 <div className="space-y-2 pt-2">
                   <label htmlFor="incident-description" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Incident Description</label>
-                  <textarea id="incident-description" 
+                  <textarea id="incident-description"
                     rows={6}
                     value={formData.description}
                     onChange={e => setFormData({...formData, description: e.target.value})}
