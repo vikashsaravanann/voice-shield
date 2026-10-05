@@ -62,7 +62,6 @@ export function RiskMeter({ probability, riskLevel, latencyMs }: RiskMeterProps)
         </div>
 
         {/* Latency & Processing Speed Ticker */}
-        {/* Added this block after judges specifically asked about latency budget */}
         <div className="text-right p-3 rounded-xl border border-slate-800 bg-slate-950/70 font-mono space-y-1">
           <span className="text-[10px] text-slate-400 block uppercase tracking-wider flex items-center justify-end gap-1">
             <Clock className="w-3 h-3 text-cyan-400" />

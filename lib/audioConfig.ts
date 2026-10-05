@@ -1,6 +1,6 @@
 /**
  * VoiceShield — Audio Streaming Configuration
- * VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
+ * VoiceShield Platform | Logic Intelligence Technologies
  *
  * Chunk size trade-offs:
  * - 250ms: Lowest latency (~150ms round-trip), higher network message overhead, faster UI responsiveness.

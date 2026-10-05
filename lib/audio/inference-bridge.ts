@@ -92,7 +92,7 @@ export class InferenceBridge {
     return decision;
   }
 
-  /** Judge-facing reliability demo: tear the socket down. */
+  /** Reliability demo: tear the socket down. */
   simulateDrop(reason = "simulated_network_partition") {
     if (this.state === "idle") return;
     this.killed = true;

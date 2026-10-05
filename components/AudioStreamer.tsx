@@ -422,7 +422,7 @@ export function AudioStreamer({
       });
       processorNodeRef.current = processor;
 
-      source.connect(audioCtx.destination); // Play the audio so judge can hear it
+      source.connect(audioCtx.destination); // Play the audio so the operator can hear it
       source.connect(processor);
       processor.connect(audioCtx.destination); // Required for onaudioprocess to fire
       source.start(0);
@@ -488,10 +488,10 @@ export function AudioStreamer({
     updateConnection("disconnected");
   };
 
-  // Simulate network severed connection for Judge Demo
+  // Simulate a severed network connection (reliability demo)
   const simulateDisconnect = () => {
     if (wsRef.current) {
-      wsRef.current.close(4001, "Simulated network drop for judge demo");
+      wsRef.current.close(4001, "Simulated network drop (demo)");
     }
   };
 

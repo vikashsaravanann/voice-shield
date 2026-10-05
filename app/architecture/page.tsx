@@ -37,8 +37,8 @@ export default function ArchitecturePage() {
       num: "03",
       title: "QUANTIZED NEURAL CLASSIFIER",
       badge: "SS3 · DUAL-STREAM INFERENCE",
-      desc: "Dual-stream neural backbone: Modified RawNet2 with parameterized sinc-convolutions for raw waveform inspection combined with a lightweight 2D ResNet with Squeeze-and-Excitation for spectral envelopes. Quantized to INT8 ONNX for sub-40ms CPU inference.",
-      metrics: ["INT8 quantized graph", "< 38ms CPU inference", "< 120MB RAM footprint"],
+      desc: "Dual-stream neural backbone: Modified RawNet2 with parameterized sinc-convolutions for raw waveform inspection combined with a lightweight 2D ResNet with Squeeze-and-Excitation for spectral envelopes. Quantized to INT8 ONNX, targeting sub-40ms CPU inference.",
+      metrics: ["INT8 quantized graph", "Target: < 38ms CPU inference", "Target: < 120MB RAM"],
     },
     {
       num: "04",

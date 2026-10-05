@@ -73,8 +73,8 @@ export function useForensicReport() {
 
     doc.setFontSize(7);
     doc.setTextColor(130, 160, 200);
-    doc.text("Logic Intelligence Technologies  |  Problem ID: VoiceShield Platform  |  Logic Intelligence Technologies", 40, 31);
-    doc.text("voiceshield-team/voiceshield-sih-2026  |  Powered by Groq LPU + FastAPI", 40, 36);
+    doc.text("Logic Intelligence Technologies  |  VoiceShield Platform", 40, 31);
+    doc.text("VoiceShield  |  Analysis pipeline: Groq LPU + FastAPI", 40, 36);
 
     // ── CLASSIFICATION BADGE ─────────────────────────────────────────────────
     const badgeColor = data.decision === "blocked" ? [200, 30, 30] : [0, 150, 100];

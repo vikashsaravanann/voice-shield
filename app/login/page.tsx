@@ -148,17 +148,17 @@ export default function LoginPage() {
       <div className="fixed bottom-1/4 left-1/4 w-[400px] h-[400px] bg-brand-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* ── Top Navigation Bar with Generous Breathing Space ── */}
-      <header className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between pb-8">
+      <header className="relative z-10 max-w-7xl w-full mx-auto flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono font-bold tracking-widest text-slate-300 hover:text-brand-400 hover:border-brand-500/40 uppercase transition-all duration-200"
+          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono font-bold tracking-widest whitespace-nowrap text-slate-300 hover:text-brand-400 hover:border-brand-500/40 uppercase transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>RETURN TO OVERVIEW</span>
         </Link>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase whitespace-nowrap">
             <span className="w-2 h-2 rounded-full bg-brand-400" />
             <span>PORTAL: SECURE FIPS 140-2</span>
           </div>
@@ -210,7 +210,7 @@ export default function LoginPage() {
               </div>
               <div className="space-y-1">
                 <h2 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
-                  SUB-300MS REAL-TIME MITIGATION
+                  LOW-LATENCY MITIGATION · 300 MS TARGET
                 </h2>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Extracts 250ms sliding window audio tensors to detect vocoder phase anomalies before caller fund transfer authorization.

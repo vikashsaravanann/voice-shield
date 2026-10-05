@@ -484,7 +484,7 @@ export default function ForensicSandboxPage() {
                       <Sliders className="w-4 h-4 text-cyan-400" />
                       <span>LIVE ACOUSTIC CALIBRATION</span>
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400">Judge Simulator</span>
+                    <span className="text-[10px] font-mono text-slate-400">Demo Simulator</span>
                   </div>
 
                   <div className="space-y-2">

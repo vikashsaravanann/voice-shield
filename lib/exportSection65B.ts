@@ -63,7 +63,7 @@ export function generateSection65BCertificate(
   doc.setFont("helvetica", "normal");
   doc.setTextColor(52, 211, 153); // emerald-400
   doc.text(
-    "LOGIC INTELLIGENCE TECHNOLOGIES · PROBLEM ID: VoiceShield Platform · I4C INTEGRATED FORENSICS",
+    "LOGIC INTELLIGENCE TECHNOLOGIES · VOICESHIELD PLATFORM · I4C INTEGRATED FORENSICS",
     pageWidth / 2,
     16,
     { align: "center" }

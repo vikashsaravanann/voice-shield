@@ -1,6 +1,6 @@
 /**
  * VoiceShield — WebSocket Reconnection with Jittered Exponential Backoff
- * VoiceShield Platform | voiceshield-team/voiceshield-sih-2026
+ * VoiceShield Platform | Logic Intelligence Technologies
  */
 
 export interface ReconnectConfig {
