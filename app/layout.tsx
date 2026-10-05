@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-[#060d22] text-slate-100 antialiased">
+        <div aria-hidden="true" className="vs-ambient" />
         <Shell>{children}</Shell>
         <VoiceShieldAssistant />
       </body>

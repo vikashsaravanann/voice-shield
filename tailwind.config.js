@@ -65,5 +65,8 @@ module.exports = {
       },
     },
   },
+  // StatusBadge builds `status-${severity}` at runtime; keep those component
+  // classes from being tree-shaken out of @layer components.
+  safelist: [{ pattern: /^status-(safe|normal|warning|high|critical|processing|offline|unknown)$/ }],
   plugins: [],
 };

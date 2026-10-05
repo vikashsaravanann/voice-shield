@@ -58,11 +58,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <div className="min-h-screen w-full flex flex-col text-slate-100 selection:bg-brand-400 selection:text-slate-950 font-sans overflow-x-hidden">
+    <div className="relative z-10 min-h-screen w-full flex flex-col text-slate-100 selection:bg-brand-400 selection:text-slate-950 font-sans overflow-x-hidden">
       <a href="#main-content" className="skip-link">Skip to content</a>
 
       <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/85 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-5 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="VoiceShield home">
             <span className="w-9 h-9 rounded-full border border-brand-400/50 overflow-hidden bg-slate-950 shrink-0 group-hover:border-brand-300 transition-colors">
               <img src="/logo.png" alt="VoiceShield logo" className="w-full h-full object-cover rounded-full" />
@@ -73,20 +73,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden min-[1200px]:flex items-center gap-0.5">
+          <nav aria-label="Primary" className="hidden min-[1280px]:flex min-w-0 items-center gap-0.5">
             {NAV.map((item) => {
               const active = isActive(item.href);
-              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative inline-flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-md text-[11.5px] xl:text-xs font-semibold tracking-[0.06em] uppercase whitespace-nowrap transition-colors ${
+                  className={`relative inline-flex items-center px-2.5 py-2 rounded-md text-xs font-semibold tracking-[0.05em] uppercase whitespace-nowrap transition-colors ${
                     active ? "text-white" : "text-slate-400 hover:text-white hover:bg-slate-800/60"
                   }`}
                 >
-                  <Icon aria-hidden className={`w-3.5 h-3.5 shrink-0 ${active ? "text-brand-400" : "text-slate-500"}`} />
                   {item.label}
                   {active && <span aria-hidden className="absolute inset-x-2.5 -bottom-[13px] h-[2px] rounded bg-brand-400" />}
                 </Link>
@@ -95,23 +93,17 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2 shrink-0">
-            <a
-              href={LIT_HOME}
-              className="hidden min-[1700px]:inline-flex btn btn-ghost btn-sm"
-            >
-              Company
-            </a>
-            <div className="hidden min-[1700px]:block">
+            <div className="hidden 2xl:block">
               <BackendHealth compact />
             </div>
-            <Link href="/login" className="btn btn-primary btn-sm">
+            <Link href="/login" className="btn btn-primary btn-sm" aria-label="Sign in">
               <Lock aria-hidden className="w-3.5 h-3.5" />
-              SIGN IN
+              <span aria-hidden className="hidden min-[400px]:inline">SIGN IN</span>
             </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="min-[1200px]:hidden btn btn-ghost btn-icon btn-sm"
+              className="min-[1280px]:hidden btn btn-ghost btn-icon btn-sm"
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav"
@@ -125,7 +117,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {mobileMenuOpen && (
         <div
           id="mobile-nav"
-          className="min-[1200px]:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-slate-950/98 backdrop-blur-2xl p-4 overflow-y-auto animate-fadeIn"
+          className="min-[1280px]:hidden fixed inset-x-0 top-14 sm:top-16 bottom-0 z-40 bg-slate-950/98 backdrop-blur-2xl p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain animate-fadeIn"
         >
           <nav aria-label="Mobile" className="flex flex-col gap-2 max-w-md mx-auto pt-2">
             <div className="px-1 py-2 text-[11px] font-semibold tracking-widest text-slate-500 uppercase">Navigation</div>
@@ -183,8 +175,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="text-xl font-bold tracking-[0.14em] text-white uppercase">VOICESHIELD</span>
               </Link>
               <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
-                VoiceShield — an AI security product by Logic Intelligence Technologies
-                Pvt. Ltd. Low-latency voice risk signals and structured evidence for
+                VoiceShield — an AI security product by Logic Intelligence Technologies Low-latency voice risk signals and structured evidence for
                 enterprise workflows.
               </p>
               <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-widest">
@@ -206,6 +197,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <FLink href="/sandbox">FORENSIC LAB</FLink>
             </FooterCol>
             <FooterCol title="COMPANY">
+              <FLink href="/about">ABOUT</FLink>
               <FLink href={LIT_HOME} external>LIT HOME</FLink>
               <FLink href={`${LIT_HOME}/voice-shield`} external>PRODUCT OVERVIEW</FLink>
               <FLink href={LIT_REQUEST} external>REQUEST ACCESS</FLink>
@@ -215,7 +207,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 uppercase tracking-wider">
-            <span>VoiceShield — a Logic Intelligence Technologies Pvt. Ltd. product</span>
+            <span>VoiceShield — a Logic Intelligence Technologies product</span>
             <span>© {new Date().getFullYear()} LIT</span>
           </div>
         </div>

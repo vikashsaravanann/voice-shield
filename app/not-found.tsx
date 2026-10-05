@@ -8,7 +8,7 @@ export default function NotFound() {
       <p className="mt-4 font-mono text-sm text-slate-400">404</p>
       <h1 id="nf-title" className="mt-1 text-2xl font-semibold text-white">Page not found</h1>
       <p className="mt-2 text-sm text-slate-400">The address does not match any VoiceShield page.</p>
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link href="/" className="btn btn-primary">Back to overview</Link>
         <Link href="/docs" className="btn btn-ghost">Documentation</Link>
       </div>

@@ -17,21 +17,21 @@ import {
 export const metadata: Metadata = {
   title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
   description:
-    "VoiceShield — an AI security product by Logic Intelligence Technologies Pvt. Ltd. Analyze eligible voice interactions for configurable fraud-risk, security, compliance and quality signals, with structured evidence designed for enterprise workflows.",
+    "VoiceShield — an AI security product by Logic Intelligence Technologies Analyze eligible voice interactions for configurable fraud-risk, security, compliance and quality signals, with structured evidence designed for enterprise workflows.",
   icons: { icon: "/logo.png", apple: "/logo.png" },
   openGraph: {
     type: "website",
     siteName: "VoiceShield",
     title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
     description:
-      "An AI security product by Logic Intelligence Technologies Pvt. Ltd. Configurable fraud-risk, security, compliance and quality signals with structured evidence for enterprise workflows.",
+      "An AI security product by Logic Intelligence Technologies Configurable fraud-risk, security, compliance and quality signals with structured evidence for enterprise workflows.",
     images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
     description:
-      "An AI security product by Logic Intelligence Technologies Pvt. Ltd. Voice security and compliance intelligence for enterprise workflows.",
+      "An AI security product by Logic Intelligence Technologies Voice security and compliance intelligence for enterprise workflows.",
     images: ["/banner.png"],
   },
 };
@@ -120,8 +120,8 @@ function DetectionPathDiagram() {
 export default function HomePage() {
   return (
     <div className="text-slate-100 flex flex-col selection:bg-brand-400 selection:text-slate-950">
-      <div className="border-b border-slate-800 bg-slate-900/70 py-2.5 px-4 text-center">
-        <p className="text-[11px] sm:text-xs font-semibold tracking-[0.14em] text-brand-200">
+      <div className="border-b border-slate-800 bg-slate-900/70 py-1.5 sm:py-2 px-4 text-center">
+        <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.08em] sm:tracking-[0.14em] leading-snug text-brand-200 text-balance">
           A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY &amp; VOICE FRAUD INTELLIGENCE
         </p>
       </div>
@@ -180,8 +180,7 @@ export default function HomePage() {
             ENGINEERED FOR ENTERPRISE VOICE SECURITY
           </h2>
           <p className="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed">
-            VoiceShield is a product of Logic Intelligence Technologies Pvt.
-            Ltd. Capabilities below describe the product architecture; live
+            VoiceShield is a product of Logic Intelligence Technologies Capabilities below describe the product architecture; live
             production behaviour depends on deployed models, hosts and
             configuration.
           </p>
