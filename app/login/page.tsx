@@ -160,7 +160,7 @@ export default function LoginPage() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase whitespace-nowrap">
             <span className="w-2 h-2 rounded-full bg-brand-400" />
-            <span>PORTAL: SECURE FIPS 140-2</span>
+            <span>PORTAL: TLS-ENCRYPTED SESSION</span>
           </div>
         </div>
       </header>
@@ -260,7 +260,7 @@ export default function LoginPage() {
             </span>
             <span className="flex items-center gap-1.5 text-teal-400">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>INDIA (AP-SOUTH-1)</span>
+              <span>ZERO RAW-AUDIO RETENTION</span>
             </span>
           </div>
 
@@ -499,7 +499,7 @@ export default function LoginPage() {
                 </Link>
               </div>
               <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
-                DIGITAL PERSONAL DATA PROTECTION ACT (DPDP) 2023 COMPLIANT
+                DESIGNED FOR DPDP ACT 2023 ALIGNMENT
               </div>
             </div>
 
@@ -510,8 +510,8 @@ export default function LoginPage() {
 
       {/* ── Footer Bar with Generous Spacing ── */}
       <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
-        <div>VOICESHIELD VoiceShield · LOGIC INTELLIGENCE TECHNOLOGIES · FIPS 140-2 ENCRYPTED</div>
-        <div className="text-slate-400">MUMBAI SOVEREIGN HOSTING (AP-SOUTH-1) · ZERO RAW AUDIO DISK RETENTION</div>
+        <div>VOICESHIELD · LOGIC INTELLIGENCE TECHNOLOGIES · TLS ENCRYPTED IN TRANSIT</div>
+        <div className="text-slate-400">ZERO RAW AUDIO DISK RETENTION BY DESIGN</div>
       </footer>
 
     </div>

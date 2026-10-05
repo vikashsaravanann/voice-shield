@@ -31,4 +31,4 @@
 
 ## Contacts
 
-Operational contacts are maintained by Logic Intelligence Technologies Pvt. Ltd. (support / admin channels on the corporate site).
+Operational contacts are maintained by Logic Intelligence Technologies (support / admin channels on the corporate site).

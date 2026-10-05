@@ -50,13 +50,9 @@ export default function TermsOfServicePage() {
               <span className="text-cyan-400 font-bold">TERMS OF SERVICE</span>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase bg-cyan-950/80 text-cyan-400 border border-cyan-500/40 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                TELEPHONY SPEC V2.4 ACTIVE
-              </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-slate-900 text-slate-300 border border-slate-800">
-                <Award className="w-3.5 h-3.5 text-brand-400" />
-                VoiceShield COMPLIANT
+                <Award aria-hidden className="w-3.5 h-3.5 text-brand-400" />
+                PRE-RELEASE EVALUATION TERMS
               </span>
             </div>
           </div>
@@ -152,7 +148,7 @@ export default function TermsOfServicePage() {
               <span className="px-2.5 py-1 rounded bg-teal-500/10 border border-teal-500/20 text-teal-400 font-mono text-xs font-bold uppercase tracking-wider">CLAUSE 3.0</span>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight uppercase">EVALUATION / DEMO ACCESS LICENSE</h2>
             </div>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">Authorized evaluators reviewing <strong className="text-white font-semibold">VoiceShield</strong> (Logic Intelligence Technologies Pvt. Ltd.) may inspect operational metrics under granted access.</p>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-4xl">Authorized evaluators reviewing <strong className="text-white font-semibold">VoiceShield</strong> (Logic Intelligence Technologies) may inspect operational metrics under granted access.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="p-6 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">

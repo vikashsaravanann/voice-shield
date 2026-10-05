@@ -62,7 +62,7 @@ export default function DocsPage() {
             <span className="text-[11px] font-mono text-cyan-400 uppercase font-bold block mb-1">
               DATA PRIVACY
             </span>
-            <span className="text-base font-bold text-white font-mono block">DPDP Act 2023 Compliant</span>
+            <span className="text-base font-bold text-white font-mono block">DPDP Act 2023–aligned design</span>
             <span className="text-xs text-slate-400">0 bytes of raw audio persisted to disk</span>
           </div>
         </div>

@@ -78,7 +78,7 @@ export default function ArchitecturePage() {
             SYSTEM ARCHITECTURE &amp; DETECTION PIPELINE
           </h1>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            V-SHIELD is a real-time, privacy-preserving audio verification engine designed for Indian telephony and VoIP ecosystems. Built to decide in under 269ms, survive 8 kHz G.711 narrowband compression, and operate with zero raw-audio persistence under India&apos;s DPDP Act 2023.
+            V-SHIELD is a real-time, privacy-preserving audio verification engine designed for Indian telephony and VoIP ecosystems. Designed to decide in under 269 ms, survive 8 kHz G.711 narrowband compression, and operate with zero raw-audio persistence under India&apos;s DPDP Act 2023.
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export default function ArchitecturePage() {
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
             <div className="flex items-center gap-2 text-brand-400 font-mono text-xs font-bold uppercase tracking-widest">
               <Lock className="w-4 h-4" />
-              <span>DPDP ACT 2023 COMPLIANCE SPECIFICATION</span>
+              <span>DPDP ACT 2023 ALIGNMENT &amp; SECURITY CONTROLS</span>
             </div>
             <h3 className="text-lg font-black text-white uppercase">ZERO RAW-AUDIO PERSISTENCE BY DESIGN</h3>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400">

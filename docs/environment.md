@@ -1,6 +1,6 @@
 # VoiceShield Environment Configuration
 
-**Product:** VoiceShield — Logic Intelligence Technologies Pvt. Ltd.  
+**Product:** VoiceShield — Logic Intelligence Technologies  
 **Repo:** voiceshield-sih-2026
 
 ## Frontend (Next.js / Vercel)

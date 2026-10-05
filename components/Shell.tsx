@@ -175,7 +175,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="text-xl font-bold tracking-[0.14em] text-white uppercase">VOICESHIELD</span>
               </Link>
               <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
-                VoiceShield — an AI security product by Logic Intelligence Technologies Low-latency voice risk signals and structured evidence for
+                VoiceShield — an AI security product by Logic Intelligence Technologies. Low-latency voice risk signals and structured evidence for
                 enterprise workflows.
               </p>
               <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-widest">

@@ -8,16 +8,20 @@ import { jsPDF } from "jspdf";
 
 function ReportForm() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get("sessionId") || "UNKNOWN";
-  const riskScore = searchParams.get("riskScore") || "98";
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const sessionId = searchParams.get("sessionId")?.trim() || null;
+  // Only show a score that came from a real session; never a default.
+  const rawScore = Number(searchParams.get("riskScore"));
+  const riskScore =
+    searchParams.get("riskScore") !== null && Number.isFinite(rawScore) && rawScore >= 0 && rawScore <= 100
+      ? Math.round(rawScore)
+      : null;
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     account: "",
-    description: `I received a fraudulent call originating from a cloned/AI-generated voice attempting financial fraud. \n\nThe VoiceShield security system automatically detected severe vocoder anomalies and blocked the session.\n\nSession ID: ${sessionId}\nMax Risk Probability: ${riskScore}%`
+    description: `I received a fraudulent call originating from a cloned/AI-generated voice attempting financial fraud. \n\nThe VoiceShield security system flagged synthetic-voice indicators during the call.${sessionId ? `\n\nSession ID: ${sessionId}` : ""}${riskScore !== null ? `\nMax risk score: ${riskScore}%` : ""}`
   });
 
   const handleDownloadDraft = () => {
@@ -42,17 +46,14 @@ function ReportForm() {
     const splitDesc = doc.splitTextToSize(formData.description, 170);
     doc.text(splitDesc, 20, 110);
     
-    doc.save(`FIR-Draft-${sessionId}.pdf`);
+    doc.save(`FIR-Draft-${sessionId ?? new Date().toISOString().slice(0, 10)}.pdf`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-      window.open(`https://cybercrime.gov.in/Webform/Index.aspx?subject=VoiceCloningFraud&session=${sessionId}`, '_blank');
-    }, 1000);
+    // VoiceShield does not file complaints. This opens the official portal,
+    // where the complainant files using the draft prepared here.
+    window.open("https://cybercrime.gov.in/", "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -68,7 +69,7 @@ function ReportForm() {
             <Building2 className="w-8 h-8 text-amber-500" />
             <h1 className="text-3xl font-extrabold text-white tracking-tight">I4C Cybercrime Reporting</h1>
           </div>
-          <p className="text-slate-400">Automated integration with Indian Cyber Crime Coordination Centre portal</p>
+          <p className="text-slate-400">Prepare a complaint draft, then file it yourself on the National Cyber Crime Reporting Portal (cybercrime.gov.in).</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -148,17 +149,10 @@ function ReportForm() {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button 
                   type="submit"
-                  disabled={isSubmitting}
                   className="flex-1 flex justify-center items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl p-3 font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50"
                 >
-                  {isSubmitting ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      Submit to I4C Portal <ExternalLink className="w-3 h-3" />
-                    </>
-                  )}
+                  <Send aria-hidden className="w-5 h-5" />
+                  Open cybercrime.gov.in <ExternalLink aria-hidden className="w-3 h-3" />
                 </button>
                 <button 
                   type="button"
@@ -185,7 +179,7 @@ function ReportForm() {
                 </div>
                 <div className="p-3 bg-slate-950 rounded-lg border border-slate-800">
                   <p className="text-xs text-slate-500 mb-1">Session ID</p>
-                  <p className="text-sm font-mono text-slate-300 break-all">{sessionId}</p>
+                  <p className="text-sm font-mono text-slate-300 break-all">{sessionId ?? "Not provided"}</p>
                 </div>
                 <div className="p-3 bg-slate-950 rounded-lg border border-slate-800">
                   <p className="text-xs text-slate-500 mb-1">Date & Time</p>
@@ -193,14 +187,18 @@ function ReportForm() {
                 </div>
                 <div className="p-3 bg-slate-950 rounded-lg border border-slate-800">
                   <p className="text-xs text-slate-500 mb-1">Risk Score</p>
-                  <p className="text-xl font-bold font-mono text-rose-500">{riskScore}%</p>
+                  {riskScore !== null ? (
+                    <p className="text-xl font-bold font-mono text-rose-500">{riskScore}%</p>
+                  ) : (
+                    <p className="text-sm font-mono text-slate-400">Not available (no session data)</p>
+                  )}
                 </div>
               </div>
 
               <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                 <p className="text-xs text-amber-200/80 leading-relaxed">
-                  This report will be forwarded to the Cyber Crime Coordination Centre. False reporting is punishable under Section 182 of the Indian Penal Code.
+                  VoiceShield does not submit complaints on your behalf. File on cybercrime.gov.in or call the national cyber-fraud helpline 1930. Filing a false complaint is an offence under Indian law.
                 </p>
               </div>
             </div>

@@ -7,7 +7,7 @@
 **Method:** Static repository inspection. Runtime E2E, live FastAPI host, and production RLS browser tests were **not** executed in this pass.
 
 **Positioning (required):**  
-VoiceShield — an AI security product by Logic Intelligence Technologies Pvt. Ltd.  
+VoiceShield — an AI security product by Logic Intelligence Technologies  
 Not a separate company, subsidiary, or legal entity.
 
 **Evidence rule:** No item is VERIFIED without runtime evidence. Unsupported quantitative claims must not be treated as production truth.

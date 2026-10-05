@@ -15,7 +15,7 @@ import {
 export const metadata = {
   title: "Privacy Policy | VoiceShield | Logic Intelligence Technologies",
   description:
-    "Privacy and data-protection design for VoiceShield — an AI security product by Logic Intelligence Technologies Pvt. Ltd.",
+    "Privacy and data-protection design for VoiceShield — an AI security product by Logic Intelligence Technologies.",
   icons: { icon: "/logo.png", apple: "/logo.png" },
 };
 
@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-4xl">
               VoiceShield is an AI security product by{" "}
               <strong className="text-white font-semibold">
-                Logic Intelligence Technologies Pvt. Ltd.
+                Logic Intelligence Technologies
               </strong>
               . It is designed to support privacy-preserving processing of eligible
               voice interactions, with configurable retention and access controls

@@ -191,7 +191,7 @@ export function useForensicReport() {
 
     // ── SECTION 4: TRANSCRIPT ─────────────────────────────────────────────────
     sectionTitle("CALL TRANSCRIPT (GROQ WHISPER)", "◈");
-    const transcriptText = data.transcript ?? "No transcript captured. Audio was processed in ephemeral memory and destroyed per DPDP Act compliance.";
+    const transcriptText = data.transcript ?? "No transcript captured. Audio was processed in ephemeral memory and discarded under the zero-retention design.";
     doc.setFillColor(10, 25, 60);
     doc.roundedRect(14, curY - 2, W - 28, 28, 2, 2, "F");
     doc.setFont("helvetica", "italic");
@@ -220,7 +220,7 @@ export function useForensicReport() {
     // Footer right
     doc.setTextColor(80, 120, 170);
     doc.text("I4C / Logic Intelligence Technologies", W - 14, H - 14, { align: "right" });
-    doc.text("DPDP Compliant — No PCM audio retained", W - 14, H - 9, { align: "right" });
+    doc.text("DPDP-aligned design — no PCM audio retained", W - 14, H - 9, { align: "right" });
 
     // Page number
     doc.setFontSize(6.5);

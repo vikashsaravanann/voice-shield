@@ -1,6 +1,6 @@
 # VoiceShield Privacy & Data Flow
 
-**Product:** VoiceShield — Logic Intelligence Technologies Pvt. Ltd.
+**Product:** VoiceShield — Logic Intelligence Technologies
 
 ## Streams
 
