@@ -31,26 +31,17 @@ def extract_features(audio_bytes: bytes, sample_rate: int = 16000) -> dict[str, 
 
     try:
         import voiceshield_dsp
-        # If the Rust extension is compiled and available, use it for massive speedups
-        # This replaces ~10ms of Python execution with ~1ms of Rust execution
-        # (Assuming voiceshield_dsp returns the correct LFCC format)
         lfcc = voiceshield_dsp.extract_lfcc(audio_float, sample_rate)
-        # We still need mel and phase if Rust module doesn't do them yet
-        try:
-            import librosa
-            n_fft = min(512, len(audio_float))
-            hop_length = max(1, n_fft // 4)
-            win_length = n_fft
-        except ImportError:
-            pass
     except ImportError:
-        # Fallback/Import check for librosa
-        try:
-            import librosa
-            n_fft = min(512, len(audio_float))
-            hop_length = max(1, n_fft // 4)
-            win_length = n_fft
+        lfcc = None
 
+    try:
+        import librosa
+        n_fft = min(512, len(audio_float))
+        hop_length = max(1, n_fft // 4)
+        win_length = n_fft
+
+        if lfcc is None:
             mfcc = librosa.feature.mfcc(
                 y=audio_float,
                 sr=sample_rate,
@@ -61,8 +52,6 @@ def extract_features(audio_bytes: bytes, sample_rate: int = 16000) -> dict[str, 
             )
             delta = librosa.feature.delta(mfcc)
             lfcc = np.concatenate([mfcc, delta], axis=0)  # shape (80, T)
-        except ImportError:
-            lfcc = None
 
         # ── Mel-Spectrogram (64 bins, log-scaled) ───────────────────────────
         mel = librosa.feature.melspectrogram(
@@ -89,7 +78,8 @@ def extract_features(audio_bytes: bytes, sample_rate: int = 16000) -> dict[str, 
     except ImportError:
         # Pure numpy lightweight fallback if librosa is not yet compiled
         T = max(1, len(audio_float) // 160)
-        lfcc = np.zeros((80, T), dtype=np.float32)
+        if lfcc is None:
+            lfcc = np.zeros((80, T), dtype=np.float32)
         log_mel = np.zeros((64, T), dtype=np.float32)
         rms = float(np.sqrt(np.mean(audio_float ** 2)))
         phase_inconsistency = float(min(1.0, rms * 3.0))

@@ -38,7 +38,7 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-slate-950">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#0D1B3E]">
       <div className="absolute right-4 top-4 z-50 sm:right-6 sm:top-6 lg:right-10 lg:top-10">
         <UserMenu />
       </div>

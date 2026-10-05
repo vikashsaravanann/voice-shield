@@ -99,91 +99,137 @@ async def audio_websocket(websocket: WebSocket):
         
         model = websocket.app.state.model
 
-        while True:
-            # We expect raw PCM16 bytes directly from the microphone
-            message = await websocket.receive()
-            if "bytes" not in message:
-                if "text" in message:
-                    try:
-                        text_data = json.loads(message["text"])
-                        if text_data.get("type") == "session.end" or text_data.get("action") == "end_session":
-                            break
-                    except json.JSONDecodeError:
-                        pass
-                continue
-                
-            audio_bytes = message["bytes"]
-            chunk_size = len(audio_bytes)
-            total_audio_bytes += chunk_size
-            
-            # Skip tiny chunks that the frontend sometimes sends on startup
-            if chunk_size < 1024:
-                continue
-                
-            process_start = time.time()
-            
-            # Step 1: Extract LFCC Features
-            features = extract_features(audio_bytes, sample_rate=16000)
-            
-            # Step 2: Run inference through the CNN
-            prob = model.predict(features)
-            
-            # Step 3: Classify risk thresholds
-            risk_level, explanation = classify_risk(prob)
-            
-            latency_ms = int((time.time() - process_start) * 1000)
-            risk_sum += float(prob)
-            max_risk = max(max_risk, float(prob))
-            latency_sum += latency_ms
-            
-            markers = model.explainability_markers(features)
-            resp = DetectionResponse(
-                session_id=session_id,
-                chunk_index=chunk_index,
-                spoof_probability=float(prob),
-                risk_level=risk_level,
-                suggested_action=explanation,
-                latency_ms=latency_ms,
-                explainability_markers=markers,
-                model={"name": model.model_name, "device": model.device},
-            )
-            
-            await websocket.send_json(resp.model_dump())
-            
-            # Fire the Twilio WhatsApp Alert if risk is high (and we haven't already!)
-            if risk_level == "high" and not alert_dispatched:
-                alert_dispatched = True
-                logger.warning(f"🚨 HIGH THREAT DETECTED! Session: {session_id} Risk: {prob:.2f}")
-                # Dispatch alert asynchronously so we don't block the WebSocket audio stream
-                asyncio.create_task(
-                    alert_service.send_threat_alert(
-                        session_id=session_id,
-                        risk_score=int(prob * 100),
-                        origin_location="WebRTC Stream",
-                        transcript="[Audio Signature Analysis Triggered]"
-                    )
-                )
+        audio_queue: asyncio.Queue[tuple[bytes, float] | None] = asyncio.Queue(maxsize=100)
 
-            events_buffer.append({
-                "session_id": session_id,
-                "chunk_index": chunk_index,
-                "spoof_probability": float(prob),
-                "risk_level": risk_level,
-                "features_snapshot": {"latency_ms": latency_ms},
-                "explainability_markers": markers,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-            })
-            
-            chunk_index += 1
-            
-            # Flush to Supabase in batches of 5 to avoid killing the DB
-            # We don't want to do 1 insert per 300ms chunk
-            if len(events_buffer) >= 5:
-                # Keep the task so finalization can wait for persistence to finish.
-                event_write_tasks.append(
-                    asyncio.create_task(batch_insert_events(list(events_buffer)))
-                )
-                events_buffer.clear()
+        async def receive_worker():
+            nonlocal total_audio_bytes
+            try:
+                while True:
+                    message = await websocket.receive()
+                    if "bytes" in message:
+                        audio_bytes = message["bytes"]
+                        chunk_size = len(audio_bytes)
+                        total_audio_bytes += chunk_size
+                        if chunk_size < 1024:
+                            continue
+                        try:
+                            audio_queue.put_nowait((audio_bytes, time.time()))
+                        except asyncio.QueueFull:
+                            # Drop oldest chunk when queue is saturated to preserve real-time sub-400ms stream
+                            try:
+                                stale_item = audio_queue.get_nowait()
+                                del stale_item
+                            except asyncio.QueueEmpty:
+                                pass
+                            await audio_queue.put((audio_bytes, time.time()))
+                    elif "text" in message:
+                        try:
+                            text_data = json.loads(message["text"])
+                            if text_data.get("type") == "session.end" or text_data.get("action") == "end_session":
+                                break
+                        except json.JSONDecodeError:
+                            pass
+            except (WebSocketDisconnect, asyncio.CancelledError):
+                pass
+            finally:
+                await audio_queue.put(None)
+
+        async def process_worker():
+            nonlocal chunk_index, risk_sum, max_risk, latency_sum, alert_dispatched
+            try:
+                while True:
+                    item = await audio_queue.get()
+                    if item is None:
+                        break
+
+                    audio_bytes, enqueued_at = item
+                    features = None
+                    try:
+                        queue_latency_ms = int((time.time() - enqueued_at) * 1000)
+                        process_start = time.time()
+
+                        # Step 1: Extract LFCC Features in memory
+                        features = extract_features(audio_bytes, sample_rate=16000)
+
+                        # Step 2: Run inference through the CNN
+                        prob = model.predict(features)
+
+                        # Step 3: Classify risk thresholds
+                        risk_level, explanation = classify_risk(prob)
+
+                        inference_latency_ms = int((time.time() - process_start) * 1000)
+                        total_latency_ms = queue_latency_ms + inference_latency_ms
+                        latency_ms = total_latency_ms
+
+                        risk_sum += float(prob)
+                        max_risk = max(max_risk, float(prob))
+                        latency_sum += latency_ms
+
+                        markers = model.explainability_markers(features)
+                        resp = DetectionResponse(
+                            session_id=session_id,
+                            chunk_index=chunk_index,
+                            spoof_probability=float(prob),
+                            risk_level=risk_level,
+                            suggested_action=explanation,
+                            latency_ms=latency_ms,
+                            explainability_markers=markers,
+                            model={"name": model.model_name, "device": model.device},
+                        )
+
+                        await websocket.send_json(resp.model_dump())
+
+                        # Fire Twilio WhatsApp Alert if risk is high
+                        if risk_level == "high" and not alert_dispatched:
+                            alert_dispatched = True
+                            logger.warning(f"🚨 HIGH THREAT DETECTED! Session: {session_id} Risk: {prob:.2f}")
+                            asyncio.create_task(
+                                alert_service.send_threat_alert(
+                                    session_id=session_id,
+                                    risk_score=int(prob * 100),
+                                    origin_location="WebRTC Stream",
+                                    transcript="[Audio Signature Analysis Triggered]",
+                                )
+                            )
+
+                        events_buffer.append({
+                            "session_id": session_id,
+                            "chunk_index": chunk_index,
+                            "spoof_probability": float(prob),
+                            "risk_level": risk_level,
+                            "features_snapshot": {"latency_ms": latency_ms},
+                            "explainability_markers": markers,
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
+                        })
+
+                        chunk_index += 1
+
+                        # Flush to Supabase in batches of 5 to avoid killing the DB
+                        if len(events_buffer) >= 5:
+                            event_write_tasks.append(
+                                asyncio.create_task(batch_insert_events(list(events_buffer)))
+                            )
+                            events_buffer.clear()
+                    finally:
+                        # ZERO-RETENTION RAW AUDIO PROCESSING:
+                        # Bytearrays are never saved to disk and purged immediately post-classification
+                        del audio_bytes
+                        if features is not None:
+                            del features
+                        audio_queue.task_done()
+            except asyncio.CancelledError:
+                pass
+
+        receiver_task = asyncio.create_task(receive_worker())
+        processor_task = asyncio.create_task(process_worker())
+
+        # Wait until client finishes or disconnects
+        done, pending = await asyncio.wait(
+            [receiver_task, processor_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for task in pending:
+            task.cancel()
 
     except WebSocketDisconnect:
         logger.info("ws_disconnected", session_id=session_id)
