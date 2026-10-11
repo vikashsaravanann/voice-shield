@@ -90,27 +90,27 @@ function DetectionPathDiagram() {
   return (
     <figure
       aria-label="VoiceShield detection path: voice stream, streaming inference, spectral signals, audit trail"
-      className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6 shadow-[0_30px_80px_-30px_rgba(0,0,0,.7)]"
+      className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-[0_10px_30px_rgba(11,37,69,0.06)]"
     >
       <figcaption className="flex items-center justify-between gap-3 mb-5">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-300">DEFENSE ARCHITECTURE</span>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1565C0]">DEFENSE ARCHITECTURE</span>
         <span className="status status-normal">Product architecture</span>
       </figcaption>
       <ol className="relative space-y-3">
-        <span aria-hidden className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-brand-400/50 via-azure-500/40 to-slate-700" />
+        <span aria-hidden className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-[#1565C0] via-[#1FA9A2] to-slate-200" />
         {steps.map(({ icon: Icon, label, sub }, i) => (
           <li key={label} className="relative flex items-start gap-4 animate-riseIn" style={{ animationDelay: `${i * 70}ms` }}>
-            <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-700 bg-slate-950 text-brand-300">
+            <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 bg-[#F8FAFC] text-[#1565C0] shadow-sm">
               <Icon aria-hidden className="h-[18px] w-[18px]" />
             </span>
             <div className="min-w-0 pt-0.5">
-              <p className="text-sm font-semibold text-white uppercase tracking-wide break-words">{label}</p>
-              <p className="text-[13px] text-slate-400 leading-snug">{sub}</p>
+              <p className="text-sm font-semibold text-[#0B2545] uppercase tracking-wide break-words">{label}</p>
+              <p className="text-[13px] text-[#475569] leading-snug">{sub}</p>
             </div>
           </li>
         ))}
       </ol>
-      <p className="mt-5 pt-4 border-t border-slate-800 text-xs text-slate-500 leading-relaxed">
+      <p className="mt-5 pt-4 border-t border-slate-200 text-xs text-slate-500 leading-relaxed">
         Capabilities describe the product architecture; live production behaviour depends on deployed models, hosts and configuration.
       </p>
     </figure>
@@ -119,9 +119,9 @@ function DetectionPathDiagram() {
 
 export default function HomePage() {
   return (
-    <div className="text-slate-100 flex flex-col selection:bg-brand-400 selection:text-slate-950">
-      <div className="border-b border-slate-800 bg-slate-900/70 py-1.5 sm:py-2 px-4 text-center">
-        <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.08em] sm:tracking-[0.14em] leading-snug text-brand-200 text-balance">
+    <div className="text-[#121826] flex flex-col selection:bg-[#E7F3FF] selection:text-[#0B2545]">
+      <div className="border-b border-slate-200 bg-blue-50/70 py-1.5 sm:py-2 px-4 text-center">
+        <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.08em] sm:tracking-[0.14em] leading-snug text-[#0B2545] text-balance">
           A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY &amp; VOICE FRAUD INTELLIGENCE
         </p>
       </div>
@@ -129,17 +129,17 @@ export default function HomePage() {
       <section className="relative px-4 sm:px-6 pt-12 pb-14 md:pt-20 md:pb-24 max-w-7xl mx-auto w-full">
         <div className="grid gap-10 lg:gap-14 lg:grid-cols-[1.15fr_0.85fr] items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-700 bg-slate-900/80 text-xs text-slate-200 mb-7">
-              <Sparkles aria-hidden className="w-3.5 h-3.5 text-brand-400" />
-              <span>AI-Powered Voice Security &amp; Compliance Intelligence</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 bg-white shadow-sm text-xs text-[#0B2545] mb-7">
+              <Sparkles aria-hidden className="w-3.5 h-3.5 text-[#1565C0]" />
+              <span className="font-medium">AI-Powered Voice Security &amp; Compliance Intelligence</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.05]">
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-[#0B2545] mb-6 leading-[1.05]">
               Detect the clone. <br />
-              <span className="text-brand-400">Protect the conversation.</span>
+              <span className="text-[#1565C0]">Protect the conversation.</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mb-9 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#475569] max-w-2xl mb-9 leading-relaxed">
               Analyze eligible voice interactions for configurable fraud-risk,
               security, compliance and quality signals, with structured evidence
               designed for enterprise workflows. Built for telecom, BFSI, BPO and
@@ -160,12 +160,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section aria-label="Platform characteristics" className="border-y border-slate-800 bg-slate-900/40">
-        <dl className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-800">
+      <section aria-label="Platform characteristics" className="border-y border-slate-200 bg-white shadow-sm">
+        <dl className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-200">
           {METRICS.map(([k, label]) => (
             <div key={k} className="px-4 py-7 sm:px-6 text-center">
-              <dt className="text-base sm:text-xl font-semibold text-white tracking-wide break-words">{k}</dt>
-              <dd className="mt-1 text-[11px] sm:text-xs text-slate-400 uppercase tracking-[0.14em] font-medium">{label}</dd>
+              <dt className="text-base sm:text-xl font-bold text-[#0B2545] tracking-wide break-words">{k}</dt>
+              <dd className="mt-1 text-[11px] sm:text-xs text-[#64748B] uppercase tracking-[0.14em] font-medium">{label}</dd>
             </div>
           ))}
         </dl>
@@ -173,13 +173,13 @@ export default function HomePage() {
 
       <section className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
         <div className="max-w-3xl mb-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-300 block mb-3">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1565C0] block mb-3">
             DEFENSE ARCHITECTURE
           </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-white uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#0B2545] uppercase tracking-tight">
             ENGINEERED FOR ENTERPRISE VOICE SECURITY
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[#475569] leading-relaxed">
             VoiceShield is a product of Logic Intelligence Technologies. Capabilities below describe the product architecture; live
             production behaviour depends on deployed models, hosts and
             configuration.
@@ -188,12 +188,12 @@ export default function HomePage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {FEATURES.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 transition-colors hover:border-slate-700">
-              <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 grid place-items-center text-brand-300 mb-4">
+            <article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 grid place-items-center text-[#1565C0] mb-4">
                 <Icon aria-hidden className="w-5 h-5" />
               </div>
-              <h3 className="text-[15px] font-semibold text-white mb-2 uppercase tracking-wide">{title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{text}</p>
+              <h3 className="text-[15px] font-semibold text-[#0B2545] mb-2 uppercase tracking-wide">{title}</h3>
+              <p className="text-sm text-[#475569] leading-relaxed">{text}</p>
             </article>
           ))}
         </div>

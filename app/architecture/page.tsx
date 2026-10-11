@@ -65,19 +65,19 @@ export default function ArchitecturePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#060d22] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F7F9FC] text-[#121826] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header Title */}
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-500/30 bg-brand-950/40 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-white text-[#1565C0] text-xs font-mono font-bold tracking-widest uppercase shadow-sm">
             <Cpu className="w-3.5 h-3.5" />
             <span>VoiceShield · TECHNICAL ARCHITECTURE SPECIFICATION</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#0B2545] uppercase">
             SYSTEM ARCHITECTURE &amp; DETECTION PIPELINE
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          <p className="text-[#475569] text-sm sm:text-base leading-relaxed">
             V-SHIELD is a real-time, privacy-preserving audio verification engine designed for Indian telephony and VoIP ecosystems. Designed to decide in under 269 ms, survive 8 kHz G.711 narrowband compression, and operate with zero raw-audio persistence under India&apos;s DPDP Act 2023.
           </p>
         </div>
@@ -85,11 +85,11 @@ export default function ArchitecturePage() {
         {/* Subsystems Grid */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl sm:text-2xl font-black tracking-wider text-white uppercase flex items-center gap-2.5">
-              <Layers className="w-5 h-5 text-brand-400" />
+            <h2 className="text-xl sm:text-2xl font-bold tracking-wider text-[#0B2545] uppercase flex items-center gap-2.5">
+              <Layers className="w-5 h-5 text-[#1565C0]" />
               <span>FIVE COUPLED SUBSYSTEMS</span>
             </h2>
-            <span className="text-xs font-mono text-slate-500 uppercase tracking-widest hidden sm:inline">
+            <span className="text-xs font-mono text-[#64748B] uppercase tracking-widest hidden sm:inline">
               END-TO-END STREAMING GRAPH
             </span>
           </div>
@@ -98,31 +98,31 @@ export default function ArchitecturePage() {
             {subsystems.map((s) => (
               <div
                 key={s.num}
-                className="relative rounded-2xl border border-slate-800/80 bg-slate-900/50 p-6 backdrop-blur-xl shadow-xl hover:border-brand-500/40 transition-all duration-300 flex flex-col justify-between group"
+                className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-300 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-black text-brand-400 tracking-widest">
+                    <span className="text-xs font-mono font-bold text-[#1565C0] tracking-widest">
                       SUBSYSTEM {s.num}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono tracking-widest bg-slate-800 text-slate-300 uppercase">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono tracking-widest bg-blue-50 text-[#0D47A1] border border-blue-100 uppercase">
                       {s.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-black tracking-wide text-white uppercase group-hover:text-brand-300 transition-colors">
+                  <h3 className="text-lg font-bold tracking-wide text-[#0B2545] uppercase group-hover:text-[#1565C0] transition-colors">
                     {s.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                     {s.desc}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-800/60 space-y-1.5">
+                <div className="mt-6 pt-4 border-t border-slate-100 space-y-1.5">
                   {s.metrics.map((m, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-[11px] font-mono text-brand-400/90">
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-brand-400" />
+                    <div key={idx} className="flex items-center gap-2 text-[11px] font-mono text-[#065F46]">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-[#065F46]" />
                       <span>{m}</span>
                     </div>
                   ))}
@@ -131,23 +131,23 @@ export default function ArchitecturePage() {
             ))}
 
             {/* Final Policy Card */}
-            <div className="rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-950/30 via-slate-900/60 to-slate-950 p-6 flex flex-col justify-between shadow-xl">
+            <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/70 via-white to-blue-50/30 p-6 flex flex-col justify-between shadow-sm">
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
+                <div className="flex items-center gap-2 text-[#1565C0] text-xs font-mono font-bold tracking-widest uppercase">
                   <ShieldCheck className="w-4 h-4" />
                   <span>POLICY ENFORCEMENT HOOK</span>
                 </div>
-                <h3 className="text-lg font-black text-white uppercase tracking-wide">
+                <h3 className="text-lg font-bold text-[#0B2545] uppercase tracking-wide">
                   FAIL-CLOSED FOR PAYMENTS · FAIL-OPEN FOR SOS
                 </h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-[#475569] leading-relaxed">
                   Integrators bind policy actions (Allow, Challenge, Terminate, Escalate) to transaction value and caller roles. High-value RTGS/NEFT transfers are fail-closed; emergency lines remain open with operator alerts.
                 </p>
               </div>
 
               <Link
                 href="/demo"
-                className="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs font-mono tracking-widest uppercase transition-all shadow-lg shadow-brand-500/20"
+                className="mt-6 btn btn-primary w-full py-3"
               >
                 <span>TEST IN LIVE DEMO</span>
                 <ArrowRight className="w-4 h-4" />
@@ -157,18 +157,18 @@ export default function ArchitecturePage() {
         </div>
 
         {/* 269ms Latency Budget */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
             <div>
-              <span className="text-xs font-mono text-brand-400 font-bold uppercase tracking-widest">
+              <span className="text-xs font-mono text-[#1565C0] font-bold uppercase tracking-widest">
                 REAL-TIME TELEMETRY PROFILE
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wide">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0B2545] uppercase tracking-wide">
                 269.0 MS TOTAL DECISION ROUND-TRIP
               </h2>
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <Clock className="w-4 h-4 text-brand-400" />
+            <div className="flex items-center gap-2 text-xs font-mono text-[#64748B]">
+              <Clock className="w-4 h-4 text-[#1565C0]" />
               <span>MEASURED ON 4-CORE INTEL/AMD CPU (NO GPU REQUIRED)</span>
             </div>
           </div>
@@ -177,10 +177,10 @@ export default function ArchitecturePage() {
             {latencyBudget.map((item, idx) => (
               <div key={idx} className="space-y-1.5">
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-300 font-bold uppercase">{item.label}</span>
-                  <span className="text-brand-400 font-bold">{item.time}</span>
+                  <span className="text-[#0B2545] font-semibold uppercase">{item.label}</span>
+                  <span className="text-[#1565C0] font-bold">{item.time}</span>
                 </div>
-                <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+                <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
                   <div
                     className={`h-full rounded-full ${item.color} transition-all duration-500`}
                     style={{ width: `${item.pct}%` }}
@@ -190,52 +190,52 @@ export default function ArchitecturePage() {
             ))}
           </div>
 
-          <p className="text-xs text-slate-500 font-mono text-center pt-2">
+          <p className="text-xs text-[#64748B] font-mono text-center pt-2">
             Sum of ingestion window, DSP feature compute, INT8 neural inference, Kalman logic, and network dispatch remains strictly inside a natural conversational pause.
           </p>
         </div>
 
         {/* DPDP Act 2023 & Security Controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
-            <div className="flex items-center gap-2 text-brand-400 font-mono text-xs font-bold uppercase tracking-widest">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4 shadow-sm">
+            <div className="flex items-center gap-2 text-[#1565C0] font-mono text-xs font-bold uppercase tracking-widest">
               <Lock className="w-4 h-4" />
               <span>DPDP ACT 2023 ALIGNMENT &amp; SECURITY CONTROLS</span>
             </div>
-            <h3 className="text-lg font-black text-white uppercase">ZERO RAW-AUDIO PERSISTENCE BY DESIGN</h3>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400">
+            <h3 className="text-lg font-bold text-[#0B2545] uppercase">ZERO RAW-AUDIO PERSISTENCE BY DESIGN</h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-[#475569]">
               <li className="flex items-start gap-2">
-                <span className="text-brand-400 font-bold">1.</span>
+                <span className="text-[#1565C0] font-bold">1.</span>
                 <span><strong>Volatile RAM Only:</strong> Audio frames reside strictly in circular volatile memory queues, overwritten immediately after feature extraction.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-brand-400 font-bold">2.</span>
+                <span className="text-[#1565C0] font-bold">2.</span>
                 <span><strong>Non-Reconstructible Vectors:</strong> Extracted LFCC and bispectral features cannot be inverse-synthesized into intelligible human speech.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-brand-400 font-bold">3.</span>
+                <span className="text-[#1565C0] font-bold">3.</span>
                 <span><strong>Append-Only Audit:</strong> Telemetry logs store session ID, C(t) risk trace, codec tag, and timestamps only — never waveform bytes.</span>
               </li>
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-4">
-            <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold uppercase tracking-widest">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4 shadow-sm">
+            <div className="flex items-center gap-2 text-[#1FA9A2] font-mono text-xs font-bold uppercase tracking-widest">
               <Radio className="w-4 h-4" />
               <span>TELEPHONY CODEC INVARIANCE (8 KHZ)</span>
             </div>
-            <h3 className="text-lg font-black text-white uppercase">ROBUST AGAINST INDIAN NARROWBAND PATHS</h3>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400">
+            <h3 className="text-lg font-bold text-[#0B2545] uppercase">ROBUST AGAINST INDIAN NARROWBAND PATHS</h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-[#475569]">
               <li className="flex items-start gap-2">
-                <span className="text-cyan-400 font-bold">1.</span>
+                <span className="text-[#1FA9A2] font-bold">1.</span>
                 <span><strong>G.711 / AMR Adaptation:</strong> Trained and validated on band-limited 300–3400 Hz telephony audio with comfort-noise insertion.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-cyan-400 font-bold">2.</span>
+                <span className="text-[#1FA9A2] font-bold">2.</span>
                 <span><strong>Target EER ≤ 5.4%:</strong> Maintained on held-out telephony-transcoded evaluation split, avoiding optimistic broadband-only lab results.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-cyan-400 font-bold">3.</span>
+                <span className="text-[#1FA9A2] font-bold">3.</span>
                 <span><strong>Accent Resilience:</strong> Trained on Indian English, Hindi, Tamil, and Telugu to prevent regional phonetics from triggering false challenges.</span>
               </li>
             </ul>

@@ -109,12 +109,12 @@ export function BackendHealth({
     <div
       role="status"
       aria-live="polite"
-      className={`rounded-2xl border border-l-4 p-5 transition-colors duration-300 ${
+      className={`rounded-2xl border border-l-4 p-5 transition-colors duration-300 bg-white shadow-sm ${
         online
-          ? "border-slate-800 border-l-[var(--ok)] bg-slate-900/60"
+          ? "border-slate-200 border-l-[#065F46]"
           : httpError
-          ? "border-slate-700 border-l-[var(--offline)] bg-slate-900/60"
-          : "border-slate-800 border-l-[var(--processing)] bg-slate-900/60"
+          ? "border-slate-200 border-l-[#475569]"
+          : "border-slate-200 border-l-[#0D47A1]"
       }`}
     >
       <div className="flex items-center justify-between gap-4">
@@ -122,12 +122,12 @@ export function BackendHealth({
           <div
             className={`p-2.5 rounded-xl border shrink-0 ${
               online
-                ? "border-emerald-500/30 bg-emerald-950/40"
-                : "border-slate-700 bg-slate-900"
+                ? "border-emerald-200 bg-emerald-50"
+                : "border-slate-200 bg-slate-100"
             }`}
           >
             {online ? (
-              <CheckCircle2 className="text-emerald-400 w-5 h-5" />
+              <CheckCircle2 className="text-emerald-700 w-5 h-5" />
             ) : (
               <ServerCrash
                 className={`w-5 h-5 ${
@@ -140,15 +140,15 @@ export function BackendHealth({
             <p className="widget-label mb-0.5">
               Control Plane
             </p>
-            <h2 className="text-sm font-bold text-white leading-tight">
+            <h2 className="text-sm font-bold text-[#0B2545] leading-tight">
               {statusLabel}
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5 max-w-lg">{statusSub}</p>
+            <p className="text-xs text-slate-500 mt-0.5 max-w-lg">{statusSub}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          {online && <Activity aria-hidden className="w-4 h-4 text-emerald-400" />}
+          {online && <Activity aria-hidden className="w-4 h-4 text-emerald-600" />}
           {httpError && !wsConnected && (
             <button
               onClick={check}
@@ -187,7 +187,7 @@ export function BackendHealth({
           ].map(({ icon: Icon, label, value, highlight }) => (
             <div
               key={label}
-              className="rounded-xl border border-slate-800/80 bg-slate-900/60 px-4 py-3 space-y-1"
+              className="rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 space-y-1"
             >
               <div className="flex items-center gap-1.5 text-slate-500">
                 <Icon className="w-3.5 h-3.5" />
@@ -197,7 +197,7 @@ export function BackendHealth({
               </div>
               <p
                 className={`text-sm font-bold ${
-                  highlight ? "text-emerald-400" : "text-white"
+                  highlight ? "text-emerald-700" : "text-[#0B2545]"
                 }`}
               >
                 {value}
@@ -208,9 +208,9 @@ export function BackendHealth({
       )}
 
       {wsConnected && httpError && (
-        <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-950/20 px-4 py-3">
-          <p className="text-xs text-emerald-300/80 leading-relaxed">
-            <strong className="text-emerald-300">Backend confirmed online:</strong> Your
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+          <p className="text-xs text-emerald-800 leading-relaxed">
+            <strong className="text-emerald-900">Backend confirmed online:</strong> Your
             WebSocket connection is live and streaming audio in real-time. The HTTP health
             endpoint returned {httpStatus ?? "no response"}, but the active stream is authoritative.
           </p>
@@ -218,9 +218,9 @@ export function BackendHealth({
       )}
 
       {!online && !loading && (
-        <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-950/10 px-4 py-3">
-          <p className="text-xs text-amber-300/80 leading-relaxed">
-            <strong className="text-amber-300">Browser shell active:</strong> The visual
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <p className="text-xs text-amber-800 leading-relaxed">
+            <strong className="text-amber-900">Browser shell active:</strong> The visual
             console remains available, but live inference and risk updates require the backend
             WebSocket. Retry after the service is deployed or awake.
           </p>

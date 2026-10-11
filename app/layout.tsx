@@ -32,10 +32,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         />
       </head>
-      <body className="min-h-screen bg-[#060d22] text-slate-100 antialiased">
+      <body className="min-h-screen bg-[#F7F9FC] text-[#121826] font-sans antialiased">
         <div aria-hidden="true" className="vs-ambient" />
         <Shell>{children}</Shell>
         <VoiceShieldAssistant />

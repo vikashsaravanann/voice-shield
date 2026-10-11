@@ -25,74 +25,74 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#060d22] text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F7F9FC] text-[#121826] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-12">
         <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-500/30 bg-brand-950/40 text-brand-400 text-xs font-mono font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-white text-[#1565C0] text-xs font-mono font-bold tracking-widest uppercase shadow-sm">
             <Award className="w-3.5 h-3.5" />
             <span>LOGIC INTELLIGENCE TECHNOLOGIES · PRODUCT</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#0B2545] uppercase">
             ABOUT VOICESHIELD
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          <p className="text-[#475569] text-sm sm:text-base leading-relaxed">
             VoiceShield is an enterprise AI security product by Logic Intelligence Technologies.
             Real-time detection and prevention of voice-cloning impersonation attacks across telephony and digital voice channels.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-xl shadow-xl space-y-4">
-          <span className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4">
+          <span className="text-xs font-mono font-bold text-[#1565C0] uppercase tracking-widest">
             THE CORE MISSION
           </span>
-          <h2 className="text-2xl font-black text-white uppercase tracking-tight">
+          <h2 className="text-2xl font-bold text-[#0B2545] uppercase tracking-tight">
             STOPPING VOICE CLONE FRAUD INSIDE THE CALL, NOT AFTER IT
           </h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <p className="text-sm text-[#475569] leading-relaxed">
             Existing speech forensics tools are offline batch processors — they report fraud hours after the damage is done.
             VoiceShield is built as real-time middleware: detect, challenge, and block within the live conversation while respecting DPDP-aligned zero raw-audio retention.
           </p>
         </div>
 
         <div className="space-y-6">
-          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
-            <Shield className="w-5 h-5 text-brand-400" />
+          <h2 className="text-xl font-bold text-[#0B2545] uppercase tracking-wider flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#1565C0]" />
             Engineering focus areas
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {team.map((t) => (
               <div
                 key={t.role}
-                className="rounded-xl border border-slate-800 bg-[#070b12] p-5 space-y-2"
+                className="rounded-xl border border-slate-200 bg-white p-5 space-y-2 shadow-sm"
               >
-                <h3 className="text-sm font-bold text-white tracking-wide">{t.role}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{t.focus}</p>
+                <h3 className="text-sm font-bold text-[#0B2545] tracking-wide">{t.role}</h3>
+                <p className="text-sm text-[#475569] leading-relaxed">{t.focus}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
-          <span className="text-xs font-mono font-bold text-brand-400 uppercase tracking-widest">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3 shadow-sm">
+          <span className="text-xs font-mono font-bold text-[#1565C0] uppercase tracking-widest">
             Product ownership
           </span>
-          <ul className="space-y-2 text-sm text-slate-300">
+          <ul className="space-y-2 text-sm text-[#475569]">
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#065F46] shrink-0 mt-0.5" />
               Designed and operated by Logic Intelligence Technologies
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#065F46] shrink-0 mt-0.5" />
               Company site: www.logicintelligencetechnologies.in/voice-shield
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#065F46] shrink-0 mt-0.5" />
               Access via registered demo / beta request — not public self-serve
             </li>
           </ul>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-brand-400 hover:text-brand-300 pt-2"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-[#1565C0] hover:text-[#0D47A1] pt-2"
           >
             Back to overview <ArrowRight className="w-3.5 h-3.5" />
           </Link>

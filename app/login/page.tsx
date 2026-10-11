@@ -140,26 +140,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] w-full overflow-x-hidden bg-[#060d22] text-slate-100 flex flex-col justify-center p-3 sm:p-6 font-sans selection:bg-brand-500 selection:text-slate-950 relative">
+    <div className="min-h-[100dvh] w-full overflow-x-hidden bg-[#F7F9FC] text-[#121826] flex flex-col justify-center p-3 sm:p-6 font-sans selection:bg-blue-500 selection:text-white relative">
       
-      {/* ── Background Cyber Ambient Gradients ── */}
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-brand-950/25 via-slate-950/60 to-[#060d22] -z-10" />
-      <div className="fixed top-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/4 left-1/4 w-[400px] h-[400px] bg-brand-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
-
       {/* ── Top Navigation Bar with Generous Breathing Space ── */}
       <header className="relative z-10 max-w-7xl w-full mx-auto flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono font-bold tracking-widest whitespace-nowrap text-slate-300 hover:text-brand-400 hover:border-brand-500/40 uppercase transition-all duration-200"
+          className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-mono font-bold tracking-widest whitespace-nowrap text-[#475569] hover:text-[#1565C0] hover:border-slate-300 uppercase transition-all duration-200 shadow-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>RETURN TO OVERVIEW</span>
         </Link>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-950/60 border border-brand-500/30 text-[11px] font-mono text-brand-400 font-bold tracking-wider uppercase whitespace-nowrap">
-            <span className="w-2 h-2 rounded-full bg-brand-400" />
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-[11px] font-mono text-[#1565C0] font-bold tracking-wider uppercase whitespace-nowrap">
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
             <span>PORTAL: TLS-ENCRYPTED SESSION</span>
           </div>
         </div>
@@ -174,29 +169,29 @@ export default function LoginPage() {
           {/* Brand Header */}
           <div className="space-y-3">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500/20 to-teal-500/10 border border-brand-500/40 flex items-center justify-center text-brand-400 shadow-xl shadow-brand-500/15 group-hover:border-brand-400 transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#1565C0] shadow-sm group-hover:border-blue-400 transition-all duration-300">
                 <Shield className="w-6 h-6 stroke-[2.2]" />
               </div>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-black tracking-wider text-white uppercase group-hover:text-brand-300 transition-colors">
+                  <span className="text-2xl font-black tracking-wider text-[#0B2545] uppercase group-hover:text-[#1565C0] transition-colors">
                     VOICESHIELD
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-brand-950 text-brand-400 border border-brand-500/40 uppercase">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest bg-blue-50 text-[#1565C0] border border-blue-200 uppercase">
                     VoiceShield
                   </span>
                 </div>
-                <div className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                <div className="text-[10px] font-mono tracking-widest text-[#64748B] uppercase">
                   LOGIC INTELLIGENCE TECHNOLOGIES
                 </div>
               </div>
             </Link>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.15] uppercase">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B2545] tracking-tight leading-[1.15] uppercase">
               OPERATOR CLEARANCE &amp; SOC THREAT PORTAL
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal max-w-xl">
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed font-normal max-w-xl">
               Defense-grade gateway for telecom carriers, banking fraud investigators, and law enforcement analysts monitoring synthetic audio impersonation in live call streams.
             </p>
           </div>
@@ -204,43 +199,43 @@ export default function LoginPage() {
           {/* Security Architecture Highlights with Generous Gaps */}
           <div className="space-y-4 pt-2">
             
-            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-800/90 bg-slate-900/40 backdrop-blur-md hover:border-slate-700 transition-colors">
-              <div className="p-2.5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 shrink-0">
+            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-colors">
+              <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-100 text-[#1565C0] shrink-0">
                 <Cpu className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                <h2 className="text-xs font-mono font-bold text-[#0B2545] uppercase tracking-wider">
                   LOW-LATENCY MITIGATION · 300 MS TARGET
                 </h2>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-[#475569] leading-relaxed">
                   Extracts 250ms sliding window audio tensors to detect vocoder phase anomalies before caller fund transfer authorization.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-800/90 bg-slate-900/40 backdrop-blur-md hover:border-slate-700 transition-colors">
-              <div className="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 shrink-0">
+            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-colors">
+              <div className="p-2.5 rounded-xl bg-teal-50 border border-teal-100 text-[#0D9488] shrink-0">
                 <Fingerprint className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                <h2 className="text-xs font-mono font-bold text-[#0B2545] uppercase tracking-wider">
                   DPDP ACT 2023 ZERO-RETENTION
                 </h2>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-[#475569] leading-relaxed">
                   Audio tensors live exclusively in volatile RAM ring buffers. Zero raw waveforms written to NVMe/SSD storage.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-800/90 bg-slate-900/40 backdrop-blur-md hover:border-slate-700 transition-colors">
-              <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0">
+            <div className="flex items-start gap-4 p-4 rounded-2xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-colors">
+              <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-100 text-[#1565C0] shrink-0">
                 <Radio className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                <h2 className="text-xs font-mono font-bold text-[#0B2545] uppercase tracking-wider">
                   8 KHZ TELEPHONY RESILIENT
                 </h2>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-[#475569] leading-relaxed">
                   Tested against narrowband G.711 / AMR compression codecs with multilingual active challenge verification gates.
                 </p>
               </div>
@@ -249,16 +244,16 @@ export default function LoginPage() {
           </div>
 
           {/* Statutory Credentials Footer */}
-          <div className="pt-2 flex flex-wrap items-center gap-6 text-[11px] font-mono text-slate-400 uppercase tracking-widest">
-            <span className="flex items-center gap-1.5 text-brand-400">
+          <div className="pt-2 flex flex-wrap items-center gap-6 text-[11px] font-mono text-[#64748B] uppercase tracking-widest">
+            <span className="flex items-center gap-1.5 text-[#1565C0]">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>AES-256-GCM</span>
             </span>
-            <span className="flex items-center gap-1.5 text-cyan-400">
+            <span className="flex items-center gap-1.5 text-[#0D9488]">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>TLS 1.3 WSS</span>
             </span>
-            <span className="flex items-center gap-1.5 text-teal-400">
+            <span className="flex items-center gap-1.5 text-[#065F46]">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>ZERO RAW-AUDIO RETENTION</span>
             </span>
@@ -268,17 +263,14 @@ export default function LoginPage() {
 
         {/* Right Column: High-Grade Authentication Card */}
         <div className="lg:col-span-6 w-full max-w-lg mx-auto">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 sm:p-10 backdrop-blur-2xl shadow-2xl shadow-brand-950/20 space-y-4 relative">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-xl space-y-4 relative">
             
-            {/* Glowing Top Edge Accent */}
-            <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-brand-500/50 to-transparent" />
-
             {/* Primary OAuth Sign In Options (Open to Any Gmail / GitHub) */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-brand-400">
+                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-[#0B2545]">
                   <span>OPEN OPERATOR ACCESS</span>
-                  <span className="text-[10px] text-cyan-300">NO DOMAIN RESTRICTIONS</span>
+                  <span className="text-[10px] text-[#1565C0]">NO DOMAIN RESTRICTIONS</span>
                 </div>
               </div>
 
@@ -288,10 +280,10 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => signInWithProvider("google")}
                   disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-brand-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-sm active:scale-95 disabled:opacity-50 text-[#0B2545] group"
                 >
                   <GoogleIcon />
-                  <span className="text-white group-hover:text-brand-300 transition-colors">
+                  <span className="group-hover:text-[#1565C0] transition-colors">
                     CONTINUE WITH GOOGLE (ANY GMAIL)
                   </span>
                 </button>
@@ -301,24 +293,20 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => signInWithProvider("github")}
                   disabled={busy !== null}
-                  className="w-full flex items-center justify-center gap-3 py-2 px-4 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-850 hover:border-cyan-500/60 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-50 group"
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-sm active:scale-95 disabled:opacity-50 text-[#0B2545] group"
                 >
                   <GithubIcon />
-                  <span className="text-white group-hover:text-cyan-300 transition-colors">
+                  <span className="group-hover:text-[#1565C0] transition-colors">
                     CONTINUE WITH GITHUB
                   </span>
                 </button>
-
-                
-
               </div>
 
               {/* Clearance Guarantee Banner */}
-              <div className="p-3 rounded-xl bg-brand-950/40 border border-brand-500/30 text-[11px] font-mono text-brand-300 flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 text-[11px] font-mono text-[#1565C0] flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#1565C0] shrink-0 mt-0.5" />
                 <span>
                   All authenticated Google &amp; GitHub accounts receive instantaneous clearance to the SOC Dashboard, Live Voice Streamer, Forensic FIR Reports, and Telephony Controls.
-                  
                 </span>
               </div>
             </div>
@@ -326,24 +314,24 @@ export default function LoginPage() {
             {/* Divider */}
             <div className="relative py-1">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-800" />
+                <div className="w-full border-t border-slate-200" />
               </div>
-              <div className="relative flex justify-center text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                <span className="bg-slate-900/95 px-3">OR USE EMAIL CREDENTIALS</span>
+              <div className="relative flex justify-center text-[11px] font-mono uppercase tracking-widest text-[#64748B]">
+                <span className="bg-white px-3">OR USE EMAIL CREDENTIALS</span>
               </div>
             </div>
 
             {/* Form Mode Tabs with Clear Visual State */}
             <div className="space-y-3">
-              <div role="group" aria-label="Authentication mode" className="flex rounded-xl bg-slate-950 p-1.5 border border-slate-800 font-mono text-xs">
+              <div role="group" aria-label="Authentication mode" className="flex rounded-xl bg-[#F7F9FC] p-1.5 border border-slate-200 font-mono text-xs">
                 <button
                   type="button"
                   onClick={() => { setMode("in"); setMessage(null); }}
                   aria-pressed={mode === "in"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "in"
-                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-[#1565C0] border border-slate-200 shadow-sm"
+                      : "text-[#64748B] hover:text-[#0B2545]"
                   }`}
                 >
                   SIGN IN
@@ -354,8 +342,8 @@ export default function LoginPage() {
                   aria-pressed={mode === "up"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "up"
-                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-[#1565C0] border border-slate-200 shadow-sm"
+                      : "text-[#64748B] hover:text-[#0B2545]"
                   }`}
                 >
                   REGISTER
@@ -366,8 +354,8 @@ export default function LoginPage() {
                   aria-pressed={mode === "reset"}
                   className={`flex-1 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-200 ${
                     mode === "reset"
-                      ? "bg-brand-500/20 text-brand-300 border border-brand-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-[#1565C0] border border-slate-200 shadow-sm"
+                      : "text-[#64748B] hover:text-[#0B2545]"
                   }`}
                 >
                   RESET
@@ -381,34 +369,33 @@ export default function LoginPage() {
                 role={message.type === "error" ? "alert" : "status"}
                 className={`p-4 rounded-xl text-xs font-mono flex items-start gap-3 border ${
                   message.type === "error"
-                    ? "bg-rose-950/50 border-rose-500/50 text-rose-300"
-                    : "bg-brand-950/50 border-brand-500/50 text-brand-300"
+                    ? "bg-[#FEE2E2] border-rose-200 text-[#991B1B]"
+                    : "bg-[#E7F7EF] border-emerald-200 text-[#065F46]"
                 }`}
               >
                 {message.type === "error" ? (
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#991B1B]" />
                 ) : (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-brand-400" />
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#065F46]" />
                 )}
                 <span className="leading-relaxed">{message.text}</span>
               </div>
             )}
 
             {callbackError && !message && (
-              <div role="alert" className="p-4 rounded-xl text-xs font-mono bg-rose-950/50 border border-rose-500/50 text-rose-300 flex items-center gap-3">
-                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <div role="alert" className="p-4 rounded-xl text-xs font-mono bg-[#FEE2E2] border border-rose-200 text-[#991B1B] flex items-center gap-3">
+                <AlertCircle className="w-4 h-4 text-[#991B1B] shrink-0" />
                 <span>{callbackError}</span>
               </div>
-
             )}
 
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label htmlFor="login-email" className="text-[11px] font-mono tracking-widest text-slate-300 uppercase">
+                <label htmlFor="login-email" className="text-[11px] font-mono tracking-widest text-[#475569] uppercase font-bold">
                   Operator Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                   <input
                     id="login-email"
                     autoComplete="email"
@@ -416,26 +403,26 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/50 transition-all"
+                    className="w-full bg-[#F7F9FC] border border-slate-200 rounded-xl py-2 pl-9 pr-3 text-sm text-[#0B2545] placeholder-slate-400 focus:outline-none focus:border-[#1565C0] focus:ring-1 focus:ring-[#1565C0] transition-all"
                     placeholder="operator@voiceshield.in"
                   />
                 </div>
               </div>
 
-                {!isReset && (
+              {!isReset && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <label htmlFor="login-password" className="font-bold text-slate-300 uppercase tracking-wider">PASSWORD</label>
+                    <label htmlFor="login-password" className="font-bold text-[#475569] uppercase tracking-wider">PASSWORD</label>
                     <button
                       type="button"
                       onClick={() => setMode("reset")}
-                      className="text-slate-400 hover:text-brand-400 uppercase tracking-wider text-[10px] transition-colors"
+                      className="text-[#64748B] hover:text-[#1565C0] uppercase tracking-wider text-[10px] transition-colors"
                     >
                       FORGOT PASSWORD?
                     </button>
                   </div>
                   <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                    <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       id="login-password"
                       autoComplete={isSignUp ? "new-password" : "current-password"}
@@ -445,14 +432,14 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white placeholder:text-slate-600 font-mono text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus:border-brand-500 transition-colors"
+                      className="w-full pl-10 pr-10 py-2 rounded-xl border border-slate-200 bg-[#F7F9FC] text-[#0B2545] placeholder:text-slate-400 font-mono text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1565C0] focus:border-[#1565C0] transition-colors"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? "Hide password" : "Show password"}
                       aria-pressed={showPassword}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -464,10 +451,9 @@ export default function LoginPage() {
                 type="submit"
                 disabled={busy !== null}
                 className="
-                  w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-teal-500
-                  hover:from-brand-400 hover:to-teal-400 text-slate-950 font-mono font-black
-                  text-xs tracking-widest uppercase transition-all shadow-lg shadow-brand-500/20
-                  active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 mt-2
+                  w-full py-2.5 rounded-xl bg-[#0B2545] hover:bg-[#1565C0]
+                  text-white font-mono font-black text-xs tracking-widest uppercase transition-all
+                  shadow-md active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 mt-2
                 "
               >
                 {busy === "email" ? (
@@ -484,21 +470,21 @@ export default function LoginPage() {
             </form>
 
             {/* Legal & Policy Direct Links with Clear Spacing */}
-            <div className="pt-4 border-t border-slate-800 text-center space-y-2">
-              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-400">
-                <Link href="/privacy" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
+            <div className="pt-4 border-t border-slate-100 text-center space-y-2">
+              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-[#64748B]">
+                <Link href="/privacy" className="hover:text-[#1565C0] uppercase transition-colors underline-offset-4 hover:underline">
                   PRIVACY POLICY
                 </Link>
-                <span className="text-slate-600">·</span>
-                <Link href="/terms" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
+                <span className="text-slate-300">·</span>
+                <Link href="/terms" className="hover:text-[#1565C0] uppercase transition-colors underline-offset-4 hover:underline">
                   TERMS OF SERVICE
                 </Link>
-                <span className="text-slate-600">·</span>
-                <Link href="/docs" className="hover:text-brand-400 uppercase transition-colors underline-offset-4 hover:underline">
+                <span className="text-slate-300">·</span>
+                <Link href="/docs" className="hover:text-[#1565C0] uppercase transition-colors underline-offset-4 hover:underline">
                   SECURITY DOCS
                 </Link>
               </div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+              <div className="text-[10px] font-mono text-[#64748B] uppercase tracking-widest">
                 DESIGNED FOR DPDP ACT 2023 ALIGNMENT
               </div>
             </div>
@@ -509,9 +495,9 @@ export default function LoginPage() {
       </main>
 
       {/* ── Footer Bar with Generous Spacing ── */}
-      <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400 uppercase tracking-widest space-y-1">
+      <footer className="relative z-10 max-w-7xl w-full mx-auto text-center pt-2 pb-2 border-t border-slate-200 text-[10px] font-mono text-[#64748B] uppercase tracking-widest space-y-1">
         <div>VOICESHIELD · LOGIC INTELLIGENCE TECHNOLOGIES · TLS ENCRYPTED IN TRANSIT</div>
-        <div className="text-slate-400">ZERO RAW AUDIO DISK RETENTION BY DESIGN</div>
+        <div className="text-[#64748B]">ZERO RAW AUDIO DISK RETENTION BY DESIGN</div>
       </footer>
 
     </div>
