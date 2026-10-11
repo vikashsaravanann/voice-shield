@@ -8,7 +8,7 @@ type Message = { role: "user" | "assistant"; content: string };
 const welcome: Message = {
   role: "assistant",
   content:
-    "System initialized. I am the VoiceShield Multi-Agent Copilot, powered by NVIDIA Nemotron Nano.\n\nMy sub-agents (Forensics, Legal, SecOps) are online. How can we assist you with VoiceShield?",
+    "System initialized. I am the VoiceShield Security Assistant, powered by Groq Llama 3.3.\n\nMy sub-agents (Forensics, Legal, SecOps) are online. How can we assist you with VoiceShield?",
 };
 
 export function VoiceShieldAssistant() {
@@ -121,7 +121,7 @@ export function VoiceShieldAssistant() {
               </button>
             </div>
             <div className="mt-3 flex items-center justify-between px-1">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by NVIDIA Nemotron</p>
+              <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Powered by Groq AI</p>
               <p className="text-[9px] font-mono uppercase tracking-widest text-slate-500">Secure Comm Link</p>
             </div>
           </form>

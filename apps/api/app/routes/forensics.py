@@ -233,7 +233,7 @@ async def analyze_audio_file(
       else "low"
   )
   
-  # Generate XAI summary using NVIDIA Nemotron-4
+  # Generate XAI summary using Groq (or deterministic forensic fallback)
   from services.nvidia_service import generate_nvidia_xai_summary
   avg_markers = {
       "high_frequency_anomaly": round(sum(s.markers.high_frequency_anomaly for s in slices) / len(slices), 3) if slices else 0,

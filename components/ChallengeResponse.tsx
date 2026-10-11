@@ -268,7 +268,7 @@ export function ChallengeResponse({ onChallengeComplete, spoofProbability = 0.08
           </div>
           <div className="flex items-center gap-2 ml-4">
             <span className="text-[10px] font-mono uppercase bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-slate-400">
-              {lang === "en" ? "LLM: NVIDIA Llama-3.1" : "ASR: Bhashini Indic Native"}
+              {lang === "en" ? "LLM: Groq Llama-3.3" : "ASR: Bhashini Indic Native"}
             </span>
           </div>
         </div>

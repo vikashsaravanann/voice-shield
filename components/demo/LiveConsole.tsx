@@ -181,7 +181,12 @@ export function LiveConsole() {
 
       <div className="board">
         <section className="card">
-          <p className="eyebrow">Synthetic-voice score</p>
+          <div className="flex items-center justify-between">
+            <p className="eyebrow">Synthetic-voice score</p>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30">
+              DEMO ONLY · SIMULATION
+            </span>
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 12 }}>
             <p className="pct" style={{ color: d ? RISK_COLOR[risk] : "var(--subtle)" }} aria-label={d ? `Synthetic-voice score ${pct} percent` : "Synthetic-voice score not yet available"}>
               {d ? pct : "—"}
