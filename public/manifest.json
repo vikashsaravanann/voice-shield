@@ -1,0 +1,21 @@
+{
+  "name": "VoiceShield AI Forensic Audio SOC",
+  "short_name": "VoiceShield",
+  "description": "Enterprise Deepfake Audio Detection & Forensic Telemetry Security Operations Center",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070c14",
+  "theme_color": "#00ffcc",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
