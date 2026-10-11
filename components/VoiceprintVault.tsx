@@ -11,11 +11,19 @@ import {
 import { UserCheck, Mic, MicOff, Plus, Trash2, CheckCircle2, Volume2, ShieldCheck, Activity } from "lucide-react";
 
 interface VoiceprintVaultProps {
-  selectedProfileId: string;
-  onSelectProfile: (profile: VoiceprintProfile) => void;
+  selectedProfileId?: string;
+  onSelectProfile?: (profile: VoiceprintProfile) => void;
 }
 
-export function VoiceprintVault({ selectedProfileId, onSelectProfile }: VoiceprintVaultProps) {
+export function VoiceprintVault({ selectedProfileId: externalSelectedId, onSelectProfile }: VoiceprintVaultProps) {
+  const [internalSelectedId, setInternalSelectedId] = useState("");
+  const selectedProfileId = externalSelectedId !== undefined ? externalSelectedId : internalSelectedId;
+
+  const handleSelect = (profile: VoiceprintProfile) => {
+    setInternalSelectedId(profile.id);
+    onSelectProfile?.(profile);
+  };
+
   const [profiles, setProfiles] = useState<VoiceprintProfile[]>([]);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [enrollName, setEnrollName] = useState("");
@@ -32,7 +40,7 @@ export function VoiceprintVault({ selectedProfileId, onSelectProfile }: Voicepri
     const list = getEnrolledVoiceprints();
     setProfiles(list);
     if (!selectedProfileId && list.length > 0) {
-      onSelectProfile(list[0]);
+      handleSelect(list[0]);
     }
   }, [selectedProfileId, onSelectProfile]);
 
@@ -131,7 +139,7 @@ export function VoiceprintVault({ selectedProfileId, onSelectProfile }: Voicepri
 
       const updated = saveEnrolledVoiceprint(newProfile);
       setProfiles(updated);
-      onSelectProfile(newProfile);
+      handleSelect(newProfile);
       setIsEnrolling(false);
       setEnrollName("");
       setEnrollRole("");
@@ -148,7 +156,7 @@ export function VoiceprintVault({ selectedProfileId, onSelectProfile }: Voicepri
     const updated = deleteEnrolledVoiceprint(id);
     setProfiles(updated);
     if (selectedProfileId === id && updated.length > 0) {
-      onSelectProfile(updated[0]);
+      handleSelect(updated[0]);
     }
   };
 
@@ -267,7 +275,7 @@ export function VoiceprintVault({ selectedProfileId, onSelectProfile }: Voicepri
           return (
             <div
               key={profile.id}
-              onClick={() => onSelectProfile(profile)}
+              onClick={() => handleSelect(profile)}
               className={`relative cursor-pointer rounded-xl p-3.5 border transition-all duration-200 ${
                 isSelected
                   ? "bg-emerald-950/40 border-emerald-500/60 shadow-lg shadow-emerald-500/10"

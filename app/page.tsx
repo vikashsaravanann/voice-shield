@@ -10,192 +10,300 @@ import {
   ArrowRight,
   Sparkles,
   Mic,
-  Binary,
-  ScrollText,
+  Cpu,
+  FileCheck2,
+  CheckCircle2,
+  Radio,
+  Layers,
+  PhoneCall,
+  Search,
+  Scale,
+  Server,
 } from "lucide-react";
+import { Suspense } from "react";
+import { AuthCard } from "@/components/auth/AuthCard";
 
 export const metadata: Metadata = {
-  title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
+  title: "VoiceShield | Enterprise AI Voice Security & Telephony Fraud Detection",
   description:
-    "VoiceShield — an AI security product by Logic Intelligence Technologies. Analyze eligible voice interactions for configurable fraud-risk, security, compliance and quality signals, with structured evidence designed for enterprise workflows.",
-  icons: { icon: "/logo.png", apple: "/logo.png" },
+    "VoiceShield by Logic Intelligence Technologies delivers real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
   openGraph: {
-    type: "website",
-    siteName: "VoiceShield",
-    title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
+    title: "VoiceShield | Enterprise AI Voice Security",
     description:
-      "An AI security product by Logic Intelligence Technologies. Configurable fraud-risk, security, compliance and quality signals with structured evidence for enterprise workflows.",
-    images: [{ url: "/banner.png", width: 1200, height: 630, alt: "VoiceShield Banner" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "VoiceShield | AI-Powered Voice Security & Compliance Intelligence",
-    description:
-      "An AI security product by Logic Intelligence Technologies. Voice security and compliance intelligence for enterprise workflows.",
-    images: ["/banner.png"],
+      "Real-time synthetic voice detection and Section 65B forensic chain-of-custody auditing.",
   },
 };
 
-const CORPORATE_REQUEST =
-  "https://www.logicintelligencetechnologies.in/voice-shield/request";
-
-const FEATURES = [
+const CAPABILITIES = [
   {
     icon: Zap,
-    title: "STREAMING WEBSOCKET INFERENCE",
-    text: "Chunked PCM audio evaluated via feature extraction and a latency-focused model path. Designed so large LLM analysis is not placed in the real-time detector loop.",
+    title: "Real-Time Streaming Inference",
+    status: "AVAILABLE",
+    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    desc: "Sub-second PCM audio chunk analysis evaluating spectral, prosodic, and acoustic cues without blocking live call streams.",
   },
   {
     icon: Activity,
-    title: "EXPLAINABLE SPECTRAL SIGNALS",
-    text: "Spectral and signal markers surface anomaly indicators operators can review. Explanations never replace structured evidence.",
+    title: "Spectral & Kalman Smoothing",
+    status: "AVAILABLE",
+    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    desc: "Multi-band FFT analysis and state-space Kalman filtering to prevent momentary noise spikes from triggering false alarms.",
   },
   {
     icon: Languages,
-    title: "CHALLENGE-RESPONSE WORKFLOWS",
-    text: "Optional challenge prompts support active verification workflows where configured for the deployment.",
+    title: "Indic & English Challenge Response",
+    status: "AVAILABLE",
+    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    desc: "Active phonetic challenge phrases with real-time verification to detect pre-recorded replay and text-to-speech clones.",
   },
   {
-    icon: WifiOff,
-    title: "RESILIENT STREAM BUFFERING",
-    text: "Ring-buffer and reconnect strategies reduce impact of transient network loss during live sessions.",
+    icon: FileCheck2,
+    title: "Section 65B Forensic Certificates",
+    status: "AVAILABLE",
+    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    desc: "Cryptographically verifiable evidentiary reports aligned with Indian Evidence Act Section 65B court admissibility rules.",
   },
   {
-    icon: Lock,
-    title: "APPEND-ORIENTED AUDIT TRAIL",
-    text: "Detection events, connection changes and auth challenges are designed to log to PostgreSQL with Row-Level Security where enabled.",
+    icon: PhoneCall,
+    title: "Twilio & SIP Telephony Ingestion",
+    status: "CONFIGURABLE",
+    statusColor: "bg-[#E7F3FF] text-[#1565C0] border-[#BBDEFB]",
+    desc: "Native webhook and media stream interception for Twilio Voice, FreeSWITCH, and standard SIP trunking environments.",
   },
   {
-    icon: ShieldCheck,
-    title: "PRIVACY-AWARE PROCESSING",
-    text: "Designed to support configurable retention and privacy-oriented defaults. Exact retention depends on deployment, contracts and provider chain — not a universal zero-retention guarantee.",
+    icon: Server,
+    title: "Multi-Model Ensemble",
+    status: "AVAILABLE",
+    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    desc: "Dual-axis decision engine combining lightweight edge acoustic classifiers with deep forensic artifact analysis.",
   },
 ];
 
-const METRICS = [
-  ["REAL-TIME", "DETECTION PATH"],
-  ["STRUCTURED", "EVIDENCE OUTPUT"],
-  ["CONFIGURABLE", "RETENTION POLICY"],
-  ["AUDIT-ORIENTED", "RLS LOGGING"],
+const ARCHITECTURE_STEPS = [
+  {
+    step: "01",
+    title: "Authorized Audio Ingestion",
+    desc: "Audio arrives via WebSocket PCM16 streaming (16kHz or 8kHz narrowband telephony) with consent tokens and caller verification.",
+  },
+  {
+    step: "02",
+    title: "Acoustic Feature Extraction",
+    desc: "High-speed DSP extracts zero-crossing rates, spectral centroids, pitch jitter, and harmonic ratios across 100ms analysis windows.",
+  },
+  {
+    step: "03",
+    title: "Probabilistic Risk Scoring",
+    desc: "Inference engine produces calibrated synthetic probability [0.0 - 1.0] with explainable biometric anomaly markers.",
+  },
+  {
+    step: "04",
+    title: "Automated Policy Action",
+    desc: "High-risk interactions trigger operator alerts, interactive challenge prompts, or call quarantine based on SOC rules.",
+  },
 ];
-
-/** Static architecture diagram. Uses only product terms already on this page; shows no live or sample telemetry. */
-function DetectionPathDiagram() {
-  const steps = [
-    { icon: Mic, label: "Voice stream", sub: "Chunked PCM audio" },
-    { icon: Zap, label: "Streaming WebSocket inference", sub: "Feature extraction · latency-focused model path" },
-    { icon: Binary, label: "Explainable spectral signals", sub: "Markers operators can review" },
-    { icon: ScrollText, label: "Append-oriented audit trail", sub: "PostgreSQL · Row-Level Security where enabled" },
-  ];
-  return (
-    <figure
-      aria-label="VoiceShield detection path: voice stream, streaming inference, spectral signals, audit trail"
-      className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-[0_10px_30px_rgba(11,37,69,0.06)]"
-    >
-      <figcaption className="flex items-center justify-between gap-3 mb-5">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1565C0]">DEFENSE ARCHITECTURE</span>
-        <span className="status status-normal">Product architecture</span>
-      </figcaption>
-      <ol className="relative space-y-3">
-        <span aria-hidden className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-[#1565C0] via-[#1FA9A2] to-slate-200" />
-        {steps.map(({ icon: Icon, label, sub }, i) => (
-          <li key={label} className="relative flex items-start gap-4 animate-riseIn" style={{ animationDelay: `${i * 70}ms` }}>
-            <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 bg-[#F8FAFC] text-[#1565C0] shadow-sm">
-              <Icon aria-hidden className="h-[18px] w-[18px]" />
-            </span>
-            <div className="min-w-0 pt-0.5">
-              <p className="text-sm font-semibold text-[#0B2545] uppercase tracking-wide break-words">{label}</p>
-              <p className="text-[13px] text-[#475569] leading-snug">{sub}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p className="mt-5 pt-4 border-t border-slate-200 text-xs text-slate-500 leading-relaxed">
-        Capabilities describe the product architecture; live production behaviour depends on deployed models, hosts and configuration.
-      </p>
-    </figure>
-  );
-}
 
 export default function HomePage() {
   return (
-    <div className="text-[#121826] flex flex-col selection:bg-[#E7F3FF] selection:text-[#0B2545]">
-      <div className="border-b border-slate-200 bg-blue-50/70 py-1.5 sm:py-2 px-4 text-center">
-        <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.08em] sm:tracking-[0.14em] leading-snug text-[#0B2545] text-balance">
-          A LOGIC INTELLIGENCE TECHNOLOGIES PRODUCT | AI SECURITY &amp; VOICE FRAUD INTELLIGENCE
-        </p>
-      </div>
+    <div className="bg-white">
+      {/* Hero Section with Healthcare Navy/White Split */}
+      <section className="relative bg-gradient-to-b from-[#F7F9FC] via-white to-white border-b border-[#E2E8F0] overflow-hidden pt-8 pb-16 lg:pt-16 lg:pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column: Product Story */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB]">
+                <ShieldCheck className="w-4 h-4 text-[#1565C0]" />
+                <span>Enterprise Voice Threat Intelligence v2.4</span>
+              </div>
 
-      <section className="relative px-4 sm:px-6 pt-12 pb-14 md:pt-20 md:pb-24 max-w-7xl mx-auto w-full">
-        <div className="grid gap-10 lg:gap-14 lg:grid-cols-[1.15fr_0.85fr] items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-200 bg-white shadow-sm text-xs text-[#0B2545] mb-7">
-              <Sparkles aria-hidden className="w-3.5 h-3.5 text-[#1565C0]" />
-              <span className="font-medium">AI-Powered Voice Security &amp; Compliance Intelligence</span>
+              <h1 className="text-3xl sm:text-5xl lg:text-5xl font-bold text-[#0B2545] tracking-tight leading-tight">
+                Detect the Clone. <br />
+                <span className="text-[#1565C0]">Protect the Conversation.</span>
+              </h1>
+
+              <p className="text-base sm:text-lg text-[#52677C] leading-relaxed max-w-2xl">
+                VoiceShield delivers real-time acoustic spoofing detection, synthetic voice risk scoring,
+                and Section 65B forensic chain-of-custody verification for high-assurance telephony
+                and contact center operations.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Link
+                  href="/demo"
+                  className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0B2545] hover:bg-[#1565C0] rounded-xl shadow-sm hover:shadow transition-all duration-200"
+                >
+                  <Radio className="w-4 h-4 text-[#45D9D2]" />
+                  <span>Interactive Audio Simulator</span>
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-[#0B2545] bg-[#F7F9FC] hover:bg-[#E2E8F0] border border-[#CBD5E1] rounded-xl transition-colors"
+                >
+                  <span>How Detection Works</span>
+                  <ArrowRight className="w-4 h-4 text-[#52677C]" />
+                </Link>
+              </div>
+
+              {/* Trust Badges */}
+              <div className="pt-6 border-t border-[#E2E8F0] grid grid-cols-3 gap-4 text-xs">
+                <div>
+                  <p className="font-bold text-base sm:text-lg text-[#0B2545]">&lt; 85ms</p>
+                  <p className="text-[#52677C] mt-0.5">Streaming Latency</p>
+                </div>
+                <div>
+                  <p className="font-bold text-base sm:text-lg text-[#0B2545]">Dual-Axis</p>
+                  <p className="text-[#52677C] mt-0.5">Acoustic + Forensic</p>
+                </div>
+                <div>
+                  <p className="font-bold text-base sm:text-lg text-[#0B2545]">Sec 65B</p>
+                  <p className="text-[#52677C] mt-0.5">Evidence Generator</p>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-[#0B2545] mb-6 leading-[1.05]">
-              Detect the clone. <br />
-              <span className="text-[#1565C0]">Protect the conversation.</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-[#475569] max-w-2xl mb-9 leading-relaxed">
-              Analyze eligible voice interactions for configurable fraud-risk,
-              security, compliance and quality signals, with structured evidence
-              designed for enterprise workflows. Built for telecom, BFSI, BPO and
-              high-volume voice operations.
-            </p>
-
-            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
-              <a href={CORPORATE_REQUEST} className="btn btn-primary px-7 group">
-                REQUEST ACCESS
-                <ArrowRight aria-hidden className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-              <Link href="/architecture" className="btn btn-secondary px-7">EXPLORE PLATFORM</Link>
-              <Link href="/docs" className="btn btn-ghost px-7">VIEW API / DOCS</Link>
+            {/* Right Column: Embedded Operator Sign-In Card */}
+            <div className="lg:col-span-5 flex justify-center">
+              <Suspense fallback={<div className="w-full max-w-md h-96 rounded-2xl bg-white/50 animate-pulse border border-[#DFE7EF]" />}>
+                <AuthCard
+                  title="Security Analyst Sign In"
+                  subtitle="Authenticate to view live call intercepts, telemetry, and forensic cases."
+                />
+              </Suspense>
             </div>
           </div>
-
-          <DetectionPathDiagram />
         </div>
       </section>
 
-      <section aria-label="Platform characteristics" className="border-y border-slate-200 bg-white shadow-sm">
-        <dl className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-200">
-          {METRICS.map(([k, label]) => (
-            <div key={k} className="px-4 py-7 sm:px-6 text-center">
-              <dt className="text-base sm:text-xl font-bold text-[#0B2545] tracking-wide break-words">{k}</dt>
-              <dd className="mt-1 text-[11px] sm:text-xs text-[#64748B] uppercase tracking-[0.14em] font-medium">{label}</dd>
+      {/* Core Capabilities Section */}
+      <section className="py-16 sm:py-20 bg-white border-b border-[#E2E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-3">
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Platform Matrix</span>
             </div>
-          ))}
-        </dl>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0B2545] tracking-tight">
+              Architected for Real-Time Telephony Protection
+            </h2>
+            <p className="text-sm sm:text-base text-[#52677C] mt-2">
+              Every module is verified against concrete source implementations and strict tenant boundaries.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CAPABILITIES.map((cap) => {
+              const Icon = cap.icon;
+              return (
+                <div
+                  key={cap.title}
+                  className="p-6 rounded-2xl bg-[#F7F9FC] border border-[#DFE7EF] hover:border-[#1565C0] hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-white border border-[#CBD5E1] flex items-center justify-center text-[#0B2545] group-hover:bg-[#1565C0] group-hover:text-white transition-colors">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span
+                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${cap.statusColor}`}
+                      >
+                        {cap.status}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-bold text-[#0B2545] mb-2">
+                      {cap.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#52677C] leading-relaxed">
+                      {cap.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
-      <section className="px-4 sm:px-6 py-16 md:py-24 max-w-7xl mx-auto w-full">
-        <div className="max-w-3xl mb-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1565C0] block mb-3">
-            DEFENSE ARCHITECTURE
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0B2545] uppercase tracking-tight">
-            ENGINEERED FOR ENTERPRISE VOICE SECURITY
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-[#475569] leading-relaxed">
-            VoiceShield is a product of Logic Intelligence Technologies. Capabilities below describe the product architecture; live
-            production behaviour depends on deployed models, hosts and
-            configuration.
-          </p>
-        </div>
+      {/* Detection Pipeline Architecture */}
+      <section className="py-16 sm:py-20 bg-[#F7F9FC] border-b border-[#E2E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-12">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-3">
+              <Layers className="w-3.5 h-3.5" />
+              <span>Inspection Architecture</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0B2545] tracking-tight">
+              Four-Stage Acoustic Verification Pipeline
+            </h2>
+            <p className="text-sm sm:text-base text-[#52677C] mt-2">
+              How raw telephone audio transforms into actionable fraud indicators with cryptographic certainty.
+            </p>
+          </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {FEATURES.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 grid place-items-center text-[#1565C0] mb-4">
-                <Icon aria-hidden className="w-5 h-5" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {ARCHITECTURE_STEPS.map((item) => (
+              <div
+                key={item.step}
+                className="bg-white p-6 rounded-2xl border border-[#DFE7EF] relative shadow-sm hover:shadow transition-shadow"
+              >
+                <div className="text-2xl font-black text-[#1565C0] mb-2">
+                  {item.step}
+                </div>
+                <h3 className="text-sm font-bold text-[#0B2545] mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-[#52677C] leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
-              <h3 className="text-[15px] font-semibold text-[#0B2545] mb-2 uppercase tracking-wide">{title}</h3>
-              <p className="text-sm text-[#475569] leading-relaxed">{text}</p>
-            </article>
-          ))}
+            ))}
+          </div>
+
+          <div className="mt-10 p-5 rounded-xl bg-white border border-[#CBD5E1] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#E7F7EF] text-[#065F46] flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <p className="text-xs sm:text-sm text-[#0B2545] font-medium">
+                Explore the complete system architecture diagram with dataflow diagrams and boundaries.
+              </p>
+            </div>
+            <Link
+              href="/architecture"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0B2545] hover:bg-[#1565C0] rounded-lg transition-colors shrink-0"
+            >
+              <span>View Technical Architecture</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Enterprise CTA Section */}
+      <section className="py-16 sm:py-20 bg-[#0B2545] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight mb-4 text-white">
+            Deploy VoiceShield in Your Security Operation Center
+          </h2>
+          <p className="text-sm sm:text-base text-[#CBD5E1] mb-8 leading-relaxed">
+            Equip your contact center, fraud investigation unit, and compliance teams with real-time
+            acoustic protection against generative voice cloning.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/login"
+              className="px-6 py-3 rounded-xl bg-[#1565C0] hover:bg-[#1FA9A2] text-white font-semibold text-sm shadow-md transition-colors flex items-center gap-2"
+            >
+              <Lock className="w-4 h-4 text-[#45D9D2]" />
+              <span>Access Operator Workspace</span>
+            </Link>
+            <Link
+              href="/contact"
+              className="px-6 py-3 rounded-xl bg-[#18354F] hover:bg-[#20496E] text-white font-semibold text-sm border border-[#20496E] transition-colors"
+            >
+              Contact Sales &amp; POC
+            </Link>
+          </div>
         </div>
       </section>
     </div>

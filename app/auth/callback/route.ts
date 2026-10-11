@@ -9,10 +9,10 @@ export async function GET(request: Request) {
   const providerError = searchParams.get("error");
   const providerErrorCode = searchParams.get("error_code");
   const providerErrorDescription = searchParams.get("error_description");
-  const requestedNext = searchParams.get("next") ?? "/dashboard";
+  const requestedNext = searchParams.get("returnTo") ?? searchParams.get("next") ?? "/app";
   const next = requestedNext.startsWith("/") && !requestedNext.startsWith("//")
     ? requestedNext
-    : "/dashboard";
+    : "/app";
 
   if (providerError) {
     const loginUrl = new URL("/login", appOrigin);

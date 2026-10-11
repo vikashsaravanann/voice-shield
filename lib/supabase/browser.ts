@@ -5,3 +5,5 @@ export function createClient() {
   const { url, key } = getSupabaseConfig();
   return createBrowserClient(url, key);
 }
+
+export const getSupabaseBrowserClient = createClient;
