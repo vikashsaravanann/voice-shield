@@ -3,31 +3,34 @@
 @tailwind utilities;
 
 :root {
-  /* Surfaces: LIT Deep Navy family */
-  --bg: #060d22;
-  --surface: #0b1634;
-  --elevated: #10204a;
-  --fg: #e9eef8;
-  --muted: #9aa9c6;
-  --subtle: #7d8db4;
-  --border: #1d2c52;
-  --border-strong: #2b3f70;
-  /* Brand (not severity) */
-  --accent: #45d9d2;
-  --accent-fg: #04201f;
-  --azure: #0894de;
-  --steel: #b4c6e0;
-  /* Severity semantics: each is distinct from brand turquoise */
-  --ok: #34c28a;          /* safe / normal */
-  --warn: #e0a83a;        /* warning */
-  --high: #ee7c3a;        /* high risk */
-  --danger: #ea5a5a;      /* critical */
-  --processing: #35aee9;  /* processing / analysing */
-  --offline: #8190ad;     /* offline / unknown */
-  --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  --radius: 10px;
+  /* Surfaces: LIT White and Cloud Neutral Palette */
+  --bg: #F7F9FC;
+  --surface: #FFFFFF;
+  --elevated: #F8FAFC;
+  --fg: #121826;
+  --muted: #475569;
+  --subtle: #64748B;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --navy: #0B2545;
+  --ink: #121826;
+  /* Brand */
+  --accent: #1565C0;
+  --accent-fg: #FFFFFF;
+  --brand-cyan: #1FA9A2;
+  --azure: #0894DE;
+  --steel: #334155;
+  /* Status semantics (WCAG 2.2 AA compliant high-contrast dark text on pastel pill backgrounds) */
+  --ok: #065F46;
+  --warn: #8D6E00;
+  --high: #B45309;
+  --danger: #991B1B;
+  --processing: #0D47A1;
+  --offline: #475569;
+  --font: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  --radius: 12px;
 }
 
 /* Element defaults. In @layer base so Tailwind utilities can override them. */
@@ -48,24 +51,17 @@
   }
   body {
     position: relative;
-    background-image:
-      linear-gradient(rgba(69, 217, 210, 0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(69, 217, 210, 0.022) 1px, transparent 1px),
-      radial-gradient(1100px 520px at 12% -12%, rgba(8, 148, 222, 0.14), transparent 60%),
-      radial-gradient(800px 420px at 100% 0%, rgba(69, 217, 210, 0.07), transparent 62%),
-      linear-gradient(180deg, #060d22 0%, #081027 100%);
-    background-size: 48px 48px, 48px 48px, auto, auto, auto;
-    background-attachment: fixed;
+    background-color: #F7F9FC;
   }
   a { color: inherit; text-decoration: none; }
   button, a { touch-action: manipulation; }
   button { font-family: inherit; cursor: pointer; }
   button:disabled { cursor: not-allowed; }
-  code { font-family: var(--mono); color: var(--steel); }
-  ::selection { background: var(--accent); color: var(--accent-fg); }
-  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  code { font-family: var(--mono); color: #0B2545; }
+  ::selection { background: #E7F3FF; color: #0B2545; }
+  *:focus-visible { outline: 2px solid #1565C0; outline-offset: 2px; border-radius: 4px; }
   main { flex: 1; }
-  canvas { width: 100%; background: #091330; border-radius: 8px; display: block; }
+  canvas { width: 100%; background: #0B2545; border-radius: 8px; display: block; }
 }
 
 /* Component classes. In @layer components so Tailwind utilities
