@@ -101,3 +101,65 @@ test("Public header and footer components exist and export valid React component
   assert.ok(header.includes("export function PublicHeader"));
   assert.ok(footer.includes("export function PublicFooter"));
 });
+
+test("Private workspace routes contain no unrotated raw API tokens", () => {
+  const privateFiles = EXPECTED_ROUTES.filter((r) => r.startsWith("app/app/"));
+  assert.equal(privateFiles.length, 21, "Exactly 21 private workspace routes");
+
+  for (const relPath of privateFiles) {
+    const content = fs.readFileSync(relPath, "utf8");
+    // Verify no static hardcoded unrotated live tokens
+    assert.ok(
+      !content.includes("vs_live_79a2f1c84b9012e88a03"),
+      `File must not contain unrotated static live token: ${relPath}`
+    );
+    // Verify no fake fallback 84ms in overview
+    if (relPath === "app/app/page.tsx") {
+      assert.ok(
+        !content.includes(": 84"),
+        "Overview must not contain fake 84ms latency fallback"
+      );
+    }
+  }
+});
+
+test("PrivateAppLayout contains navigation mappings for all 21 private destinations", () => {
+  const layout = fs.readFileSync("components/layout/PrivateAppLayout.tsx", "utf8");
+  const expectedHrefs = [
+    "/app",
+    "/app/detection",
+    "/app/forensics",
+    "/app/incidents",
+    "/app/sessions",
+    "/app/voiceprints",
+    "/app/challenges",
+    "/app/telephony",
+    "/app/threat-map",
+    "/app/analytics",
+    "/app/reports",
+    "/app/alerts",
+    "/app/api-keys",
+    "/app/webhooks",
+    "/app/models",
+    "/app/audit-log",
+    "/app/organization",
+    "/app/users",
+    "/app/notifications",
+    "/app/settings",
+    "/app/profile",
+  ];
+
+  for (const href of expectedHrefs) {
+    assert.ok(
+      layout.includes(`href: "${href}"`),
+      `PrivateAppLayout must contain navigation link to ${href}`
+    );
+  }
+});
+
+test("Middleware enforces session authentication on /app routes", () => {
+  const mw = fs.readFileSync("lib/supabase/middleware.ts", "utf8");
+  assert.ok(mw.includes('pathname === "/app" || pathname.startsWith("/app/")'));
+  assert.ok(mw.includes('redirectUrl.pathname = "/login"'));
+  assert.ok(mw.includes('redirectUrl.searchParams.set("returnTo"'));
+});
