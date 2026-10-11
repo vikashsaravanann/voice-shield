@@ -6,11 +6,18 @@ import structlog
 logger = structlog.get_logger()
 
 NVIDIA_INVOKE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "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")
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
+GROQ_INVOKE_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 async def generate_nvidia_xai_summary(markers: dict[str, float], risk_level: str, max_risk: float) -> str:
     if risk_level == "low":
         return "Acoustic telemetry aligns with natural biological human vocal tract constraints. No neural vocoder artifacts or phase anomalies detected."
+
+    # If neither Groq nor Nvidia API keys are configured, return deterministic forensic summary safely
+    if not GROQ_API_KEY and not NVIDIA_API_KEY:
+        logger.info("xai_summary.fallback_deterministic", reason="No external LLM provider configured")
+        return f"WARNING: Advanced synthetic artifacts detected (Peak Risk: {max_risk*100:.1f}%), indicating probable deepfake injection."
 
     prompt = f"""
     You are an expert Cyber Forensic Audio Examiner giving a brief, authoritative summary (under 60 words).
@@ -25,26 +32,43 @@ async def generate_nvidia_xai_summary(markers: dict[str, float], risk_level: str
     Provide the explanation in a professional, legal-forensic tone. Do not use markdown.
     """
 
-    payload = {
-        "model": "nvidia/nemotron-4-340b-instruct",
-        "messages": [
-            {"role": "system", "content": "You are a cyber forensics expert."},
-            {"role": "user", "content": prompt}
-        ],
-        "temperature": 0.3,
-        "max_tokens": 150,
-        "top_p": 0.95
-    }
-
-    headers = {
-        "Authorization": f"Bearer {NVIDIA_API_KEY}",
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    }
+    if GROQ_API_KEY:
+        invoke_url = GROQ_INVOKE_URL
+        headers = {
+            "Authorization": f"Bearer {GROQ_API_KEY}",
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "llama-3.3-70b-versatile",
+            "messages": [
+                {"role": "system", "content": "You are a cyber forensics expert."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3,
+            "max_tokens": 150
+        }
+    else:
+        invoke_url = NVIDIA_INVOKE_URL
+        headers = {
+            "Authorization": f"Bearer {NVIDIA_API_KEY}",
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "nvidia/nemotron-4-340b-instruct",
+            "messages": [
+                {"role": "system", "content": "You are a cyber forensics expert."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3,
+            "max_tokens": 150,
+            "top_p": 0.95
+        }
 
     try:
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.post(NVIDIA_INVOKE_URL, headers=headers, json=payload)
+            response = await client.post(invoke_url, headers=headers, json=payload)
             response.raise_for_status()
             data = response.json()
             if "choices" in data and len(data["choices"]) > 0:
@@ -52,5 +76,5 @@ async def generate_nvidia_xai_summary(markers: dict[str, float], risk_level: str
                 return summary
             return "Forensic telemetry indicates significant synthetic deviations."
     except Exception as e:
-        logger.error("nvidia_api.error", error=str(e))
+        logger.error("xai_summary.error", error=str(e), provider="groq" if GROQ_API_KEY else "nvidia")
         return f"WARNING: Advanced synthetic artifacts detected (Peak Risk: {max_risk*100:.1f}%), indicating probable deepfake injection."

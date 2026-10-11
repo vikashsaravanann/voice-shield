@@ -34,8 +34,36 @@ async def generate_challenge(language: str = "en") -> dict[str, str]:
     """Generate an unpredictable phonemic challenge phrase with optional LLM augmentation."""
     lang = language.lower() if language.lower() in CHALLENGES else "en"
 
-    # Dynamic Generation using NVIDIA NIM (Llama-3.1-70B-Instruct)
-    nvidia_key = os.getenv("NVIDIA_API_KEY_LLAMA", "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")
+    # Dynamic Generation using Groq LLM (primary) or NVIDIA NIM (secondary if configured)
+    groq_key = os.getenv("GROQ_API_KEY", "").strip()
+    nvidia_key = os.getenv("NVIDIA_API_KEY_LLAMA", "").strip()
+
+    if groq_key and lang == "en":
+        try:
+            import httpx
+            payload = {
+                "model": "llama-3.3-70b-versatile",
+                "messages": [{
+                    "role": "system",
+                    "content": "Generate a single 6-word unpredictable phonetic challenge sentence for voice verification. Output ONLY the sentence."
+                }],
+                "max_tokens": 30,
+                "temperature": 0.8,
+            }
+            headers = {
+                "Authorization": f"Bearer {groq_key}",
+                "Accept": "application/json",
+            }
+            async with httpx.AsyncClient(timeout=4.0) as client:
+                res = await client.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
+                res.raise_for_status()
+                data = res.json()
+                text = data["choices"][0]["message"]["content"]
+                if text and len(text.strip()) > 10:
+                    return {"language": lang, "challenge_text": text.strip().strip('"')}
+        except Exception:
+            pass
+
     if nvidia_key and lang == "en":
         try:
             import httpx
