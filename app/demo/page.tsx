@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Cpu, Lock, Mic } from "lucide-react";
+import { Cpu, Lock, Mic, ShieldCheck, ArrowRight } from "lucide-react";
 import { LiveConsole } from "@/components/demo/LiveConsole";
 
 export const metadata: Metadata = {
@@ -15,46 +15,51 @@ const FACTS = [
   { icon: Cpu, text: "Lightweight in-browser detector, not the production model" },
 ];
 
-/**
- * VoiceShield live demo. The interactive console lives in
- * components/demo/LiveConsole.tsx (mic capture, risk score, challenge, reconnect).
- */
 export default function DemoPage() {
   return (
     <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <header className="max-w-3xl">
-        <p className="eyebrow">Live demo</p>
-        <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">Voice analysis console</h1>
-        <p className="mt-3 text-base text-slate-300 leading-relaxed">
+      <header className="max-w-3xl mb-8">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-3">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>IN-BROWSER AUDIO SIMULATOR</span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0B2545]">
+          Voice Analysis Console
+        </h1>
+        <p className="mt-3 text-base text-[#52677C] leading-relaxed">
           Speak into your microphone and watch the pipeline score each 333 ms segment of audio for synthetic-voice
-          indicators. Use <strong className="text-white font-semibold">Simulate cloned voice</strong> to see how the
+          indicators. Use <strong className="text-[#0B2545] font-semibold">Simulate cloned voice</strong> to see how the
           console escalates to a spoken challenge.
         </p>
-        <ul className="mt-5 flex flex-wrap gap-2" aria-label="How this demo handles your audio">
+        <ul className="mt-5 flex flex-wrap gap-2.5" aria-label="How this demo handles your audio">
           {FACTS.map(({ icon: Icon, text }) => (
             <li
               key={text}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-700/80 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-300"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#DFE7EF] bg-white px-3.5 py-2 text-xs font-medium text-[#0B2545] shadow-xs"
             >
-              <Icon aria-hidden className="h-3.5 w-3.5 text-brand-400 shrink-0" />
-              {text}
+              <Icon aria-hidden className="h-3.5 w-3.5 text-[#1565C0] shrink-0" />
+              <span>{text}</span>
             </li>
           ))}
         </ul>
       </header>
 
-      <div className="mt-8">
+      <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#DFE7EF] shadow-sm">
         <LiveConsole />
       </div>
 
-      <p className="mt-10 text-sm text-slate-400">
-        Scores on this page come from the in-browser detector and show how the pipeline behaves; they are not output of
-        the production inference service. See the{" "}
-        <Link href="/architecture" className="text-brand-300 underline underline-offset-4 hover:text-brand-200">
-          architecture
-        </Link>{" "}
-        for how the production path works.
-      </p>
+      <div className="mt-8 p-4 rounded-xl bg-[#F7F9FC] border border-[#E2E8F0] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#52677C]">
+        <p>
+          Need to connect high-volume production SIP trunks or carrier media forks?
+        </p>
+        <Link
+          href="/app"
+          className="inline-flex items-center gap-1.5 font-semibold text-[#1565C0] hover:underline shrink-0"
+        >
+          <span>Launch Enterprise SOC Workspace</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
     </div>
   );
 }

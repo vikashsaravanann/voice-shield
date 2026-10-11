@@ -340,8 +340,10 @@ function CanvasIdle({ label }: { label: string }) {
         display: "grid",
         placeItems: "center",
         fontSize: 12,
-        color: "var(--subtle)",
-        border: "1px dashed var(--border-strong)",
+        fontWeight: 600,
+        letterSpacing: "0.02em",
+        color: "#CBD5E1",
+        border: "1px dashed rgba(255, 255, 255, 0.25)",
         borderRadius: 8,
         pointerEvents: "none",
       }}

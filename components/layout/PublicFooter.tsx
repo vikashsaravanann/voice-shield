@@ -7,221 +7,201 @@ import {
   Lock,
   FileCheck2,
   CheckCircle2,
-  ExternalLink,
+  ArrowUpRight,
+  Cookie,
   Cpu,
+  Database,
+  PhoneCall,
+  ShieldAlert,
+  Eye,
+  FileCode2,
+  FileText,
 } from "lucide-react";
+
+/**
+ * Trust & Legal Repository Links for VoiceShield.
+ * Arranged strictly in horizontal pairs:
+ * Row 1: Button 1 (Privacy Policy) | Button 2 (Terms of Service)
+ * Row 2: Button 3 (Cookie Policy)  | Button 4 (Acceptable Use)
+ * Row 3: Button 5 (AI & Model Limits) | Button 6 (Data & Retention)
+ * Row 4: Button 7 (Telephony Consent) | Button 8 (Vulnerability Disclosure)
+ * Row 5: Button 9 (Accessibility)  | Button 10 (Copyright & DMCA Agent)
+ */
+const TRUST_LEGAL_BUTTONS = [
+  {
+    title: "Privacy Policy",
+    href: "/privacy",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/privacy",
+    description: "Audio privacy, real-time telemetry & zero biometric storage",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Terms of Service",
+    href: "/terms",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/terms",
+    description: "Enterprise SLA, licensing commitments & operational terms",
+    icon: FileText,
+  },
+  {
+    title: "Cookie Policy",
+    href: "/cookie-policy",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/cookie-policy",
+    description: "Essential SOC tokens & fraud session cookies",
+    icon: Cookie,
+  },
+  {
+    title: "Acceptable Use",
+    href: "/acceptable-use",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/acceptable-use",
+    description: "Ethical defensive usage & spoof prevention standards",
+    icon: CheckCircle2,
+  },
+  {
+    title: "AI & Model Limitations",
+    href: "/ai-limitations",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/ai-limitations",
+    description: "Probabilistic boundaries & false-positive governance",
+    icon: Cpu,
+  },
+  {
+    title: "Data & Retention Controls",
+    href: "/data-retention",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/data-retention",
+    description: "Zero-retention defaults & forensic audit trail controls",
+    icon: Database,
+  },
+  {
+    title: "Telephony & Recording Consent",
+    href: "/telephony-consent",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/telephony-consent",
+    description: "Multi-party recording disclosures & carrier compliance",
+    icon: PhoneCall,
+  },
+  {
+    title: "Vulnerability Disclosure",
+    href: "/responsible-disclosure",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/responsible-disclosure",
+    description: "ISO/IEC 29147 coordinated security bug reporting",
+    icon: ShieldAlert,
+  },
+  {
+    title: "Accessibility Statement",
+    href: "/accessibility",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/accessibility",
+    description: "WCAG 2.1 Level AA conformance & screen-reader support",
+    icon: Eye,
+  },
+  {
+    title: "Copyright & DMCA Agent",
+    href: "/copyright",
+    fullUrl: "https://voiceshield.logicintelligencetechnologies.in/copyright",
+    description: "Designated DMCA agent & intellectual property claims",
+    icon: FileCode2,
+  },
+];
 
 export function PublicFooter() {
   return (
-    <footer className="bg-[#0B2545] text-white border-t border-[#18354F] pt-16 pb-12 mt-auto">
+    <footer className="bg-white border-t border-[#DFE7EF] pt-14 pb-10 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#18354F]">
-          {/* Brand & Mission Statement */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#1565C0] flex items-center justify-center text-white shadow-md">
-                <ShieldCheck className="w-6 h-6 text-[#45D9D2]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl tracking-tight text-white">
-                  VoiceShield
-                </span>
-                <span className="text-xs text-[#45D9D2] font-semibold tracking-wide">
-                  AI Voice Fraud Prevention & Security
-                </span>
-              </div>
+        
+        {/* Brand & Trust Header */}
+        <div className="max-w-3xl mx-auto text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-4">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>TRUST & LEGAL REPOSITORY</span>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0B2545] to-[#1565C0] flex items-center justify-center text-white shadow-xs">
+              <ShieldCheck className="w-5 h-5 text-[#45D9D2]" />
             </div>
-            <p className="text-sm text-[#CBD5E1] max-w-sm leading-relaxed">
-              VoiceShield by Logic Intelligence Technologies delivers real-time synthetic voice
-              detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody
-              auditing for contact centers, financial networks, and enterprise communications.
-            </p>
-            <div className="pt-2 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#18354F] text-[#45D9D2] border border-[#20496E]">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                WCAG 2.1 AA Target
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#18354F] text-[#CBD5E1] border border-[#20496E]">
-                <Lock className="w-3.5 h-3.5" />
-                Encrypted Audio Pipeline
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#18354F] text-[#CBD5E1] border border-[#20496E]">
-                <FileCheck2 className="w-3.5 h-3.5" />
-                Section 65B Admissible
-              </span>
-            </div>
+            <span className="font-bold text-xl sm:text-2xl text-[#0B2545] tracking-tight">
+              VoiceShield
+            </span>
+            <span className="px-1.5 py-0.5 text-[10px] font-bold bg-[#E7F3FF] text-[#1565C0] rounded border border-[#BBDEFB] uppercase">
+              AI SOC
+            </span>
           </div>
 
-          {/* Product Links */}
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#45D9D2] mb-4">
-              Product
-            </h3>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/features" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Core Features
-                </Link>
-              </li>
-              <li>
-                <Link href="/how-it-works" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  How Detection Works
-                </Link>
-              </li>
-              <li>
-                <Link href="/use-cases" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Enterprise Use Cases
-                </Link>
-              </li>
-              <li>
-                <Link href="/threat-intel" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Threat Intelligence
-                </Link>
-              </li>
-              <li>
-                <Link href="/industries" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Industry Solutions
-                </Link>
-              </li>
-              <li>
-                <Link href="/integrations" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Integrations & Telephony
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Pricing & Plans
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <p className="text-xs sm:text-sm text-[#52677C] leading-relaxed max-w-2xl mx-auto">
+            VoiceShield by <strong className="text-[#0B2545] font-semibold">Logic Intelligence Technologies</strong> delivers
+            enterprise voice fraud mitigation, synthetic voice detection, and Section 65B admissible forensic auditing.
+            Review our published legal agreements, regulatory disclosures, and operating policies below.
+          </p>
 
-          {/* Resources & Technical */}
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#45D9D2] mb-4">
-              Resources & Tools
-            </h3>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/docs" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link href="/architecture" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  System Architecture
-                </Link>
-              </li>
-              <li>
-                <Link href="/demo" className="text-[#CBD5E1] hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Interactive Demo</span>
-                  <span className="text-[9px] bg-[#FFF4D9] text-[#8D6E00] px-1 py-0.2 rounded font-bold">SIM</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/report" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Incident Reporting
-                </Link>
-              </li>
-              <li>
-                <Link href="/security" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Security & Trust
-                </Link>
-              </li>
-              <li>
-                <Link href="/status" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  System Status
-                </Link>
-              </li>
-              <li>
-                <Link href="/changelog" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Changelog & Models
-                </Link>
-              </li>
-            </ul>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-[#F7F9FC] text-[#065F46] border border-[#A7F3D0]">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
+              WCAG 2.1 AA Target
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-[#F7F9FC] text-[#0B2545] border border-[#CBD5E1]">
+              <Lock className="w-3.5 h-3.5 text-[#1565C0]" />
+              Encrypted Telephony Pipeline
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-[#F7F9FC] text-[#0B2545] border border-[#CBD5E1]">
+              <FileCheck2 className="w-3.5 h-3.5 text-[#1565C0]" />
+              Section 65B Admissible
+            </span>
           </div>
+        </div>
 
-          {/* Legal & Governance */}
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#45D9D2] mb-4">
-              Trust & Legal
-            </h3>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/privacy" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/cookie-policy" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Cookie Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/acceptable-use" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Acceptable Use
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-limitations" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  AI & Model Limitations
-                </Link>
-              </li>
-              <li>
-                <Link href="/data-retention" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Data & Retention Controls
-                </Link>
-              </li>
-              <li>
-                <Link href="/telephony-consent" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Telephony & Recording Consent
-                </Link>
-              </li>
-              <li>
-                <Link href="/responsible-disclosure" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Vulnerability Disclosure
-                </Link>
-              </li>
-              <li>
-                <Link href="/accessibility" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Accessibility Statement
-                </Link>
-              </li>
-              <li>
-                <Link href="/copyright" className="text-[#CBD5E1] hover:text-white transition-colors">
-                  Copyright & DMCA Agent
-                </Link>
-              </li>
-            </ul>
-          </div>
+        {/* 
+          10 Trust & Legal Buttons in Equal 2-Column Grid:
+          Button 1 and Button 2 are horizontal.
+          Button 3 is bottom of Button 1; Button 4 is bottom of Button 2, and so forth.
+        */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 max-w-4xl mx-auto">
+          {TRUST_LEGAL_BUTTONS.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-white hover:bg-[#F0F7FF] border border-[#DFE7EF] hover:border-[#1565C0] shadow-xs hover:shadow-sm transition-all duration-200 min-h-[72px]\ text-left"
+                title={item.title}
+              >
+                <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-[#E7F3FF] group-hover:bg-[#1565C0] text-[#1565C0] group-hover:text-white flex items-center justify-center shrink-0 transition-colors shadow-2xs">
+                    <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                  </div>
+                  <div className="flex flex-col min-w-0 flex-1 pr-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-mono font-bold text-[#1565C0] opacity-80">
+                        0{index + 1}
+                      </span>
+                      <span className="text-sm font-bold text-[#0B2545] group-hover:text-[#1565C0] transition-colors truncate">
+                        {item.title}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-[#52677C] font-normal truncate mt-0.5">
+                      {item.description}
+                    </span>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#1565C0] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+              </Link>
+            );
+          })}
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
-          <p>
+        <div className="mt-12 pt-6 border-t border-[#DFE7EF] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#52677C]">
+          <p className="text-center sm:text-left">
             &copy; {new Date().getFullYear()} Logic Intelligence Technologies. All rights reserved.
             VoiceShield™ is an enterprise voice fraud mitigation platform.
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="/about" className="hover:text-white transition-colors">
-              About LIT
-            </Link>
-            <Link href="/contact" className="hover:text-white transition-colors">
-              Contact
-            </Link>
-            <Link href="/faq" className="hover:text-white transition-colors">
-              FAQ
-            </Link>
-            <Link href="/compliance" className="hover:text-white transition-colors">
-              Compliance
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/status"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#065F46] hover:text-[#047857] transition-colors"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+              <span>Operational · Live v2.4</span>
             </Link>
           </div>
         </div>
+
       </div>
     </footer>
   );
