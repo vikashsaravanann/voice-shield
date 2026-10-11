@@ -245,12 +245,21 @@ export function PublicHeader() {
 
                 {/* Dropdown Mega Menu */}
                 {moreOpen && (
-                  <div className="fixed inset-x-0 top-[56px] sm:top-[64px] flex justify-center px-4 lg:px-6 pt-2 z-50 pointer-events-auto">
+                  <>
+                    {/* Semi-transparent dark backdrop to dim page content and dismiss on outside click */}
                     <div
-                      id="more-mega-menu"
-                      aria-label="All VoiceShield Pages"
-                      className="w-full max-w-[1400px] max-h-[calc(100dvh-84px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#DFE7EF] bg-white/98 backdrop-blur-2xl shadow-[0_20px_50px_rgba(15,23,42,0.14)] p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-x-5 gap-y-6 animate-in fade-in zoom-in-95 duration-150"
-                    >
+                      className="fixed inset-0 top-[56px] sm:top-[64px] bg-[#0B2545]/30 backdrop-blur-[2px] z-40 transition-opacity"
+                      onClick={() => setMoreOpen(false)}
+                      aria-hidden="true"
+                    />
+
+                    <div className="fixed inset-x-0 top-[56px] sm:top-[64px] flex justify-center px-4 lg:px-6 pt-2 z-50 pointer-events-auto">
+                      <div
+                        id="more-mega-menu"
+                        aria-label="All VoiceShield Pages"
+                        className="w-full max-w-[1400px] max-h-[calc(100dvh-84px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#CBD5E1] bg-white shadow-[0_25px_60px_-15px_rgba(11,37,69,0.3),0_0_0_1px_rgba(11,37,69,0.06)] p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-x-5 gap-y-6 animate-in fade-in zoom-in-95 duration-150"
+                        style={{ backgroundColor: "#FFFFFF" }}
+                      >
                       {MORE_NAV_GROUPS.map((group) => (
                         <div key={group.id} className="min-w-0">
                           <p className="px-2 mb-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#1565C0] flex items-center gap-1.5 whitespace-nowrap">
@@ -287,6 +296,7 @@ export function PublicHeader() {
                       ))}
                     </div>
                   </div>
+                  </>
                 )}
               </div>
             </nav>
@@ -333,7 +343,7 @@ export function PublicHeader() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="xl:hidden fixed inset-x-0 top-[56px] sm:top-[64px] bottom-0 bg-white/98 backdrop-blur-xl border-t border-[#DFE7EF] overflow-y-auto p-4 sm:p-6 z-40">
+          <div className="xl:hidden fixed inset-x-0 top-[56px] sm:top-[64px] bottom-0 bg-white border-t border-[#DFE7EF] overflow-y-auto p-4 sm:p-6 z-40 shadow-2xl" style={{ backgroundColor: "#FFFFFF" }}>
             <div className="space-y-4 max-w-lg mx-auto pb-12">
               
               <div className="flex items-center justify-between pb-2 border-b border-[#DFE7EF]">
