@@ -45,6 +45,7 @@ allowed_origins = [
 ]
 _always_allow = [
     "https://voiceshield.logicintelligencetechnologies.in",
+    "https://voice-shield.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
@@ -55,8 +56,7 @@ for _o in _always_allow:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    # This regex is a lifesaver for Vercel preview deployments
-    allow_origin_regex=r"https://.*\.vercel\.app", 
+    allow_origin_regex=r"^https://voice-shield(-[a-z0-9-]+)?\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
