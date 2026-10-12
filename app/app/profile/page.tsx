@@ -36,7 +36,9 @@ export default function ProfilePage() {
           setEmail(user.email || "operator@enterprise.com");
           setUserId(user.id);
           setLastSignIn(user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString() : "Current Active Session");
-          if (user.user_metadata?.role) {
+          if (user.email?.toLowerCase() === "createwithvikash@gmail.com") {
+            setRole("Tenant Admin");
+          } else if (user.user_metadata?.role) {
             setRole(user.user_metadata.role);
           }
         }

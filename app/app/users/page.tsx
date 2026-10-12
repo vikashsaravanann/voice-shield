@@ -25,9 +25,9 @@ interface OperatorSeat {
 export default function UsersPage() {
   const [operators, setOperators] = useState<OperatorSeat[]>([
     {
-      id: "op-primary",
-      email: "operator@enterprise.com",
-      role: "Security Analyst",
+      id: "op-super-admin",
+      email: "createwithvikash@gmail.com",
+      role: "Tenant Admin",
       status: "ACTIVE",
       lastActive: "Now",
     },
@@ -52,15 +52,16 @@ export default function UsersPage() {
         const supabase = getSupabaseBrowserClient();
         const { data: { user } } = await supabase.auth.getUser();
         if (active && user?.email) {
+          const isSuperAdmin = user.email.toLowerCase() === "createwithvikash@gmail.com";
           setOperators((prev) => [
             {
               id: user.id,
               email: user.email!,
-              role: "Security Analyst",
+              role: isSuperAdmin ? "Tenant Admin" : "Security Analyst",
               status: "ACTIVE",
               lastActive: "Active Session",
             },
-            ...prev.filter((p) => p.email !== user.email && p.id !== "op-primary"),
+            ...prev.filter((p) => p.email !== user.email && p.id !== "op-super-admin" && p.id !== "op-primary"),
           ]);
         }
       } catch {
