@@ -1,0 +1,17 @@
+--- voice-shield/app/api/contact/route.ts
++++ voice-shield/app/api/contact/route.ts
+@@ -28,8 +28,14 @@
+       if (data?.id) {
+         ticketId = `TKT-${data.id.substring(0, 8).toUpperCase()}`;
+       }
+-    } catch {
+-      // Graceful fallback for local/offline execution
++    } catch (err: any) {
++      console.error("Database insert failed:", err);
++      return NextResponse.json(
++        { error: "System unavailable. Could not save consultation request." },
++        { status: 503 }
++      );
+     }
+ 
+     return NextResponse.json({
