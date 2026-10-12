@@ -4,14 +4,19 @@ import { MetadataRoute } from 'next'
 const PRODUCTION_URL = 'https://voiceshield.logicintelligencetechnologies.in'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = PRODUCTION_URL
-
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/dashboard/', '/report/'],
+      disallow: [
+        '/api/',
+        '/auth/',
+        '/dashboard/',
+        '/dashboard',
+        '/app/',
+        '/app',
+      ],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${PRODUCTION_URL}/sitemap.xml`,
   }
 }

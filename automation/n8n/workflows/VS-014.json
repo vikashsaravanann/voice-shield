@@ -1,0 +1,198 @@
+{
+  "name": "VS-014: API key rotation reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "vs-014",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "vs-014-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst headers = $input.first().json.headers || {};\nconst signatureHeader = headers['x-lit-signature'] || headers['X-LIT-Signature'] || '';\nconst timestampHeader = headers['x-lit-timestamp'] || headers['X-LIT-Timestamp'] || '';\nconst eventIdHeader = headers['x-lit-event-id'] || headers['X-LIT-Event-ID'] || '';\nconst rawBody = $input.first().json.rawBody || JSON.stringify($input.first().json.body || {});\n\nif (!signatureHeader || !timestampHeader || !eventIdHeader) {\n  throw new Error('HMAC verification failed: Missing required LIT security headers (X-LIT-Signature, X-LIT-Timestamp, X-LIT-Event-ID)');\n}\n\nconst now = Math.floor(Date.now() / 1000);\nconst timestamp = parseInt(timestampHeader, 10);\nif (isNaN(timestamp) || Math.abs(now - timestamp) > 300) {\n  throw new Error(`HMAC verification failed: Timestamp tolerance exceeded (diff: ${Math.abs(now - timestamp)}s > 300s)`);\n}\n\nconst secret = $env.N8N_WEBHOOK_SECRET;\nif (!secret || typeof secret !== 'string' || secret.trim().length === 0) {\n  throw new Error('HMAC verification failed: N8N_WEBHOOK_SECRET environment variable is missing or empty (fail-closed)');\n}\n\nconst expectedSignature = 'v1=' + crypto\n  .createHmac('sha256', secret)\n  .update(`${timestamp}.${eventIdHeader}.${rawBody}`)\n  .digest('hex');\n\nconst sigBuffer = Buffer.from(signatureHeader);\nconst expBuffer = Buffer.from(expectedSignature);\nif (sigBuffer.length !== expBuffer.length || !crypto.timingSafeEqual(sigBuffer, expBuffer)) {\n  throw new Error('HMAC verification failed: Invalid cryptographic signature');\n}\n\nconst body = typeof $input.first().json.body === 'object' ? $input.first().json.body : JSON.parse(rawBody);\n\nreturn [{\n  json: {\n    verified: true,\n    event_id: eventIdHeader,\n    timestamp: timestamp,\n    payload: body\n  }\n}];"
+      },
+      "id": "vs-014-hmac",
+      "name": "HMAC SHA-256 Verification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Zero-Raw-Audio, Zero-Biometric-Embedding, Zero-PHI Boundary Assertion\nconst PROHIBITED_KEYS = [\n  'raw_audio', 'audio_chunk', 'pcm_data', 'voiceprint', 'biometric_embedding',\n  'spectrogram', 'waveform', 'phone_number', 'patient', 'clinical_notes',\n  'mrn', 'ssn', 'aadhaar', 'auth_token', 'password_hash'\n];\n\nfunction sanitizeCheck(obj, path = '') {\n  if (!obj || typeof obj !== 'object') return;\n  for (const [k, v] of Object.entries(obj)) {\n    const currentPath = path ? `${path}.${k}` : k;\n    if (PROHIBITED_KEYS.includes(k.toLowerCase())) {\n      throw new Error(`Zero-Biometric/PHI Boundary Violation: Prohibited field detected at ${currentPath}`);\n    }\n    if (typeof v === 'object') sanitizeCheck(v, currentPath);\n  }\n}\n\nconst payload = $input.first().json.payload;\nsanitizeCheck(payload);\n\nreturn [{\n  json: {\n    ...$input.first().json,\n    sanitized: true\n  }\n}];"
+      },
+      "id": "vs-014-boundary-guard",
+      "name": "Zero-Biometric & Privacy Guard",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.voiceshield.logicintelligencetechnologies.in/api/v1/internal/ops/action",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-LIT-Workflow-Code",
+              "value": "VS-014"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "workflow_code",
+              "value": "VS-014"
+            },
+            {
+              "name": "event_type",
+              "value": "auth.api_key.rotation_due"
+            },
+            {
+              "name": "risk_tier",
+              "value": "R3"
+            },
+            {
+              "name": "event_id",
+              "value": "={{$node['HMAC SHA-256 Verification'].json['event_id']}}"
+            },
+            {
+              "name": "payload",
+              "value": "={{$node['Zero-Biometric & Privacy Guard'].json['payload']}}"
+            }
+          ]
+        }
+      },
+      "id": "vs-014-action",
+      "name": "Action Integration",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.voiceshield.logicintelligencetechnologies.in/api/v1/admin-outbox/events/{{$node['HMAC SHA-256 Verification'].json['event_id']}}/callback",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "workflow_code",
+              "value": "VS-014"
+            },
+            {
+              "name": "status",
+              "value": "DELIVERED"
+            },
+            {
+              "name": "execution_id",
+              "value": "={{$execution.id}}"
+            }
+          ]
+        }
+      },
+      "id": "vs-014-callback",
+      "name": "Authoritative Callback",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "HMAC SHA-256 Verification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HMAC SHA-256 Verification": {
+      "main": [
+        [
+          {
+            "node": "Zero-Biometric & Privacy Guard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zero-Biometric & Privacy Guard": {
+      "main": [
+        [
+          {
+            "node": "Action Integration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action Integration": {
+      "main": [
+        [
+          {
+            "node": "Authoritative Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "workflowCode": "VS-014",
+    "title": "API key rotation reminder",
+    "riskClass": "R3",
+    "eventType": "auth.api_key.rotation_due",
+    "zeroPhiCertified": true,
+    "zeroBiometricCertified": true
+  }
+}
