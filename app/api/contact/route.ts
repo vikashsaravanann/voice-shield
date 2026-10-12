@@ -62,11 +62,42 @@ export async function POST(request: Request) {
             template_key: 'voiceshield_consultation_ack',
             category: 'transactional',
             sender_pool: 'HELLO',
-            recipients: [{ address: email.trim().toLowerCase(), role: 'to' }],
-            safe_template_data: { name, ticketId }
+            recipients: [
+              { address: email.trim().toLowerCase(), role: 'to' },
+              { address: 'admin@logicintelligencetechnologies.in', role: 'to' },
+            ],
+            safe_template_data: { name, ticketId, organization, message }
           }),
-          // fire and forget, outbox handles retries internally if needed, but we don't block the user
         }).catch(e => console.error("Event dispatch error:", e));
+
+        // Synchronize to corporate universal intake stream
+        fetch('https://www.logicintelligencetechnologies.in/api/intake/event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.LIT_INTERNAL_API_KEY}`,
+            'x-lit-internal-token': process.env.LIT_INTERNAL_API_KEY || "",
+          },
+          body: JSON.stringify({
+            schema_version: 1,
+            event_id: data.id,
+            idempotency_key: `entity:voiceshield_contact:${data.id}`,
+            entity: 'voiceshield',
+            environment: process.env.NODE_ENV === 'production' ? 'production' : 'staging',
+            source_site: 'voiceshield.logicintelligencetechnologies.in',
+            form_id: 'voiceshield_contact',
+            source_record_id: data.id,
+            record_type: 'contact',
+            customer_name: name,
+            customer_email: email.trim().toLowerCase(),
+            company_name: organization,
+            safe_fields: {
+              environment: environment || 'Unspecified',
+              message: message || '',
+              ticket_id: ticketId,
+            },
+          }),
+        }).catch(e => console.error("Corporate intake sync error:", e));
       }
     } catch (dbError) {
       console.error("VoiceShield DB Insert Error:", dbError);
