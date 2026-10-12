@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Key,
   Copy,
@@ -55,6 +55,20 @@ export default function ApiKeysPage() {
   const [scope, setScope] = useState("carrier:audio:write");
   const [toastMessage, setToastMessage] = useState("");
 
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("vs_workspace_api_keys");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setKeys(parsed);
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
   const handleGenerateKey = (e: React.FormEvent) => {
     e.preventDefault();
     if (!keyName.trim()) return;
@@ -73,25 +87,41 @@ export default function ApiKeysPage() {
       status: "ACTIVE",
     };
 
-    setKeys((prev) => [newKey, ...prev]);
+    setKeys((prev) => {
+      const updated = [newKey, ...prev];
+      try {
+        localStorage.setItem("vs_workspace_api_keys", JSON.stringify(updated));
+      } catch {
+        // Ignore
+      }
+      return updated;
+    });
+
     setCreatedSecret(rawSecret);
     setKeyName("");
   };
 
-  const handleCopySecret = () => {
-    if (!createdSecret) return;
-    navigator.clipboard.writeText(createdSecret);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const handleRevokeKey = (id: string, name: string) => {
+    if (!window.confirm(`Revoke API key "${name}"? Ingestion traffic using this key will be rejected immediately.`)) return;
+
+    setKeys((prev) => {
+      const updated = prev.map((k) => (k.id === id ? { ...k, status: "REVOKED" as const } : k));
+      try {
+        localStorage.setItem("vs_workspace_api_keys", JSON.stringify(updated));
+      } catch {
+        // Ignore
+      }
+      return updated;
+    });
+
+    setToastMessage(`API key "${name}" revoked.`);
+    setTimeout(() => setToastMessage(""), 3500);
   };
 
-  const handleRevokeKey = (id: string) => {
-    if (!window.confirm("Are you sure you want to revoke this API credential? Ingestion streams using it will be rejected immediately.")) return;
-    setKeys((prev) =>
-      prev.map((k) => (k.id === id ? { ...k, status: "REVOKED" } : k))
-    );
-    setToastMessage("API key revoked. Carrier streams using this token will fail authentication.");
-    setTimeout(() => setToastMessage(""), 4000);
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -101,17 +131,17 @@ export default function ApiKeysPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB]">
-              AUTHENTICATION TOKENS
+              INGESTION TOKENS
             </span>
             <span className="text-xs text-[#52677C]">
-              Bearer Tokens &bull; WebSocket Handshake Keys
+              Bearer Tokens for Audio Streaming
             </span>
           </div>
           <h1 className="text-2xl font-bold text-[#0B2545] tracking-tight">
-            Ingestion API Credentials
+            API Keys &amp; Ingestion Credentials
           </h1>
           <p className="text-xs sm:text-sm text-[#52677C]">
-            Scoped tokens permitting carrier FreeSWITCH and Asterisk telephony servers to stream audio directly into VoiceShield.
+            Manage authentication credentials for carrier media forks, SIP bridges, and REST endpoints.
           </p>
         </div>
 
@@ -120,83 +150,68 @@ export default function ApiKeysPage() {
             setCreatedSecret(null);
             setModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#1565C0] hover:bg-[#0B2545] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0B2545] hover:bg-[#1565C0] text-white font-semibold text-xs transition-colors shadow-sm"
         >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Generate New Key</span>
+          <Plus className="w-4 h-4" />
+          <span>Generate Ingestion Key</span>
         </button>
       </div>
 
-      {/* Toast Feedback */}
       {toastMessage && (
-        <div className="p-3 bg-[#E7F7EF] border border-[#A7F3D0] rounded-xl text-xs text-[#065F46] flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{toastMessage}</span>
+        <div className="p-4 rounded-xl bg-[#E7F7EF] border border-[#A7F3D0] text-xs text-[#065F46] flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+            <span className="font-semibold">{toastMessage}</span>
+          </div>
         </div>
       )}
 
-      {/* Security Advisory */}
-      <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DFE7EF] text-xs text-[#52677C] flex items-start gap-3">
-        <Info className="w-4 h-4 text-[#1565C0] shrink-0 mt-0.5" />
-        <p>
-          <strong>Secret Masking Standards:</strong> Full API secrets are shown exactly once upon creation and cannot be retrieved again. Existing keys in the database are stored as one-way salted hashes.
-        </p>
-      </div>
-
-      {/* API Keys Table */}
-      <div className="bg-white rounded-2xl border border-[#DFE7EF] overflow-hidden shadow-sm">
-        <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between">
-          <h2 className="text-sm font-bold text-[#0B2545]">Active Telephony Ingestion Tokens</h2>
-          <span className="text-xs text-[#52677C]">{keys.filter((k) => k.status === "ACTIVE").length} Active</span>
+      {/* Keys Table Card */}
+      <div className="bg-white rounded-2xl border border-[#DFE7EF] shadow-2xs overflow-hidden">
+        <div className="p-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F7F9FC]">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#0B2545]">
+            <Key className="w-4 h-4 text-[#1565C0]" />
+            <span>Active Ingestion Credentials ({keys.length})</span>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-[#F7F9FC] text-[#52677C] font-semibold border-b border-[#E2E8F0] uppercase tracking-wider text-[11px]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F7F9FC] text-[#52677C] font-bold border-b border-[#DFE7EF]">
               <tr>
-                <th className="px-6 py-3">Label</th>
-                <th className="px-6 py-3">Token Mask</th>
-                <th className="px-6 py-3">Assigned Scope</th>
-                <th className="px-6 py-3">Created</th>
-                <th className="px-6 py-3">Last Telemetry</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3 text-right">Revoke</th>
+                <th className="py-3 px-4">Key Description</th>
+                <th className="py-3 px-4">Masked Token Prefix</th>
+                <th className="py-3 px-4">Authorization Scope</th>
+                <th className="py-3 px-4">Last Activity</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E2E8F0]">
               {keys.map((k) => (
-                <tr key={k.id} className="hover:bg-[#F8FAFC]">
-                  <td className="px-6 py-4 font-bold text-[#0B2545]">
-                    {k.name}
+                <tr key={k.id} className="hover:bg-[#F7F9FC] transition-colors">
+                  <td className="py-3.5 px-4 font-bold text-[#0B2545]">{k.name}</td>
+                  <td className="py-3.5 px-4 font-mono text-[11px] text-[#52677C]">{k.prefix}</td>
+                  <td className="py-3.5 px-4 font-mono text-[10px] text-[#0B2545]">
+                    <span className="px-2 py-0.5 rounded bg-[#F7F9FC] border border-[#DFE7EF]">
+                      {k.scope}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 font-mono text-xs text-[#52677C]">
-                    {k.prefix}
-                  </td>
-                  <td className="px-6 py-4 font-mono text-xs text-[#1565C0]">
-                    {k.scope}
-                  </td>
-                  <td className="px-6 py-4 text-[#52677C]">
-                    {k.created}
-                  </td>
-                  <td className="px-6 py-4 text-[#52677C]">
-                    {k.lastUsed}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                        k.status === "ACTIVE"
-                          ? "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]"
-                          : "bg-[#FCEAF3] text-[#991B1B] border-[#F8BBD0]"
-                      }`}
-                    >
+                  <td className="py-3.5 px-4 font-mono text-[11px] text-[#52677C]">{k.lastUsed}</td>
+                  <td className="py-3.5 px-4">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                      k.status === "ACTIVE"
+                        ? "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]"
+                        : "bg-[#FCEAF3] text-[#991B1B] border-[#F8BBD0]"
+                    }`}>
                       {k.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="py-3.5 px-4 text-right">
                     {k.status === "ACTIVE" && (
                       <button
-                        onClick={() => handleRevokeKey(k.id)}
-                        className="text-xs text-[#991B1B] hover:underline font-semibold"
+                        onClick={() => handleRevokeKey(k.id, k.name)}
+                        className="text-xs font-bold text-[#991B1B] hover:underline"
                       >
                         Revoke
                       </button>
@@ -209,112 +224,85 @@ export default function ApiKeysPage() {
         </div>
       </div>
 
-      {/* Generate Key Modal */}
+      {/* Modal */}
       {modalOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-          onClick={() => setModalOpen(false)}
-        >
-          <div
-            className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#DFE7EF] space-y-4 animate-in fade-in zoom-in-95"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-          >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B2545]/40 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl shadow-2xl border border-[#CBD5E1] w-full max-w-md p-6 space-y-4 animate-riseIn">
             <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#1565C0] bg-[#E7F3FF] px-2 py-0.5 rounded border border-[#BBDEFB]">
-                  Credential Issuance
-                </span>
-                <h3 className="text-base font-bold text-[#0B2545] mt-1">
-                  Generate Ingestion API Key
-                </h3>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="p-1 rounded-md text-[#94A3B8] hover:text-[#0B2545]"
-              >
+              <h3 className="font-bold text-sm text-[#0B2545]">
+                {createdSecret ? "Ingestion Key Generated" : "Create New Ingestion Key"}
+              </h3>
+              <button onClick={() => setModalOpen(false)} className="text-[#52677C] hover:text-[#0B2545]">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {createdSecret ? (
               <div className="space-y-4 text-xs">
-                <div className="p-3 bg-[#E7F7EF] rounded-xl border border-[#A7F3D0] text-[#065F46] flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p>
-                    <strong>API Key Created:</strong> Copy your key now. For your security, it will not be displayed again.
-                  </p>
+                <div className="p-4 rounded-xl bg-[#FFF4D9] border border-[#FFE082] text-[#8D6E00] space-y-1">
+                  <p className="font-bold">Copy Your Secret Key Now</p>
+                  <p>For your security, this raw secret will not be displayed again.</p>
                 </div>
 
-                <div>
-                  <label className="block font-bold text-[#0B2545] mb-1">Raw API Secret</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      readOnly
-                      value={createdSecret}
-                      className="w-full font-mono text-xs px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-[#0B2545]"
-                    />
-                    <button
-                      onClick={handleCopySecret}
-                      className="px-3.5 py-2 bg-[#0B2545] hover:bg-[#1565C0] text-white font-semibold rounded-lg text-xs flex items-center gap-1.5 shrink-0"
-                    >
-                      {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-[#45D9D2]" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copied ? "Copied" : "Copy"}</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end">
+                <div className="p-3 bg-[#F7F9FC] border border-[#CBD5E1] rounded-xl flex items-center justify-between font-mono break-all text-[11px] text-[#0B2545]">
+                  <span>{createdSecret}</span>
                   <button
-                    onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 bg-[#1565C0] text-white rounded-lg text-xs font-semibold hover:bg-[#0B2545]"
+                    onClick={() => copyToClipboard(createdSecret)}
+                    className="ml-2 p-1.5 rounded-lg border border-[#CBD5E1] hover:bg-white text-[#1565C0]"
+                    title="Copy to clipboard"
                   >
-                    Done
+                    <Copy className="w-4 h-4" />
                   </button>
                 </div>
+                {copied && <span className="text-[10px] text-[#10B981] font-bold block">Copied to clipboard!</span>}
+
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="w-full py-2.5 rounded-xl bg-[#0B2545] text-white font-bold"
+                >
+                  Done
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleGenerateKey} className="space-y-3 text-xs">
+              <form onSubmit={handleGenerateKey} className="space-y-4 text-xs">
                 <div>
-                  <label className="block font-bold text-[#0B2545] mb-1">Key Description / Purpose *</label>
+                  <label className="block font-bold text-[#0B2545] uppercase mb-1">Key Description / Ingestion Node</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. FreeSWITCH Primary Telephony SIP Trunk"
+                    placeholder="e.g. Production Twilio Trunk Gateway"
                     value={keyName}
                     onChange={(e) => setKeyName(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
+                    className="w-full px-3 py-2 border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold text-[#0B2545] mb-1">Access Scope</label>
+                  <label className="block font-bold text-[#0B2545] uppercase mb-1">Authorization Scope</label>
                   <select
                     value={scope}
                     onChange={(e) => setScope(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
+                    className="w-full px-3 py-2 border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] outline-none"
                   >
-                    <option value="carrier:audio:write">carrier:audio:write (Standard Realtime Ingestion)</option>
-                    <option value="carrier:audio:full">carrier:audio:full (Ingestion + Replay Challenges)</option>
-                    <option value="telemetry:read">telemetry:read (Read-Only Metrics &amp; Events)</option>
+                    <option value="carrier:audio:write">carrier:audio:write (Streaming Audio Stream Ingestion)</option>
+                    <option value="forensic:audit:read">forensic:audit:read (Read-Only Forensic Hash Retrieval)</option>
+                    <option value="admin:full">admin:full (Tenant Administration)</option>
                   </select>
                 </div>
 
-                <div className="pt-3 flex justify-end gap-2">
+                <div className="flex items-center justify-end gap-2 pt-2">
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 rounded-lg border border-[#DFE7EF] text-[#52677C] hover:bg-[#F7F9FC] font-semibold"
+                    className="px-4 py-2 rounded-xl border border-[#DFE7EF] font-bold text-[#52677C]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#1565C0] hover:bg-[#0B2545] text-white font-semibold rounded-lg transition-colors"
+                    className="px-5 py-2 rounded-xl bg-[#0B2545] hover:bg-[#1565C0] text-white font-bold transition-colors shadow-sm"
                   >
-                    Create Key
+                    Generate Secret
                   </button>
                 </div>
               </form>

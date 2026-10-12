@@ -13,6 +13,7 @@ import {
   Filter,
   Info,
   Check,
+  RefreshCw,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatDistanceToNow } from "date-fns";
@@ -32,71 +33,94 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"ALL" | "UNREAD" | "CRITICAL">("ALL");
 
-  useEffect(() => {
-    let active = true;
-    const fetchNotifications = async () => {
-      setLoading(true);
-      try {
-        const supabase = getSupabaseBrowserClient();
-        const { data: dbSessions } = await supabase
-          .from("sessions")
-          .select("*")
-          .order("started_at", { ascending: false })
-          .limit(20);
-
-        if (!active) return;
-
-        if (dbSessions && dbSessions.length > 0) {
-          const items: NotificationItem[] = dbSessions
-            .filter((s) => Number(s.risk_summary?.max_risk ?? 0) >= 0.35 || s.status === "flagged")
-            .map((s) => {
-              const maxRisk = Number(s.risk_summary?.max_risk ?? 0.85);
-              const isCrit = maxRisk >= 0.75;
-              return {
-                id: `notif-${s.id.slice(0, 8)}`,
-                title: isCrit
-                  ? `High-Risk Synthetic Stream Quarantined (${Math.round(maxRisk * 100)}%)`
-                  : `Phonetic Challenge Injected (${Math.round(maxRisk * 100)}%)`,
-                message: `Telephony stream #${s.id.slice(0, 8)} exceeded scrutiny threshold. Kalman policy decision: ${s.risk_summary?.decision ?? "BLOCKED"}.`,
-                severity: isCrit ? "critical" : "warning",
-                timestamp: s.started_at ? formatDistanceToNow(new Date(s.started_at), { addSuffix: true }) : "Recent",
-                read: false,
-                linkHref: `/app/sessions?session=${s.id}`,
-              };
-            });
-
-          setNotifications(items);
-        } else {
-          setNotifications([]);
-        }
-      } catch {
-        if (active) setNotifications([]);
-      } finally {
-        if (active) setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const handleMarkAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  const getReadIds = (): Set<string> => {
+    try {
+      const stored = localStorage.getItem("vs_read_notifications");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
   };
 
-  const handleToggleRead = (id: string) => {
+  const saveReadIds = (ids: Set<string>) => {
+    try {
+      localStorage.setItem("vs_read_notifications", JSON.stringify(Array.from(ids)));
+    } catch {
+      // Ignore
+    }
+  };
+
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data: dbSessions } = await supabase
+        .from("sessions")
+        .select("*")
+        .order("started_at", { ascending: false })
+        .limit(25);
+
+      const readIds = getReadIds();
+
+      if (dbSessions && dbSessions.length > 0) {
+        const items: NotificationItem[] = dbSessions
+          .filter((s) => Number(s.risk_summary?.max_risk ?? 0) >= 0.35 || s.status === "flagged")
+          .map((s) => {
+            const maxRisk = Number(s.risk_summary?.max_risk ?? 0.85);
+            const isCrit = maxRisk >= 0.75;
+            const notifId = `notif-${s.id.slice(0, 8)}`;
+            return {
+              id: notifId,
+              title: isCrit
+                ? `High-Risk Synthetic Stream Quarantined (${Math.round(maxRisk * 100)}%)`
+                : `Phonetic Challenge Injected (${Math.round(maxRisk * 100)}%)`,
+              message: `Telephony stream #${s.id.slice(0, 8)} exceeded scrutiny threshold. Kalman policy decision: ${s.risk_summary?.decision ?? "BLOCKED"}.`,
+              severity: isCrit ? "critical" : "warning",
+              timestamp: s.started_at ? formatDistanceToNow(new Date(s.started_at), { addSuffix: true }) : "Recent",
+              read: readIds.has(notifId),
+              linkHref: `/app/sessions?session=${s.id}`,
+            };
+          });
+
+        setNotifications(items);
+      } else {
+        setNotifications([]);
+      }
+    } catch {
+      setNotifications([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const handleMarkAsRead = (id: string) => {
+    const readIds = getReadIds();
+    readIds.add(id);
+    saveReadIds(readIds);
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n))
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
   };
 
-  const handleClear = () => {
+  const handleMarkAllRead = () => {
+    const readIds = getReadIds();
+    notifications.forEach((n) => readIds.add(n.id));
+    saveReadIds(readIds);
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  };
+
+  const handleClearAll = () => {
+    const readIds = getReadIds();
+    notifications.forEach((n) => readIds.add(n.id));
+    saveReadIds(readIds);
     setNotifications([]);
   };
 
-  const filteredItems = notifications.filter((n) => {
+  const filtered = notifications.filter((n) => {
     if (filter === "UNREAD") return !n.read;
     if (filter === "CRITICAL") return n.severity === "critical";
     return true;
@@ -111,135 +135,138 @@ export default function NotificationsPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB]">
-              TENANT INBOX
+              TENANT ALERT FEED
             </span>
             <span className="text-xs text-[#52677C]">
-              {unreadCount} Unread Alert{unreadCount === 1 ? "" : "s"}
+              Real-time Ingestion Anomalies
             </span>
           </div>
           <h1 className="text-2xl font-bold text-[#0B2545] tracking-tight">
-            Notification Feed &amp; System Alerts
+            Security Notification Feed
           </h1>
           <p className="text-xs sm:text-sm text-[#52677C]">
-            Real-time feed of synthetic voice risk alerts, challenge failures, and carrier trunk status notices.
+            Review automated quarantine actions, challenge triggers, and operational alerts.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          {notifications.length > 0 && (
-            <>
-              <button
-                onClick={handleMarkAllRead}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#F7F9FC] text-[#52677C] border border-[#DFE7EF] text-xs font-semibold rounded-lg transition-colors"
-              >
-                <Check className="w-3.5 h-3.5" />
-                <span>Mark All Read</span>
-              </button>
-              <button
-                onClick={handleClear}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#FCEAF3] text-[#991B1B] border border-[#F8BBD0] text-xs font-semibold rounded-lg transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear Feed</span>
-              </button>
-            </>
+          {unreadCount > 0 && (
+            <button
+              onClick={handleMarkAllRead}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white text-xs font-semibold text-[#0B2545] border border-[#DFE7EF] hover:bg-[#F7F9FC] transition-colors shadow-2xs"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>Mark All Read</span>
+            </button>
           )}
+          <button
+            onClick={fetchNotifications}
+            className="p-2 rounded-xl bg-white border border-[#DFE7EF] text-[#52677C] hover:text-[#0B2545] hover:bg-[#F7F9FC]"
+            title="Refresh feed"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 bg-[#F7F9FC] p-1 rounded-xl border border-[#DFE7EF] w-fit">
-        {[
-          { label: "All Alerts", value: "ALL" },
-          { label: "Unread", value: "UNREAD" },
-          { label: "Critical Only", value: "CRITICAL" },
-        ].map((f) => (
-          <button
-            key={f.value}
-            onClick={() => setFilter(f.value as any)}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-              filter === f.value
-                ? "bg-white text-[#0B2545] shadow-xs border border-[#DFE7EF]"
-                : "text-[#52677C] hover:text-[#0B2545]"
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setFilter("ALL")}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+            filter === "ALL"
+              ? "bg-[#0B2545] text-white"
+              : "bg-white text-[#52677C] border border-[#DFE7EF] hover:bg-[#F7F9FC]"
+          }`}
+        >
+          All ({notifications.length})
+        </button>
+        <button
+          onClick={() => setFilter("UNREAD")}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+            filter === "UNREAD"
+              ? "bg-[#0B2545] text-white"
+              : "bg-white text-[#52677C] border border-[#DFE7EF] hover:bg-[#F7F9FC]"
+          }`}
+        >
+          Unread ({unreadCount})
+        </button>
+        <button
+          onClick={() => setFilter("CRITICAL")}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+            filter === "CRITICAL"
+              ? "bg-[#0B2545] text-white"
+              : "bg-white text-[#52677C] border border-[#DFE7EF] hover:bg-[#F7F9FC]"
+          }`}
+        >
+          Critical Only
+        </button>
       </div>
 
-      {/* Feed List */}
-      <div className="bg-white rounded-2xl border border-[#DFE7EF] overflow-hidden shadow-sm">
+      {/* Notification List */}
+      <div className="space-y-3">
         {loading ? (
-          <div className="p-8 text-center text-xs text-[#52677C]">
-            Loading notification feed...
+          <div className="p-12 text-center text-xs text-[#52677C] bg-white rounded-2xl border border-[#DFE7EF]">
+            Querying active alerts...
           </div>
-        ) : filteredItems.length === 0 ? (
-          <div className="p-12 text-center text-xs text-[#52677C] space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#E7F7EF] text-[#065F46] flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <p className="font-bold text-[#0B2545]">Feed Clean — No Active Notifications</p>
-            <p className="text-[11px] text-[#52677C]">
-              All threat alerts have been acknowledged or there have been zero synthetic voice events during this cycle.
-            </p>
+        ) : filtered.length === 0 ? (
+          <div className="p-12 text-center text-xs text-[#52677C] bg-white rounded-2xl border border-[#DFE7EF]">
+            <CheckCircle2 className="w-8 h-8 text-[#10B981] mx-auto mb-2" />
+            <p className="font-bold text-[#0B2545]">All Alerts Cleared</p>
+            <p className="mt-1">No notifications matching the selected filter.</p>
           </div>
         ) : (
-          <div className="divide-y divide-[#E2E8F0]">
-            {filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className={`p-4 flex items-start justify-between gap-4 transition-colors ${
-                  item.read ? "bg-white hover:bg-[#F8FAFC]" : "bg-[#F7F9FC] hover:bg-[#F1F5F9]"
-                }`}
-              >
-                <div className="flex items-start gap-3 min-w-0">
-                  <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
-                      item.severity === "critical"
-                        ? "bg-[#FCEAF3] text-[#991B1B]"
-                        : "bg-[#FFF4D9] text-[#8D6E00]"
-                    }`}
-                  >
-                    {item.severity === "critical" ? (
-                      <ShieldAlert className="w-4 h-4" />
-                    ) : (
-                      <AlertTriangle className="w-4 h-4" />
+          filtered.map((n) => (
+            <div
+              key={n.id}
+              className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                n.read
+                  ? "bg-white border-[#DFE7EF]"
+                  : "bg-[#F7F9FC] border-[#BBDEFB] shadow-2xs"
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div className={`p-2 rounded-xl mt-0.5 shrink-0 ${
+                  n.severity === "critical"
+                    ? "bg-[#FCEAF3] text-[#991B1B]"
+                    : "bg-[#FFF4D9] text-[#8D6E00]"
+                }`}>
+                  <ShieldAlert className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-xs text-[#0B2545]">{n.title}</span>
+                    {!n.read && (
+                      <span className="w-2 h-2 rounded-full bg-[#1565C0]" />
                     )}
                   </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-xs text-[#0B2545]">{item.title}</p>
-                      {!item.read && (
-                        <span className="w-2 h-2 rounded-full bg-[#1565C0]" />
-                      )}
-                    </div>
-                    <p className="text-xs text-[#52677C] mt-0.5">{item.message}</p>
-                    <p className="text-[10px] text-[#94A3B8] mt-1">{item.timestamp}</p>
-                  </div>
+                  <p className="text-xs text-[#52677C] mt-1">{n.message}</p>
+                  <span className="text-[10px] font-mono text-[#52677C] block mt-1">{n.timestamp}</span>
                 </div>
+              </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  {item.linkHref && (
-                    <Link
-                      href={item.linkHref}
-                      className="text-xs font-semibold text-[#1565C0] hover:underline flex items-center gap-1"
-                    >
-                      <span>Investigate</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </Link>
-                  )}
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                {n.linkHref && (
+                  <Link
+                    href={n.linkHref}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-[#1565C0] bg-[#E7F3FF] hover:bg-[#BBDEFB] transition-colors"
+                  >
+                    <span>Inspect</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+                )}
+                {!n.read && (
                   <button
-                    onClick={() => handleToggleRead(item.id)}
-                    className="p-1 rounded text-[#94A3B8] hover:text-[#0B2545]"
-                    title={item.read ? "Mark unread" : "Mark read"}
+                    onClick={() => handleMarkAsRead(n.id)}
+                    className="p-1.5 rounded-lg border border-[#DFE7EF] text-[#52677C] hover:text-[#0B2545] hover:bg-[#F7F9FC]"
+                    title="Mark as read"
                   >
                     <Check className="w-3.5 h-3.5" />
                   </button>
-                </div>
+                )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))
         )}
       </div>
     </div>

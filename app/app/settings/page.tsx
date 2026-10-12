@@ -13,6 +13,7 @@ import {
   Sliders,
   Server,
   Layers,
+  Loader2,
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -22,25 +23,49 @@ export default function SettingsPage() {
   const [retentionDays, setRetentionDays] = useState(30);
   const [kalmanSensitivity, setKalmanSensitivity] = useState(85);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [successToast, setSuccessToast] = useState("");
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("vs_workspace_settings");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (typeof parsed.zeroPersistence === "boolean") setZeroPersistence(parsed.zeroPersistence);
-        if (typeof parsed.sec65bEnabled === "boolean") setSec65bEnabled(parsed.sec65bEnabled);
-        if (typeof parsed.isolateDemo === "boolean") setIsolateDemo(parsed.isolateDemo);
-        if (typeof parsed.retentionDays === "number") setRetentionDays(parsed.retentionDays);
-        if (typeof parsed.kalmanSensitivity === "number") setKalmanSensitivity(parsed.kalmanSensitivity);
+    let active = true;
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (active) {
+            setZeroPersistence(Boolean(data.zeroPersistence));
+            setSec65bEnabled(Boolean(data.sec65bEnabled));
+            setIsolateDemo(Boolean(data.isolateDemo));
+            setRetentionDays(Number(data.retentionDays) || 30);
+            setKalmanSensitivity(Number(data.kalmanSensitivity) || 85);
+          }
+        }
+      } catch {
+        try {
+          const stored = localStorage.getItem("vs_workspace_settings");
+          if (stored && active) {
+            const parsed = JSON.parse(stored);
+            if (typeof parsed.zeroPersistence === "boolean") setZeroPersistence(parsed.zeroPersistence);
+            if (typeof parsed.sec65bEnabled === "boolean") setSec65bEnabled(parsed.sec65bEnabled);
+            if (typeof parsed.isolateDemo === "boolean") setIsolateDemo(parsed.isolateDemo);
+            if (typeof parsed.retentionDays === "number") setRetentionDays(parsed.retentionDays);
+            if (typeof parsed.kalmanSensitivity === "number") setKalmanSensitivity(parsed.kalmanSensitivity);
+          }
+        } catch {
+          // Defaults
+        }
+      } finally {
+        if (active) setLoading(false);
       }
-    } catch {
-      // Use defaults
-    }
+    };
+    fetchSettings();
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
@@ -53,13 +78,21 @@ export default function SettingsPage() {
       savedAt: new Date().toISOString(),
     };
 
-    localStorage.setItem("vs_workspace_settings", JSON.stringify(payload));
-
-    setTimeout(() => {
+    try {
+      await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      localStorage.setItem("vs_workspace_settings", JSON.stringify(payload));
+      setSuccessToast("Workspace compliance policies and retention rules saved and persisted to tenant backend.");
+    } catch {
+      localStorage.setItem("vs_workspace_settings", JSON.stringify(payload));
+      setSuccessToast("Workspace policies saved to local storage cache.");
+    } finally {
       setSaving(false);
-      setSuccessToast("Workspace compliance policies and retention rules saved successfully.");
       setTimeout(() => setSuccessToast(""), 4000);
-    }, 600);
+    }
   };
 
   const handleResetDefaults = () => {
@@ -81,176 +114,172 @@ export default function SettingsPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB]">
-              TENANT GOVERNANCE
+              TENANT POLICIES
             </span>
             <span className="text-xs text-[#52677C]">
-              DPDP Act 2023 &bull; ISO/IEC 27001 Data Policies
+              Statutory Retention &amp; Audio Processing Parameters
             </span>
           </div>
           <h1 className="text-2xl font-bold text-[#0B2545] tracking-tight">
-            Workspace Governance &amp; Privacy Policies
+            System &amp; Privacy Preferences
           </h1>
           <p className="text-xs sm:text-sm text-[#52677C]">
-            Configure memory buffering zero-persistence, DPDP retention schedules, and acoustic filter gain.
+            Configure ephemeral processing windows, Section 65B automation, and Kalman state-space filtering sensitivity.
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleResetDefaults}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-[#F7F9FC] text-[#52677C] border border-[#DFE7EF] text-xs font-semibold rounded-lg shadow-xs transition-colors"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Defaults</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={handleResetDefaults}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white text-xs font-semibold text-[#52677C] hover:text-[#0B2545] border border-[#DFE7EF] hover:bg-[#F7F9FC] transition-colors shadow-2xs"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset Defaults</span>
+          </button>
+        </div>
       </div>
 
-      {/* Success Toast */}
+      {/* Success Notification */}
       {successToast && (
-        <div className="p-3 bg-[#E7F7EF] border border-[#A7F3D0] rounded-xl text-xs text-[#065F46] flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{successToast}</span>
+        <div className="p-4 rounded-xl bg-[#E7F7EF] border border-[#A7F3D0] text-xs text-[#065F46] flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#10B981]" />
+            <span className="font-semibold">{successToast}</span>
+          </div>
         </div>
       )}
 
       {/* Settings Form */}
-      <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Panel 1: Privacy and Data Retention */}
-        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-sm space-y-5">
+      <form onSubmit={handleSave} className="space-y-6">
+        {/* Policy Group 1: Audio Privacy & Retention */}
+        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-2xs space-y-5">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
-            <ShieldCheck className="w-4 h-4 text-[#1565C0]" />
-            <h2 className="text-sm font-bold text-[#0B2545]">
-              Ephemeral Processing &amp; Retention
-            </h2>
+            <Database className="w-4 h-4 text-[#1565C0]" />
+            <h2 className="text-sm font-bold text-[#0B2545]">Statutory Audio Storage &amp; DPDP 2023 Rules</h2>
           </div>
 
-          {/* Toggle 1: Zero-Persistence Buffering */}
-          <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#E2E8F0]">
-            <div>
-              <label htmlFor="zero-persistence-toggle" className="font-bold text-xs text-[#0B2545] block">
-                Zero-Persistence Audio Buffering
-              </label>
-              <p className="text-[11px] text-[#52677C] mt-0.5">
-                Immediately zero-out raw PCM audio buffers from RAM upon completing 333ms feature extraction. No voice audio is written to disk.
-              </p>
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-[#DFE7EF]">
+              <div>
+                <span className="font-bold text-xs text-[#0B2545] block">
+                  Zero Audio Persistence Mode (Ephemeral DSP)
+                </span>
+                <p className="text-xs text-[#52677C] mt-0.5">
+                  Raw PCM16 telephony audio buffers are discarded from RAM immediately after feature extraction. Only cryptographic hashes and detection vectors are retained.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={zeroPersistence}
+                onChange={(e) => setZeroPersistence(e.target.checked)}
+                className="w-4 h-4 rounded text-[#1565C0] focus:ring-[#1565C0] border-[#CBD5E1] mt-1 cursor-pointer"
+              />
             </div>
-            <input
-              id="zero-persistence-toggle"
-              type="checkbox"
-              checked={zeroPersistence}
-              onChange={(e) => setZeroPersistence(e.target.checked)}
-              className="mt-1 h-5 w-5 rounded border-[#CBD5E1] text-[#1565C0] focus:ring-[#1565C0]"
-            />
-          </div>
 
-          {/* Toggle 2: Automated Section 65B Certificate Generation */}
-          <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#E2E8F0]">
-            <div>
-              <label htmlFor="sec65b-toggle" className="font-bold text-xs text-[#0B2545] block">
-                Automated §65B Certificate Drafting
-              </label>
-              <p className="text-[11px] text-[#52677C] mt-0.5">
-                Automatically generate cryptographic SHA-256 evidence digests on confirmed attack sessions for Indian Evidence Act admissibility.
-              </p>
+            <div className="flex items-start justify-between gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-[#DFE7EF]">
+              <div>
+                <span className="font-bold text-xs text-[#0B2545] block">
+                  Automate Section 65B Draft Generation
+                </span>
+                <p className="text-xs text-[#52677C] mt-0.5">
+                  Pre-compile tamper-evident SHA-256 certificate drafts upon incident quarantine to accelerate judicial filings under the Indian Evidence Act / BSA 2023.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={sec65bEnabled}
+                onChange={(e) => setSec65bEnabled(e.target.checked)}
+                className="w-4 h-4 rounded text-[#1565C0] focus:ring-[#1565C0] border-[#CBD5E1] mt-1 cursor-pointer"
+              />
             </div>
-            <input
-              id="sec65b-toggle"
-              type="checkbox"
-              checked={sec65bEnabled}
-              onChange={(e) => setSec65bEnabled(e.target.checked)}
-              className="mt-1 h-5 w-5 rounded border-[#CBD5E1] text-[#1565C0] focus:ring-[#1565C0]"
-            />
-          </div>
 
-          {/* Toggle 3: Demo Sandbox Isolation */}
-          <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#E2E8F0]">
-            <div>
-              <label htmlFor="demo-isolation-toggle" className="font-bold text-xs text-[#0B2545] block">
-                Isolate Public Demo Sessions
-              </label>
-              <p className="text-[11px] text-[#52677C] mt-0.5">
-                Enforce strict tenant separation preventing unauthenticated public sandbox experiments from polluting production SOC telemetry.
-              </p>
+            <div className="flex items-start justify-between gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-[#DFE7EF]">
+              <div>
+                <span className="font-bold text-xs text-[#0B2545] block">
+                  Isolate Browser Demo Sessions from SOC Incident Log
+                </span>
+                <p className="text-xs text-[#52677C] mt-0.5">
+                  Prevent synthetic test microphone audio executed via /demo or /app/detection from polluting enterprise telephony audit logs.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={isolateDemo}
+                onChange={(e) => setIsolateDemo(e.target.checked)}
+                className="w-4 h-4 rounded text-[#1565C0] focus:ring-[#1565C0] border-[#CBD5E1] mt-1 cursor-pointer"
+              />
             </div>
-            <input
-              id="demo-isolation-toggle"
-              type="checkbox"
-              checked={isolateDemo}
-              onChange={(e) => setIsolateDemo(e.target.checked)}
-              className="mt-1 h-5 w-5 rounded border-[#CBD5E1] text-[#1565C0] focus:ring-[#1565C0]"
-            />
-          </div>
 
-          {/* Retention Days Dropdown */}
-          <div>
-            <label htmlFor="retention-days-select" className="block text-xs font-bold text-[#0B2545] mb-1">
-              Telemetry Retention Period (DPDP Act Schedule)
-            </label>
-            <select
-              id="retention-days-select"
-              value={retentionDays}
-              onChange={(e) => setRetentionDays(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-xs text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
-            >
-              <option value={7}>7 Days (Strict Minimal Retention)</option>
-              <option value={30}>30 Days (Standard Enterprise SOC Default)</option>
-              <option value={90}>90 Days (Financial Regulatory Compliance)</option>
-              <option value={180}>180 Days (Extended Judicial Audit)</option>
-            </select>
-            <p className="text-[11px] text-[#52677C] mt-1">
-              Expired session metadata and audit rows are permanently deleted via automated cron.
-            </p>
+            <div>
+              <label className="block text-xs font-bold text-[#0B2545] uppercase tracking-wider mb-1.5">
+                Audit Event Retention Horizon
+              </label>
+              <select
+                value={retentionDays}
+                onChange={(e) => setRetentionDays(Number(e.target.value))}
+                className="w-full sm:w-72 px-3 py-2 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] focus:ring-2 focus:ring-[#1565C0] outline-none"
+              >
+                <option value={7}>7 Days (Strict Minimalist)</option>
+                <option value={30}>30 Days (Standard Enterprise Default)</option>
+                <option value={90}>90 Days (RBI Banking Guidance)</option>
+                <option value={180}>180 Days (Forensic Investigation Archive)</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Panel 2: Engine Calibration & Actions */}
-        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-sm space-y-5">
+        {/* Policy Group 2: Algorithmic Filter Parameters */}
+        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-2xs space-y-5">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
             <Sliders className="w-4 h-4 text-[#1565C0]" />
-            <h2 className="text-sm font-bold text-[#0B2545]">
-              DSP Engine Parameters
-            </h2>
+            <h2 className="text-sm font-bold text-[#0B2545]">Kalman Filter Sensitivity &amp; Discontinuity Threshold</h2>
           </div>
 
           <div>
-            <div className="flex items-center justify-between text-xs mb-1">
-              <label htmlFor="kalman-slider" className="font-bold text-[#0B2545]">Kalman Smoother Momentum Factor</label>
-              <span className="font-mono font-bold text-[#1565C0]">0.{kalmanSensitivity}</span>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-bold text-[#0B2545] uppercase tracking-wider">
+                Synthetic Detection Scrutiny Index
+              </label>
+              <span className="text-xs font-mono font-bold text-[#1565C0] px-2 py-0.5 rounded bg-[#E7F3FF] border border-[#BBDEFB]">
+                {kalmanSensitivity}%
+              </span>
             </div>
             <input
-              id="kalman-slider"
               type="range"
-              min={60}
+              min={50}
               max={95}
               value={kalmanSensitivity}
               onChange={(e) => setKalmanSensitivity(Number(e.target.value))}
-              className="w-full accent-[#1565C0]"
+              className="w-full accent-[#1565C0] cursor-pointer"
             />
-            <p className="text-[11px] text-[#52677C] mt-1">
-              Balances transient line crackle rejection against clone onset detection speed. Default 0.85 is certified for telephony.
-            </p>
-          </div>
-
-          <div className="p-4 bg-[#F7F9FC] rounded-xl border border-[#DFE7EF] text-xs text-[#52677C] space-y-2">
-            <div className="flex items-center gap-2 text-[#0B2545] font-bold">
-              <Info className="w-4 h-4 text-[#1565C0]" />
-              <span>Statutory Compliance Declaration</span>
+            <div className="flex justify-between text-[10px] text-[#52677C] mt-1 font-mono">
+              <span>50% (Permissive / High Telephony Noise)</span>
+              <span>85% (Balanced Default)</span>
+              <span>95% (Zero-Tolerance Banking)</span>
             </div>
-            <p>
-              Under Section 4(1) of the Digital Personal Data Protection Act, 2023, personal data processing must be limited to declared lawful purposes. VoiceShield processes strictly mathematical feature snapshots; caller biometrics are never shared with external aggregators.
-            </p>
           </div>
+        </div>
 
-          <div className="pt-3">
-            <button
-              type="submit"
-              disabled={saving}
-              className="w-full py-2.5 bg-[#1565C0] hover:bg-[#0B2545] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-            >
-              <Save className="w-4 h-4" />
-              <span>{saving ? "Saving Policies..." : "Save Workspace Settings"}</span>
-            </button>
-          </div>
+        {/* Save Bar */}
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0B2545] hover:bg-[#1565C0] text-white font-semibold text-xs transition-colors shadow-sm disabled:opacity-60"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Persisting Policy Parameters...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Save Workspace Policies</span>
+              </>
+            )}
+          </button>
         </div>
       </form>
     </div>

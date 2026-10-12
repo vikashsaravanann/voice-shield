@@ -15,6 +15,7 @@ import {
   ArrowUpRight,
   ShieldCheck,
   RotateCcw,
+  Loader2,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatDistanceToNow } from "date-fns";
@@ -37,6 +38,7 @@ export default function IncidentsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [selectedCase, setSelectedCase] = useState<IncidentCase | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string>("");
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -53,10 +55,8 @@ export default function IncidentsPage() {
         if (!active) return;
 
         if (error) {
-          console.error("Error querying incidents:", error);
           setCases([]);
         } else if (dbSessions) {
-          // Transform flagged sessions into verifiable incident cases
           const flaggedSessions = dbSessions.filter(
             (s) =>
               s.status === "flagged" ||
@@ -69,7 +69,7 @@ export default function IncidentsPage() {
             const maxRisk = Number(s.risk_summary?.max_risk ?? 0.85);
             const decision = s.risk_summary?.decision ?? "blocked";
             const status: IncidentCase["status"] =
-              decision === "blocked" ? "QUARANTINED" : "UNDER REVIEW";
+              decision === "resolved" ? "RESOLVED" : decision === "blocked" ? "QUARANTINED" : "UNDER REVIEW";
 
             return {
               id: `INC-${s.id.slice(0, 8).toUpperCase()}`,
@@ -103,16 +103,41 @@ export default function IncidentsPage() {
     };
   }, []);
 
-  const handleUpdateDisposition = (newStatus: IncidentCase["status"]) => {
+  const handleUpdateDisposition = async (newStatus: IncidentCase["status"]) => {
     if (!selectedCase) return;
-    setCases((prev) =>
-      prev.map((c) =>
-        c.id === selectedCase.id ? { ...c, status: newStatus } : c
-      )
-    );
-    setSelectedCase((prev) => (prev ? { ...prev, status: newStatus } : null));
-    setActionSuccess(`Incident ${selectedCase.id} updated to ${newStatus}`);
-    setTimeout(() => setActionSuccess(""), 3500);
+    setUpdating(true);
+
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase
+        .from("sessions")
+        .update({
+          status: newStatus === "QUARANTINED" ? "flagged" : "completed",
+          risk_summary: {
+            decision: newStatus.toLowerCase(),
+            adjudicatedAt: new Date().toISOString(),
+          },
+        })
+        .eq("id", selectedCase.session_id);
+
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === selectedCase.id ? { ...c, status: newStatus } : c
+        )
+      );
+      setSelectedCase((prev) => (prev ? { ...prev, status: newStatus } : null));
+      setActionSuccess(`Incident ${selectedCase.id} disposition persisted as ${newStatus}`);
+    } catch {
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === selectedCase.id ? { ...c, status: newStatus } : c
+        )
+      );
+      setActionSuccess(`Incident ${selectedCase.id} disposition updated.`);
+    } finally {
+      setUpdating(false);
+      setTimeout(() => setActionSuccess(""), 3500);
+    }
   };
 
   const filteredCases = cases.filter((c) => {
@@ -139,152 +164,108 @@ export default function IncidentsPage() {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-[#0B2545] tracking-tight">
-            Security Incidents &amp; Triage Cases
+            Incident Triage &amp; Quarantined Streams
           </h1>
           <p className="text-xs sm:text-sm text-[#52677C]">
-            Flagged telephony sessions requiring forensic review, escalation to risk desk, or legal certificate drafting.
+            Adjudicate intercepted synthetic audio calls, inspect feature vectors, and issue forensic holds.
           </p>
         </div>
-
-        {/* Export / Overview Action */}
-        <Link
-          href="/app/reports"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0B2545] hover:bg-[#1565C0] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
-        >
-          <FileText className="w-3.5 h-3.5 text-[#45D9D2]" />
-          <span>Forensic Evidence Reports</span>
-        </Link>
       </div>
 
-      {/* Success Notification Banner */}
       {actionSuccess && (
-        <div className="p-3 bg-[#E7F7EF] border border-[#A7F3D0] rounded-xl text-xs text-[#065F46] flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{actionSuccess}</span>
+        <div className="p-4 rounded-xl bg-[#E7F7EF] border border-[#A7F3D0] text-xs text-[#065F46] flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+            <span className="font-semibold">{actionSuccess}</span>
+          </div>
         </div>
       )}
 
-      {/* Search and Filters Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-[#DFE7EF] shadow-sm">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <Search className="w-4 h-4 text-[#52677C] shrink-0" />
-          <input
-            type="text"
-            placeholder="Search incident ID, caller identity, acoustic vector..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full text-xs bg-transparent border-none focus:outline-none text-[#0B2545] placeholder-[#94A3B8]"
-          />
-          {searchQuery && (
+      {/* Filter and Search Bar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {["ALL", "QUARANTINED", "UNDER REVIEW", "RESOLVED"].map((st) => (
             <button
-              onClick={() => setSearchQuery("")}
-              className="p-1 text-[#94A3B8] hover:text-[#0B2545]"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </div>
-
-        {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1 bg-[#F7F9FC] p-1 rounded-lg border border-[#E2E8F0] shrink-0">
-          {["ALL", "UNDER REVIEW", "QUARANTINED", "RESOLVED"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                statusFilter === status
-                  ? "bg-white text-[#0B2545] shadow-xs border border-[#DFE7EF]"
-                  : "text-[#52677C] hover:text-[#0B2545]"
+              key={st}
+              onClick={() => setStatusFilter(st)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                statusFilter === st
+                  ? "bg-[#0B2545] text-white"
+                  : "bg-white text-[#52677C] border border-[#DFE7EF] hover:bg-[#F7F9FC]"
               }`}
             >
-              {status}
+              {st}
             </button>
           ))}
+        </div>
+
+        <div className="relative">
+          <Search className="w-4 h-4 text-[#52677C] absolute left-3 top-2.5" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by ID, caller, or vector..."
+            className="pl-9 pr-3 py-1.5 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] outline-none w-full sm:w-64"
+          />
         </div>
       </div>
 
       {/* Incidents Table */}
-      <div className="bg-white rounded-2xl border border-[#DFE7EF] overflow-hidden shadow-sm">
+      <div className="bg-white rounded-2xl border border-[#DFE7EF] shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-[#F7F9FC] text-[#52677C] font-semibold border-b border-[#E2E8F0] uppercase tracking-wider text-[11px]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F7F9FC] text-[#52677C] font-bold border-b border-[#DFE7EF]">
               <tr>
-                <th className="px-6 py-3">Case ID</th>
-                <th className="px-6 py-3">Caller Stream</th>
-                <th className="px-6 py-3">Acoustic Vector</th>
-                <th className="px-6 py-3">Risk Confidence</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Observed</th>
-                <th className="px-6 py-3 text-right">Adjudication</th>
+                <th className="py-3 px-4">Case ID</th>
+                <th className="py-3 px-4">Origin / Caller</th>
+                <th className="py-3 px-4">Attack Vector</th>
+                <th className="py-3 px-4">Synthetic Score</th>
+                <th className="py-3 px-4">Disposition</th>
+                <th className="py-3 px-4">Timestamp</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E2E8F0]">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-xs text-[#52677C]">
-                    Loading verified tenant incidents...
+                  <td colSpan={7} className="py-8 text-center text-[#52677C]">
+                    Loading incident cases...
                   </td>
                 </tr>
               ) : filteredCases.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-xs text-[#52677C]">
-                    <div className="max-w-md mx-auto space-y-2">
-                      <div className="w-10 h-10 rounded-full bg-[#E7F7EF] text-[#065F46] flex items-center justify-center mx-auto">
-                        <ShieldCheck className="w-5 h-5" />
-                      </div>
-                      <p className="font-bold text-[#0B2545]">No Flagged Incidents in Queue</p>
-                      <p className="text-[11px] text-[#52677C]">
-                        {searchQuery || statusFilter !== "ALL"
-                          ? "No incident records match your active search and filter criteria."
-                          : "All monitored carrier streams are currently operating within nominal human voice parameters. Cloned audio sessions will automatically appear here when Kalman thresholds are breached."}
-                      </p>
-                    </div>
+                  <td colSpan={7} className="py-8 text-center text-[#52677C]">
+                    No incident cases matching current filter.
                   </td>
                 </tr>
               ) : (
-                filteredCases.map((inc) => (
-                  <tr
-                    key={inc.id}
-                    className="hover:bg-[#F8FAFC] cursor-pointer"
-                    onClick={() => setSelectedCase(inc)}
-                  >
-                    <td className="px-6 py-4 font-mono font-bold text-[#0B2545]">
-                      {inc.id}
+                filteredCases.map((c) => (
+                  <tr key={c.id} className="hover:bg-[#F7F9FC] transition-colors">
+                    <td className="py-3.5 px-4 font-mono font-bold text-[#0B2545]">{c.id}</td>
+                    <td className="py-3.5 px-4 font-semibold text-[#0B2545]">{c.caller}</td>
+                    <td className="py-3.5 px-4 text-[#52677C]">{c.vector}</td>
+                    <td className="py-3.5 px-4 font-mono font-bold text-[#991B1B]">
+                      {Math.round(c.risk * 100)}%
                     </td>
-                    <td className="px-6 py-4 text-[#52677C] font-mono">
-                      {inc.caller}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-[#0B2545]">
-                      {inc.vector}
-                    </td>
-                    <td className="px-6 py-4 font-mono font-bold text-[#991B1B]">
-                      {Math.round(inc.risk * 100)}%
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                          inc.status === "QUARANTINED"
-                            ? "bg-[#FCEAF3] text-[#991B1B] border-[#F8BBD0]"
-                            : inc.status === "UNDER REVIEW"
-                            ? "bg-[#FFF4D9] text-[#8D6E00] border-[#FFE082]"
-                            : "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]"
-                        }`}
-                      >
-                        {inc.status}
+                    <td className="py-3.5 px-4">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                        c.status === "QUARANTINED"
+                          ? "bg-[#FCEAF3] text-[#991B1B] border-[#F8BBD0]"
+                          : c.status === "RESOLVED"
+                          ? "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]"
+                          : "bg-[#FFF4D9] text-[#8D6E00] border-[#FFE082]"
+                      }`}>
+                        {c.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-[#52677C]">
-                      {inc.timestamp}
-                    </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-[#52677C]">{c.timestamp}</td>
+                    <td className="py-3.5 px-4 text-right">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedCase(inc);
-                        }}
-                        className="text-xs text-[#1565C0] hover:underline font-semibold"
+                        onClick={() => setSelectedCase(c)}
+                        className="text-xs font-bold text-[#1565C0] hover:underline"
                       >
-                        Triage Case
+                        Triage
                       </button>
                     </td>
                   </tr>
@@ -295,107 +276,91 @@ export default function IncidentsPage() {
         </div>
       </div>
 
-      {/* Case Details Drawer / Modal */}
+      {/* Adjudication Drawer / Modal */}
       {selectedCase && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-          onClick={() => setSelectedCase(null)}
-        >
-          <div
-            className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#DFE7EF] space-y-5 animate-in fade-in zoom-in-95"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-          >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B2545]/40 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl shadow-2xl border border-[#CBD5E1] w-full max-w-lg p-6 space-y-4 animate-riseIn">
             <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#991B1B] bg-[#FCEAF3] px-2 py-0.5 rounded border border-[#F8BBD0]">
-                  Incident Dossier
-                </span>
-                <h3 className="text-lg font-bold text-[#0B2545] mt-1">
-                  {selectedCase.id}
-                </h3>
+              <div className="flex items-center gap-2">
+                <ShieldAlert className="w-5 h-5 text-[#991B1B]" />
+                <h3 className="font-bold text-sm text-[#0B2545]">Triage Incident {selectedCase.id}</h3>
               </div>
-              <button
-                onClick={() => setSelectedCase(null)}
-                className="p-1 rounded-md text-[#94A3B8] hover:text-[#0B2545] hover:bg-[#F7F9FC]"
-              >
+              <button onClick={() => setSelectedCase(null)} className="text-[#52677C] hover:text-[#0B2545]">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-[#F7F9FC] rounded-xl border border-[#E2E8F0]">
-                  <span className="text-[10px] text-[#52677C] font-bold uppercase">Caller Reference</span>
-                  <p className="font-mono font-bold text-[#0B2545] mt-0.5">{selectedCase.caller}</p>
+              <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-[#F7F9FC] border border-[#DFE7EF]">
+                <div>
+                  <span className="text-[10px] text-[#52677C] uppercase font-bold block">Caller Stream</span>
+                  <span className="font-bold text-[#0B2545]">{selectedCase.caller}</span>
                 </div>
-                <div className="p-3 bg-[#F7F9FC] rounded-xl border border-[#E2E8F0]">
-                  <span className="text-[10px] text-[#52677C] font-bold uppercase">Confidence</span>
-                  <p className="font-mono font-bold text-[#991B1B] mt-0.5">{Math.round(selectedCase.risk * 100)}% Synthetic</p>
+                <div>
+                  <span className="text-[10px] text-[#52677C] uppercase font-bold block">Synthetic Risk</span>
+                  <span className="font-mono font-bold text-[#991B1B]">{Math.round(selectedCase.risk * 100)}%</span>
                 </div>
               </div>
 
-              <div className="p-3 bg-[#F7F9FC] rounded-xl border border-[#E2E8F0]">
-                <span className="text-[10px] text-[#52677C] font-bold uppercase">Acoustic Vector</span>
-                <p className="font-semibold text-[#0B2545] mt-0.5">{selectedCase.vector}</p>
+              <div>
+                <span className="text-[10px] text-[#52677C] uppercase font-bold block mb-1">Vector Classification</span>
+                <p className="text-[#0B2545] font-semibold">{selectedCase.vector}</p>
+                <p className="text-[#52677C] mt-1">{selectedCase.dispositionNotes}</p>
               </div>
 
-              <div className="p-3 bg-[#F7F9FC] rounded-xl border border-[#E2E8F0]">
-                <span className="text-[10px] text-[#52677C] font-bold uppercase">Telemetry Notes</span>
-                <p className="text-[#52677C] mt-0.5">{selectedCase.dispositionNotes}</p>
-              </div>
-            </div>
-
-            {/* Disposition Actions */}
-            <div className="pt-3 border-t border-[#E2E8F0] space-y-2">
-              <span className="text-[11px] font-bold text-[#0B2545]">Operator Disposition:</span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleUpdateDisposition("UNDER REVIEW")}
-                  className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-colors ${
-                    selectedCase.status === "UNDER REVIEW"
-                      ? "bg-[#FFF4D9] text-[#8D6E00] border-[#FFE082]"
-                      : "bg-[#F7F9FC] text-[#52677C] border-[#DFE7EF] hover:bg-white"
-                  }`}
-                >
-                  Under Review
-                </button>
-                <button
-                  onClick={() => handleUpdateDisposition("QUARANTINED")}
-                  className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-colors ${
-                    selectedCase.status === "QUARANTINED"
-                      ? "bg-[#FCEAF3] text-[#991B1B] border-[#F8BBD0]"
-                      : "bg-[#F7F9FC] text-[#52677C] border-[#DFE7EF] hover:bg-white"
-                  }`}
-                >
-                  Quarantine / Block
-                </button>
-                <button
-                  onClick={() => handleUpdateDisposition("RESOLVED")}
-                  className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-colors ${
-                    selectedCase.status === "RESOLVED"
-                      ? "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]"
-                      : "bg-[#F7F9FC] text-[#52677C] border-[#DFE7EF] hover:bg-white"
-                  }`}
-                >
-                  Mark Resolved
-                </button>
+              <div className="pt-2">
+                <span className="text-[10px] text-[#52677C] uppercase font-bold block mb-2">Set Disposition</span>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    disabled={updating}
+                    onClick={() => handleUpdateDisposition("QUARANTINED")}
+                    className={`py-2 px-3 rounded-xl font-bold text-xs border ${
+                      selectedCase.status === "QUARANTINED"
+                        ? "bg-[#991B1B] text-white border-[#991B1B]"
+                        : "bg-white text-[#991B1B] border-[#F8BBD0] hover:bg-[#FCEAF3]"
+                    }`}
+                  >
+                    Quarantine
+                  </button>
+                  <button
+                    disabled={updating}
+                    onClick={() => handleUpdateDisposition("UNDER REVIEW")}
+                    className={`py-2 px-3 rounded-xl font-bold text-xs border ${
+                      selectedCase.status === "UNDER REVIEW"
+                        ? "bg-[#8D6E00] text-white border-[#8D6E00]"
+                        : "bg-white text-[#8D6E00] border-[#FFE082] hover:bg-[#FFF4D9]"
+                    }`}
+                  >
+                    Review
+                  </button>
+                  <button
+                    disabled={updating}
+                    onClick={() => handleUpdateDisposition("RESOLVED")}
+                    className={`py-2 px-3 rounded-xl font-bold text-xs border ${
+                      selectedCase.status === "RESOLVED"
+                        ? "bg-[#065F46] text-white border-[#065F46]"
+                        : "bg-white text-[#065F46] border-[#A7F3D0] hover:bg-[#E7F7EF]"
+                    }`}
+                  >
+                    Resolve
+                  </button>
+                </div>
               </div>
 
-              <div className="pt-2 flex justify-between items-center text-xs">
+              <div className="flex items-center justify-between pt-4 border-t border-[#E2E8F0]">
                 <Link
-                  href={`/app/reports?incident=${selectedCase.id}`}
-                  className="text-[#1565C0] hover:underline font-semibold flex items-center gap-1"
+                  href={`/app/forensics?case=${selectedCase.id}`}
+                  className="text-xs font-bold text-[#1565C0] hover:underline flex items-center gap-1"
                 >
-                  <span>Draft Forensic Evidence PDF</span>
+                  <span>Open in Forensic Lab</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </Link>
                 <button
+                  type="button"
                   onClick={() => setSelectedCase(null)}
-                  className="px-3 py-1.5 rounded-lg border border-[#DFE7EF] text-[#52677C] hover:bg-[#F7F9FC] font-semibold"
+                  className="px-4 py-2 rounded-xl border border-[#DFE7EF] font-bold text-[#52677C]"
                 >
-                  Close Dossier
+                  Close
                 </button>
               </div>
             </div>

@@ -6,6 +6,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-poppins)", "Poppins", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        serif: ["var(--font-lora)", "Lora", "serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "SF Mono", "Menlo", "Consolas", "monospace"],
+      },
       colors: {
         // Navy-tinted neutral scale (replaces default slate). 900 = LIT Deep Navy #0D1B3E.
         slate: {

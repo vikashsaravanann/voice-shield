@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Loader2, Send, X, Network, Scale, Activity } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -12,6 +13,7 @@ const welcome: Message = {
 };
 
 export function VoiceShieldAssistant() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([welcome]);
@@ -46,6 +48,10 @@ export function VoiceShieldAssistant() {
       setLoading(false);
     }
   }
+
+  // Do not obscure authentication / recovery / verification forms
+  const isAuthRoute = pathname === "/login" || pathname === "/signup" || pathname === "/forgot-password" || pathname === "/reset-password" || pathname === "/verify-email";
+  if (isAuthRoute) return null;
 
   return (
     <div className="fixed bottom-5 right-5 z-50">

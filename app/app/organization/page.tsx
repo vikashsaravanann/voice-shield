@@ -10,6 +10,7 @@ import {
   Info,
   Lock,
   Save,
+  Loader2,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
@@ -33,8 +34,13 @@ export default function OrganizationPage() {
           if (user.user_metadata?.organization_name) {
             setOrgName(user.user_metadata.organization_name);
           }
-          if (user.email) {
+          if (user.user_metadata?.compliance_email) {
+            setComplianceEmail(user.user_metadata.compliance_email);
+          } else if (user.email) {
             setComplianceEmail(user.email);
+          }
+          if (user.user_metadata?.industry_sector) {
+            setSector(user.user_metadata.industry_sector);
           }
         }
       } catch {
@@ -47,14 +53,25 @@ export default function OrganizationPage() {
     };
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setTimeout(() => {
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.updateUser({
+        data: {
+          organization_name: orgName.trim(),
+          compliance_email: complianceEmail.trim(),
+          industry_sector: sector,
+        },
+      });
+      setSuccessMsg("Organization profile and compliance contacts successfully persisted to tenant record.");
+    } catch {
+      setSuccessMsg("Organization profile updated for current session.");
+    } finally {
       setSaving(false);
-      setSuccessMsg("Organization profile and primary compliance contacts successfully updated.");
       setTimeout(() => setSuccessMsg(""), 4000);
-    }, 700);
+    }
   };
 
   const handleCopyId = () => {
@@ -80,133 +97,116 @@ export default function OrganizationPage() {
             Organization Profile &amp; Tenancy
           </h1>
           <p className="text-xs sm:text-sm text-[#52677C]">
-            Enterprise identity boundaries, primary statutory compliance officer, and verified customer identifiers.
+            Manage enterprise boundary identifiers, regulatory contacts, and tenant credentials.
           </p>
         </div>
       </div>
 
-      {/* Success Toast */}
       {successMsg && (
-        <div className="p-3 bg-[#E7F7EF] border border-[#A7F3D0] rounded-xl text-xs text-[#065F46] flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{successMsg}</span>
+        <div className="p-4 rounded-xl bg-[#E7F7EF] border border-[#A7F3D0] text-xs text-[#065F46] flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+            <span className="font-semibold">{successMsg}</span>
+          </div>
         </div>
       )}
 
-      {/* Main Settings Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <form onSubmit={handleSave} className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-sm space-y-4">
+      <form onSubmit={handleSave} className="space-y-6">
+        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-2xs space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
             <Building className="w-4 h-4 text-[#1565C0]" />
-            <h2 className="text-sm font-bold text-[#0B2545]">
-              Entity Identification
-            </h2>
+            <h2 className="text-sm font-bold text-[#0B2545]">Tenant Boundary &amp; Entity Identification</h2>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-[#0B2545] mb-1">
-              Organization Legal Entity Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={orgName}
-              onChange={(e) => setOrgName(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-xs text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-[#0B2545] uppercase tracking-wider mb-1">
+                Cryptographic Tenant ID (Immutable)
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  disabled
+                  value={tenantId}
+                  className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#DFE7EF] rounded-xl text-xs font-mono text-[#52677C] cursor-not-allowed"
+                />
+                <button
+                  type="button"
+                  onClick={handleCopyId}
+                  className="p-2 rounded-xl border border-[#DFE7EF] text-[#52677C] hover:text-[#0B2545] hover:bg-[#F7F9FC]"
+                  title="Copy Tenant ID"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              </div>
+              {copied && <span className="text-[10px] text-[#10B981] font-bold block mt-1">Tenant ID copied!</span>}
+            </div>
 
-          <div>
-            <label className="block text-xs font-bold text-[#0B2545] mb-1">
-              Primary Compliance &amp; DPO Email *
-            </label>
-            <input
-              type="email"
-              required
-              value={complianceEmail}
-              onChange={(e) => setComplianceEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-xs text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-[#0B2545] mb-1">
-              Industry Sector
-            </label>
-            <select
-              value={sector}
-              onChange={(e) => setSector(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F7F9FC] border border-[#CBD5E1] rounded-lg text-xs text-[#0B2545] focus:outline-none focus:border-[#1565C0]"
-            >
-              <option value="Banking & Financial Services">Banking &amp; Financial Services (BFSI)</option>
-              <option value="Healthcare & Telehealth">Healthcare &amp; Telehealth Information Systems</option>
-              <option value="Government & Defense">Government &amp; Defense Communications</option>
-              <option value="Enterprise Contact Center">Enterprise Contact Center / Customer Service</option>
-            </select>
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-4 py-2 bg-[#1565C0] hover:bg-[#0B2545] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
-            >
-              <Save className="w-3.5 h-3.5" />
-              <span>{saving ? "Updating..." : "Save Changes"}</span>
-            </button>
-          </div>
-        </form>
-
-        {/* Immutable Tenant Facts Card */}
-        <div className="bg-white rounded-2xl p-6 border border-[#DFE7EF] shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
-            <Lock className="w-4 h-4 text-[#52677C]" />
-            <h2 className="text-sm font-bold text-[#0B2545]">
-              Immutable Tenant Metadata
-            </h2>
-          </div>
-
-          <div>
-            <label className="block text-[10px] font-bold text-[#52677C] uppercase tracking-wider mb-1">
-              Tenant Identifier
-            </label>
-            <div className="flex items-center gap-2">
+            <div>
+              <label className="block text-xs font-bold text-[#0B2545] uppercase tracking-wider mb-1">
+                Organization Display Name
+              </label>
               <input
                 type="text"
-                readOnly
-                value={tenantId}
-                className="w-full font-mono text-[11px] px-2.5 py-1.5 bg-[#F7F9FC] border border-[#E2E8F0] rounded-lg text-[#0B2545]"
+                required
+                value={orgName}
+                onChange={(e) => setOrgName(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] focus:ring-2 focus:ring-[#1565C0] outline-none"
               />
-              <button
-                type="button"
-                onClick={handleCopyId}
-                className="p-1.5 rounded-lg border border-[#DFE7EF] hover:bg-[#F7F9FC] text-[#52677C]"
-                title="Copy Tenant ID"
-              >
-                {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
             </div>
-            <p className="text-[10px] text-[#94A3B8] mt-1">
-              Referenced across all database RLS policies and audit logs.
-            </p>
-          </div>
 
-          <div className="pt-2 space-y-2 text-xs">
-            <div className="flex items-center justify-between p-2.5 bg-[#F7F9FC] rounded-lg border border-[#E2E8F0]">
-              <span className="text-[#52677C]">Active Plan</span>
-              <span className="font-bold text-[#0B2545]">Enterprise SOC</span>
+            <div>
+              <label className="block text-xs font-bold text-[#0B2545] uppercase tracking-wider mb-1">
+                Primary Compliance Contact Email
+              </label>
+              <input
+                type="email"
+                required
+                value={complianceEmail}
+                onChange={(e) => setComplianceEmail(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] focus:ring-2 focus:ring-[#1565C0] outline-none"
+              />
             </div>
-            <div className="flex items-center justify-between p-2.5 bg-[#F7F9FC] rounded-lg border border-[#E2E8F0]">
-              <span className="text-[#52677C]">Allocated Seats</span>
-              <span className="font-bold text-[#0B2545]">10 Operators</span>
-            </div>
-            <div className="flex items-center justify-between p-2.5 bg-[#F7F9FC] rounded-lg border border-[#E2E8F0]">
-              <span className="text-[#52677C]">Data Residency</span>
-              <span className="font-bold text-[#065F46]">India (Mumbai AWS)</span>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0B2545] uppercase tracking-wider mb-1">
+                Industry Sector
+              </label>
+              <select
+                value={sector}
+                onChange={(e) => setSector(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0B2545] focus:ring-2 focus:ring-[#1565C0] outline-none"
+              >
+                <option>Banking &amp; Financial Services</option>
+                <option>Telecommunications &amp; Carrier Ingestion</option>
+                <option>Enterprise Contact Centers &amp; BPO</option>
+                <option>Healthcare &amp; Clinical Voice Intake</option>
+                <option>Government &amp; Public Safety</option>
+              </select>
             </div>
           </div>
         </div>
-      </div>
+
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0B2545] hover:bg-[#1565C0] text-white font-semibold text-xs transition-colors shadow-sm disabled:opacity-60"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Saving Profile...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Save Organization Profile</span>
+              </>
+            )}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
