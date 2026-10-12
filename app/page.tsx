@@ -22,6 +22,9 @@ import {
 } from "lucide-react";
 import { Suspense } from "react";
 import { AuthCard } from "@/components/auth/AuthCard";
+import { PastelFeatureCard, type PastelTone } from "@/components/shared/PastelFeatureCard";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SectionReveal } from "@/components/shared/SectionReveal";
 
 export const metadata: Metadata = {
   title: "VoiceShield | Enterprise AI Voice Security & Telephony Fraud Detection",
@@ -34,47 +37,62 @@ export const metadata: Metadata = {
   },
 };
 
-const CAPABILITIES = [
+interface CapabilityItem {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  status: string;
+  badgeTone: "green" | "blue" | "gold" | "purple";
+  tone: PastelTone;
+  desc: string;
+}
+
+const CAPABILITIES: CapabilityItem[] = [
   {
     icon: Zap,
     title: "Real-Time Streaming Inference",
     status: "AVAILABLE",
-    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    badgeTone: "green",
+    tone: "sky",
     desc: "Sub-second PCM audio chunk analysis evaluating spectral, prosodic, and acoustic cues without blocking live call streams.",
   },
   {
     icon: Activity,
     title: "Spectral & Kalman Smoothing",
     status: "AVAILABLE",
-    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    badgeTone: "green",
+    tone: "purple",
     desc: "Multi-band FFT analysis and state-space Kalman filtering to prevent momentary noise spikes from triggering false alarms.",
   },
   {
     icon: Languages,
     title: "Indic & English Challenge Response",
     status: "AVAILABLE",
-    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    badgeTone: "gold",
+    tone: "gold",
     desc: "Active phonetic challenge phrases with real-time verification to detect pre-recorded replay and text-to-speech clones.",
   },
   {
     icon: FileCheck2,
     title: "Section 65B Forensic Certificates",
     status: "AVAILABLE",
-    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    badgeTone: "green",
+    tone: "green",
     desc: "Cryptographically verifiable evidentiary reports aligned with Indian Evidence Act Section 65B court admissibility rules.",
   },
   {
     icon: PhoneCall,
     title: "Twilio & SIP Telephony Ingestion",
     status: "CONFIGURABLE",
-    statusColor: "bg-[#E7F3FF] text-[#1565C0] border-[#BBDEFB]",
+    badgeTone: "blue",
+    tone: "sandal",
     desc: "Native webhook and media stream interception for Twilio Voice, FreeSWITCH, and standard SIP trunking environments.",
   },
   {
     icon: Server,
     title: "Multi-Model Ensemble",
     status: "AVAILABLE",
-    statusColor: "bg-[#E7F7EF] text-[#065F46] border-[#A7F3D0]",
+    badgeTone: "purple",
+    tone: "pink",
     desc: "Dual-axis decision engine combining lightweight edge acoustic classifiers with deep forensic artifact analysis.",
   },
 ];
@@ -148,7 +166,7 @@ export default function HomePage() {
               {/* Trust Badges */}
               <div className="pt-6 border-t border-[#E2E8F0] grid grid-cols-3 gap-4 text-xs">
                 <div>
-                  <p className="font-bold text-base sm:text-lg text-[#0B2545]">&lt; 85ms</p>
+                  <p className="font-bold text-base sm:text-lg text-[#0B2545]">Sub-Second</p>
                   <p className="text-[#52677C] mt-0.5">Streaming Latency</p>
                 </div>
                 <div>
@@ -175,78 +193,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Core Capabilities Section */}
-      <section className="py-16 sm:py-20 bg-white border-b border-[#E2E8F0]">
+      {/* Core Capabilities Section with Pastel Feature Cards */}
+      <SectionReveal className="py-16 sm:py-20 bg-white border-b border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-3">
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Platform Matrix</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0B2545] tracking-tight">
-              Architected for Real-Time Telephony Protection
-            </h2>
-            <p className="text-sm sm:text-base text-[#52677C] mt-2">
-              Every module is verified against concrete source implementations and strict tenant boundaries.
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow="Platform Matrix"
+            title="Architected for Real-Time Telephony Protection"
+            description="Every module is verified against concrete source implementations and strict tenant boundaries."
+            align="center"
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CAPABILITIES.map((cap) => {
-              const Icon = cap.icon;
-              return (
-                <div
-                  key={cap.title}
-                  className="p-6 rounded-2xl bg-[#F7F9FC] border border-[#DFE7EF] hover:border-[#1565C0] hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-[#CBD5E1] flex items-center justify-center text-[#0B2545] group-hover:bg-[#1565C0] group-hover:text-white transition-colors">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${cap.statusColor}`}
-                      >
-                        {cap.status}
-                      </span>
-                    </div>
-                    <h3 className="text-base font-bold text-[#0B2545] mb-2">
-                      {cap.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#52677C] leading-relaxed">
-                      {cap.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+            {CAPABILITIES.map((cap) => (
+              <PastelFeatureCard
+                key={cap.title}
+                tone={cap.tone}
+                icon={cap.icon}
+                title={cap.title}
+                description={cap.desc}
+                badge={cap.status}
+                badgeTone={cap.badgeTone}
+              />
+            ))}
           </div>
         </div>
-      </section>
+      </SectionReveal>
 
       {/* Detection Pipeline Architecture */}
-      <section className="py-16 sm:py-20 bg-[#F7F9FC] border-b border-[#E2E8F0]">
+      <SectionReveal className="py-16 sm:py-20 bg-[#F7F9FC] border-b border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F3FF] text-[#1565C0] border border-[#BBDEFB] mb-3">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Inspection Architecture</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0B2545] tracking-tight">
-              Four-Stage Acoustic Verification Pipeline
-            </h2>
-            <p className="text-sm sm:text-base text-[#52677C] mt-2">
-              How raw telephone audio transforms into actionable fraud indicators with cryptographic certainty.
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow="Inspection Architecture"
+            title="Four-Stage Acoustic Verification Pipeline"
+            description="How raw telephone audio transforms into actionable fraud indicators with cryptographic certainty."
+            align="left"
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {ARCHITECTURE_STEPS.map((item) => (
               <div
                 key={item.step}
-                className="bg-white p-6 rounded-2xl border border-[#DFE7EF] relative shadow-sm hover:shadow transition-shadow"
+                className="bg-white p-6 rounded-2xl border border-[#DFE7EF] relative shadow-xs hover:shadow-sm transition-shadow"
               >
-                <div className="text-2xl font-black text-[#1565C0] mb-2">
+                <div className="text-2xl font-black text-[#1565C0] mb-2 font-mono">
                   {item.step}
                 </div>
                 <h3 className="text-sm font-bold text-[#0B2545] mb-2">
@@ -277,7 +266,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </SectionReveal>
 
       {/* Enterprise CTA Section */}
       <section className="py-16 sm:py-20 bg-[#0B2545] text-white">
