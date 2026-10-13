@@ -47,6 +47,11 @@ export const metadata: Metadata = {
       "Detect the clone. Protect the conversation. A Logic Intelligence Technologies security product.",
     images: ["/banner.png"],
   },
+  verification: {
+    other: {
+      "naver-site-verification": "87bb7556d3074f2fdc46420853dc7856",
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
