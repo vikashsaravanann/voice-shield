@@ -220,7 +220,14 @@ export function PrivateAppLayout({ children }: { children: React.ReactNode }) {
     );
   }, [searchQuery]);
 
-  const isSuperAdmin = userEmail?.toLowerCase() === "createwithvikash@gmail.com";
+  const SUPER_ADMINS = [
+    "createwithvikash@gmail.com",
+    "admin@logicintelligencetechnologies.in",
+    "hello@logicintelligencetechnologies.in",
+    "vikash@logicintelligencetechnologies.in",
+    "platform_owner@healthcare.lit",
+  ];
+  const isSuperAdmin = !!userEmail && SUPER_ADMINS.includes(userEmail.toLowerCase());
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] flex flex-col font-sans text-[#121826]">

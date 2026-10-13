@@ -46,8 +46,14 @@ export default function UsersPage() {
       try {
         const supabase = getSupabaseBrowserClient();
         const { data: { user } } = await supabase.auth.getUser();
-        if (active && user?.email) {
-          const isSuperAdmin = user.email.toLowerCase() === "createwithvikash@gmail.com";
+          const SUPER_ADMINS = [
+            "createwithvikash@gmail.com",
+            "admin@logicintelligencetechnologies.in",
+            "hello@logicintelligencetechnologies.in",
+            "vikash@logicintelligencetechnologies.in",
+            "platform_owner@healthcare.lit",
+          ];
+          const isSuperAdmin = SUPER_ADMINS.includes(user.email.toLowerCase());
           
           // Load stored invited operators if any
           let storedOperators: OperatorSeat[] = [];
