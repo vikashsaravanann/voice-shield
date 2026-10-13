@@ -25,6 +25,14 @@ import { AuthCard } from "@/components/auth/AuthCard";
 import { PastelFeatureCard, type PastelTone } from "@/components/shared/PastelFeatureCard";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SectionReveal } from "@/components/shared/SectionReveal";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { FaqSection } from "@/components/marketing/FaqSection";
+import {
+  ORGANIZATION_JSONLD,
+  SOFTWARE_APP_JSONLD,
+  HOMEPAGE_FAQS,
+  faqPageJsonLd,
+} from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "VoiceShield | AI Voice Security",
@@ -123,6 +131,7 @@ const ARCHITECTURE_STEPS = [
 export default function HomePage() {
   return (
     <div className="bg-white">
+      <JsonLd data={[ORGANIZATION_JSONLD, SOFTWARE_APP_JSONLD, faqPageJsonLd(HOMEPAGE_FAQS)]} />
       {/* Hero Section with Healthcare Navy/White Split */}
       <section className="relative bg-gradient-to-b from-[#F7F9FC] via-white to-white border-b border-[#E2E8F0] overflow-hidden pt-8 pb-16 lg:pt-16 lg:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -267,6 +276,9 @@ export default function HomePage() {
           </div>
         </div>
       </SectionReveal>
+
+      {/* FAQ Section (visible content mirrored by FAQPage JSON-LD above) */}
+      <FaqSection />
 
       {/* Enterprise CTA Section */}
       <section className="py-16 sm:py-20 bg-[#0B2545] text-white">
