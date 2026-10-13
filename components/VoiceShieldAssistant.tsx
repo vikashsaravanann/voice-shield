@@ -190,7 +190,7 @@ export function VoiceShieldAssistant() {
           <span className="absolute inset-1 rounded-full border border-cyan-300/35 transition-transform duration-300 group-hover:scale-105" />
           <span className="absolute inset-2 rounded-full border border-brand-400/20" />
           <span className="absolute inset-0 rounded-full bg-brand-400/10 opacity-0 transition-opacity group-hover:opacity-100" />
-          <img src="/logo.png" alt="" className="relative z-10 h-full w-full rounded-full object-cover" />
+          <img src="/logo.png" alt="VoiceShield AI Assistant Logo" className="relative z-10 h-full w-full rounded-full object-cover" />
           <div className="absolute right-0.5 top-0.5 z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#06111a] bg-brand-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]">
             <span className="absolute inline-flex h-full w-full rounded-full bg-brand-300 opacity-60" />
           </div>
