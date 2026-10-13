@@ -46,6 +46,7 @@ export default function UsersPage() {
       try {
         const supabase = getSupabaseBrowserClient();
         const { data: { user } } = await supabase.auth.getUser();
+        if (active && user?.email) {
           const SUPER_ADMINS = [
             "createwithvikash@gmail.com",
             "admin@logicintelligencetechnologies.in",
