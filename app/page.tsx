@@ -27,13 +27,13 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SectionReveal } from "@/components/shared/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "VoiceShield | Enterprise AI Voice Security & Telephony Fraud Detection",
+  title: "VoiceShield | AI Voice Security & Telephony Protection",
   description:
-    "VoiceShield by Logic Intelligence Technologies delivers real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
+    "VoiceShield delivers real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
   openGraph: {
-    title: "VoiceShield | Enterprise AI Voice Security",
+    title: "VoiceShield | AI Voice Security & Telephony Protection",
     description:
-      "Real-time synthetic voice detection and Section 65B forensic chain-of-custody auditing.",
+      "Real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
   },
 };
 
