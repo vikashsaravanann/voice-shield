@@ -27,13 +27,13 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SectionReveal } from "@/components/shared/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "VoiceShield | AI Voice Security & Telephony Protection",
+  title: "VoiceShield | AI Voice Security",
   description:
-    "VoiceShield delivers real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
+    "Real-time AI voice spoofing detection and telephony security platform.",
   openGraph: {
-    title: "VoiceShield | AI Voice Security & Telephony Protection",
+    title: "VoiceShield | AI Voice Security",
     description:
-      "Real-time synthetic voice detection, neural spoofing mitigation, and Section 65B forensic chain-of-custody auditing.",
+      "Real-time AI voice spoofing detection and telephony security platform.",
   },
 };
 

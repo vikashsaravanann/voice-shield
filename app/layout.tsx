@@ -28,23 +28,23 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://voiceshield.logicintelligencetechnologies.in"),
-  title: "VoiceShield | Anti-Spoofing & Acoustic Telemetry SOC",
+  title: "VoiceShield | AI Voice Security",
   description:
-    "Detect the clone. Protect the conversation. VoiceShield by Logic Intelligence Technologies — real-time synthetic voice and clone detection.",
+    "Real-time AI voice spoofing detection and telephony security platform.",
   icons: { icon: "/logo.png", apple: "/logo.png" },
   openGraph: {
     type: "website",
     siteName: "VoiceShield",
-    title: "VoiceShield | Anti-Spoofing & Acoustic Telemetry SOC",
+    title: "VoiceShield | AI Voice Security",
     description:
-      "Detect the clone. Protect the conversation. A Logic Intelligence Technologies security product.",
+      "Real-time AI voice spoofing detection and telephony security platform.",
     images: [{ url: "/banner.png" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VoiceShield | Anti-Spoofing & Acoustic Telemetry SOC",
+    title: "VoiceShield | AI Voice Security",
     description:
-      "Detect the clone. Protect the conversation. A Logic Intelligence Technologies security product.",
+      "Real-time AI voice spoofing detection and telephony security platform.",
     images: ["/banner.png"],
   },
   verification: {
